@@ -25,8 +25,7 @@ public class Inventory {
         if(input < 1 || input > 5)
             return; //escape input
         splayTree selected = Items[input - 1]; //select a tree
-
-
+        
     }
 
 
