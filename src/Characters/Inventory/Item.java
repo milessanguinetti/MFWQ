@@ -69,11 +69,12 @@ public abstract class Item extends combatEffect implements incrementableData {
 
     @Override
     public int compareTo(String toCompare) {
-        return itemName.compareTo(toCompare);
+        return itemName.toLowerCase().compareTo(toCompare.toLowerCase());
     }
 
     @Override
     public int compareTo(Data toCompare) {
-        return itemName.compareTo(toCompare.returnKey());
+        return itemName.toLowerCase().compareTo(toCompare.returnKey().toLowerCase());
     }
+
 }

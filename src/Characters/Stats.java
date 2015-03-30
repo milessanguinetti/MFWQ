@@ -16,10 +16,6 @@ public class Stats {
     protected int tempSpd; //temp spd param
     protected int Vit; //vitality parameter
     protected int tempVit; //temp vit param
-    protected int Swg; //swag parameter
-    protected int tempSwg; //temp swg param
-    protected int Luk; //luck parameter
-    protected int tempLuk; //temp luk param
     protected int Int; //intellect parameter
     protected int tempInt; //temp int param
     protected int Fth; //faith parameter
@@ -36,8 +32,6 @@ public class Stats {
         Dex = toCopy.Dex;
         Spd = toCopy.Spd;
         Vit = toCopy.Vit;
-        Swg = toCopy.Swg;
-        Luk = toCopy.Luk;
         Int = toCopy.Int;
         Fth = toCopy.Fth;
     }
@@ -70,14 +64,6 @@ public class Stats {
         return tempVit;
     }
 
-    public int getTempSwg() {
-        return tempSwg;
-    }
-
-    public int getTempLuk() {
-        return tempLuk;
-    }
-
     public int getTempInt() {
         return tempInt;
     }
@@ -107,14 +93,6 @@ public class Stats {
         this.tempVit = tempVit;
     }
 
-    public void setTempSwg(int tempSwg) {
-        this.tempSwg = tempSwg;
-    }
-
-    public void setTempLuk(int tempLuk) {
-        this.tempLuk = tempLuk;
-    }
-
     public void setTempInt(int tempInt) {
         this.tempInt = tempInt;
     }
@@ -122,8 +100,8 @@ public class Stats {
     //display function
     public void Display(){
         System.out.println("HP:" + HP + '/' + MHP + " SP: " + SP + '/' + MSP);
-        System.out.println("Str: " + Str + " Dex: " + Dex + " Spd: " + Spd + " Vit: " + Vit);
-        System.out.println("Swg: " + Swg + " Luk: " + Luk + " Int: " + Int + " Fth: " + Fth);
+        System.out.println("Str: " + Str + " Dex: " + Dex + " Spd: " + Spd);
+        System.out.println(" Vit: " + Vit + "Int: " + Int + " Fth: " + Fth);
     }
 
     //subtract passed int from HP; returns true if alive and false if dead
@@ -179,8 +157,6 @@ public class Stats {
             tempDex = Dex;
             tempSpd = Spd;
             tempVit = Vit;
-            tempSwg = Swg;
-            tempLuk = Luk;
             tempInt = Int;
             tempFth = Fth;
     }
@@ -208,22 +184,12 @@ public class Stats {
             return tempVit;
         }
 
-        else if(toIncrement == 4) { //swag case
-            tempSwg = Math.round(tempSwg * Boost);
-            return tempSwg;
-        }
-
-        else if(toIncrement == 5) { //luck case
-            tempLuk = Math.round(tempLuk * Boost);
-            return tempLuk;
-        }
-
-        else if(toIncrement == 6) { //int case
+        else if(toIncrement == 4) { //int case
             tempInt = Math.round(tempInt * Boost);
             return tempInt;
         }
 
-        else if(toIncrement == 7){ //fth case
+        else if(toIncrement == 5){ //fth case
             tempFth = Math.round(tempFth * Boost);
             return tempFth;
         }
@@ -254,16 +220,6 @@ public class Stats {
             HP += 10;
             MHP += 10; //vit incrementation at level up boosts HP
             return Vit;
-        }
-
-        else if(toIncrement.toUpperCase().equals("SWG")) { //swag case
-            ++Swg;
-            return Swg;
-        }
-
-        else if(toIncrement.toUpperCase().equals("LUK")) { //luck case
-            ++Luk;
-            return Luk;
         }
 
         else if(toIncrement.toUpperCase().equals("INT")) { //int case
@@ -304,16 +260,6 @@ public class Stats {
         else if(toIncrement == 3) { //vit case
             ++Vit;
             return Vit;
-        }
-
-        else if(toIncrement == 4) { //swag case
-            ++Swg;
-            return Swg;
-        }
-
-        else if(toIncrement == 5) { //luck case
-            ++Luk;
-            return Luk;
         }
 
         else if(toIncrement == 6) { //int case

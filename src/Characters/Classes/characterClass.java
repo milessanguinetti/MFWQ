@@ -16,22 +16,25 @@ public abstract class characterClass {
     orderedLLL Skills; //skills for this class
 
     //add job experience to the character's class.
-    public void gainJexp(int Gains, gameCharacter toLevel){
+    public void gainJexp(int Gains){
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
             Gains -= (jexpCap - jexp);
             ++jlevel;
             jexpCap += Math.round(jexpCap*1.2); //jexp cap goes up by 20%
             jexp = 0; //reset jexp to 0 now that we've leveled.
-            Ding(toLevel);
-            gainJexp(Gains, toLevel); //recursive call to add the rest of the jexp onto the
+            jobDing();
+            gainJexp(Gains); //recursive call to add the rest of the jexp onto the
                              //next level.
         }
         else
             jexp += Gains; //otherwise, we just add it to our exp.
     }
 
-    //adds skills and stat bonuses according to the class in question
-    public abstract void Ding(gameCharacter toLevel);
+    //adds stat bonuses to a character according to the class in question
+    public abstract void baseDing(gameCharacter toLevel, int level);
+
+    //adds skills according to the class in question
+    public abstract void jobDing();
 
     public Skill getSkill(int toGet){
         LLLnode Retrieved = Skills.retrieveInt(toGet);
