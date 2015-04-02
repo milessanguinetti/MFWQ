@@ -1,6 +1,5 @@
 package Characters.Inventory;
 
-import Structures.Node;
 import Structures.splayNode;
 import Structures.splayTree;
 

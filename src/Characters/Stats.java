@@ -20,6 +20,8 @@ public class Stats {
     protected int tempInt; //temp int param
     protected int Fth; //faith parameter
     protected int tempFth; //temp fth param
+    protected int Armor; //armor parameter; entirely from equipment and buffs
+    protected int tempArmor; //temporary armor parameter; for combat
 
     //default constructor
     public Stats(){}
@@ -34,6 +36,7 @@ public class Stats {
         Vit = toCopy.Vit;
         Int = toCopy.Int;
         Fth = toCopy.Fth;
+        Armor = toCopy.Armor;
     }
 
     //checks to see if the character is alive
@@ -73,28 +76,32 @@ public class Stats {
     }
 
     //temp setters
-    public void setTempFth(int tempFth) {
-        this.tempFth = tempFth;
+    public void setTempFth(int ptempFth) {
+        tempFth = ptempFth;
     }
 
-    public void setTempStr(int tempStr) {
-        this.tempStr = tempStr;
+    public void setTempStr(int ptempStr) {
+        tempStr = ptempStr;
     }
 
-    public void setTempDex(int tempDex) {
-        this.tempDex = tempDex;
+    public void setTempDex(int ptempDex) {
+        tempDex = ptempDex;
     }
 
-    public void setTempSpd(int tempSpd) {
-        this.tempSpd = tempSpd;
+    public void setTempSpd(int ptempSpd) {
+        tempSpd = ptempSpd;
     }
 
-    public void setTempVit(int tempVit) {
-        this.tempVit = tempVit;
+    public void setTempVit(int ptempVit) {
+        tempVit = ptempVit;
     }
 
-    public void setTempInt(int tempInt) {
-        this.tempInt = tempInt;
+    public void setTempInt(int ptempInt) {
+        tempInt = ptempInt;
+    }
+
+    public void setTempArmor(int ptempArmor){
+        tempArmor = ptempArmor;
     }
 
     //display function
@@ -130,7 +137,7 @@ public class Stats {
 
     //subtract passed int from SP; returns true if they have the MP to begin with, false if not
     public boolean subtractSP(int toSubtract){
-        if(!(SP - toSubtract > 0))
+        if(!(SP - toSubtract < 0))
             return false; //return false if we don't have the SP to cast or whatever
         SP -= toSubtract; //subtract
         if(SP > MSP)
@@ -138,32 +145,32 @@ public class Stats {
         return true;
         }
 
-    //multiply SP by passed integer; returns true if not oom and false if oom; rounds
-    public boolean multiplySP(float toMultiply){
+    //multiply SP by passed integer; returns number of sp lost; rounds
+    public int multiplySP(float toMultiply){
+        int toReturn = (Math.round(SP * toMultiply) - SP) *-1; //find out how much SP we are losing
         SP = Math.round(SP * toMultiply); //multiply
         if(SP > MSP)
             SP = MSP; //no SP pools above max after gaining SP
         else if(SP < 0)
             SP = 0; //no SP pools lower than 0 either
-        if(SP > 0)
-            return true;
-        return false; //return value based on whether or not character is alive
+        return toReturn;
     }
 
 
     //set all temps to their base values, a la the beginning of a fight.
     public void setTemps(){
-            tempStr = Str;
-            tempDex = Dex;
-            tempSpd = Spd;
-            tempVit = Vit;
-            tempInt = Int;
-            tempFth = Fth;
+        tempStr = Str;
+        tempDex = Dex;
+        tempSpd = Spd;
+        tempVit = Vit;
+        tempInt = Int;
+        tempFth = Fth;
+        tempArmor = Armor;
     }
 
-    //increment and return a given temp parameter
+    //multiply and return a given temp parameter
     //based on the passed integer and float
-    public int tempIncrement(int toIncrement, float Boost){
+    public int tempMultiply(int toIncrement, float Boost){
         if(toIncrement == 0) { //str case
             tempStr = Math.round(tempStr * Boost);
             return tempStr;
@@ -194,46 +201,50 @@ public class Stats {
             return tempFth;
         }
 
+        else if(toIncrement == 6){
+            tempArmor = Math.round(tempArmor * Boost);
+            return tempArmor;
+        }
+
         return 0; //stat not found
     }
 
-    //increment and return a given parameter
-    //based on the passed string
-    public int incrementStat(String toIncrement){
-        if(toIncrement.toUpperCase().equals("STR")) { //str case
-            ++Str;
-            return Str;
+    //increment and return a given temp parameter
+    //based on the passed integer
+    public int incrementTemp(int toIncrement, int Value){
+        if(toIncrement == 0) { //str case
+            tempStr += Value;
+            return tempStr;
         }
 
-        else if(toIncrement.toUpperCase().equals("DEX")) { // dex case
-            ++Dex;
-            return Dex;
+        else if(toIncrement == 1) { // dex case
+            tempDex += Value;
+            return tempDex;
         }
 
-        else if(toIncrement.toUpperCase().equals("SPD")) { //speed case
-            ++Spd;
-            return Spd;
+        else if(toIncrement == 2) { //speed case
+            tempSpd += Value;
+            return tempSpd;
         }
 
-        else if(toIncrement.toUpperCase().equals("VIT")) { //vit case
-            ++Vit;
-            HP += 10;
-            MHP += 10; //vit incrementation at level up boosts HP
-            return Vit;
+        else if(toIncrement == 3) { //vit case
+            tempVit += Value;
+            return tempVit;
         }
 
-        else if(toIncrement.toUpperCase().equals("INT")) { //int case
-            ++Int;
-            SP += 10;
-            MSP += 10; //int incrementation at level up boosts SP
-            return Int;
+        else if(toIncrement == 4) { //int case
+            tempInt += Value;
+            return tempInt;
         }
 
-        else if(toIncrement.toUpperCase().equals("FTH")) { //fth case
-            ++Fth;
-            SP += 10;
-            MSP += 10; //int incrementation at level up boosts SP
-            return Fth;
+        else if(toIncrement == 5){ //fth case
+            tempFth += Value;
+            return tempFth;
+        }
+
+        else if(toIncrement == 6){ //armor case
+            tempArmor += Value;
+            return tempArmor;
         }
 
         return 0; //stat not found
@@ -241,35 +252,40 @@ public class Stats {
 
     //increment and return a given parameter
     //based on the passed integer
-    public int incrementStat(int toIncrement){
+    public int incrementStat(int toIncrement, int Value){
         if(toIncrement == 0) { //str case
-            ++Str;
+            Str += Value;
             return Str;
         }
 
         else if(toIncrement == 1) { // dex case
-            ++Dex;
+            Dex += Value;
             return Dex;
         }
 
         else if(toIncrement == 2) { //speed case
-            ++Spd;
+            Spd += Value;
             return Spd;
         }
 
         else if(toIncrement == 3) { //vit case
-            ++Vit;
+            Vit += Value;
             return Vit;
         }
 
-        else if(toIncrement == 6) { //int case
-            ++Int;
+        else if(toIncrement == 4) { //int case
+            Int += Value;
             return Int;
         }
 
-        else if(toIncrement == 7){ //fth case
-            ++Fth;
+        else if(toIncrement == 5){ //fth case
+            Fth += Value;
             return Fth;
+        }
+
+        else if(toIncrement == 6){ //armor case
+            Armor += Value;
+            return Armor;
         }
 
         return 0; //stat not found

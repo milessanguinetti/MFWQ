@@ -1,18 +1,33 @@
 package Characters.Inventory;
 
-import Characters.combatEffect;
+import Characters.gameCharacter;
 import Structures.Data;
 import Structures.incrementableData;
-
 import java.io.PrintWriter;
 
 /**
  * Created by Miles Sanguinetti on 3/22/15.
  */
-public abstract class Item extends combatEffect implements incrementableData {
-    private String itemName;
+public abstract class Item implements incrementableData {
+    protected String itemName;
     private String Description;
     private int Quantity;
+
+    //default constructor
+    Item(){}
+
+    //constructor with name and description
+    Item(String name, String description){
+        itemName = name;
+        Description = description;
+        Quantity = 1;
+    }
+
+    public void Use(){
+        //INTERFACING METHOD FOR CHARACTERS
+    }
+
+    public abstract boolean Use(gameCharacter toUseOn);
 
     @Override
     public int Increment(int toIncrement) {
@@ -41,9 +56,8 @@ public abstract class Item extends combatEffect implements incrementableData {
 
     @Override
     public void Display() {
-        System.out.println(itemName);
+        System.out.println(itemName + " (" + Quantity + " in stock)");
         System.out.println(Description);
-        System.out.println("Quantity: " + Quantity);
     }
 
     @Override

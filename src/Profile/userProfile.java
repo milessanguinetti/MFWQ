@@ -1,10 +1,13 @@
 package Profile;
 
+import Characters.Inventory.Inventory;
+
 /**
  * Created by Miles Sanguinetti on 3/29/15.
  */
-public class userProfile {
+public class userProfile extends Inventory{
     private int Coins; //how much money the player has.
+    private int difficultyModifier; //difficulty modifier; typically used for new game+
 
     //add a passed sum of coins
     public int addCoins(int toAdd){
@@ -25,5 +28,14 @@ public class userProfile {
         if(Coins < 0)
             Coins = 0;
         return Coins;
+    }
+
+    public int getDifficulty(){
+        return difficultyModifier;
+    }
+
+    public int incrementDifficulty(int toIncrement){
+        difficultyModifier += toIncrement;
+        return difficultyModifier;
     }
 }

@@ -19,6 +19,10 @@ public class splayNode extends Node {
         super(name, toInsert);                       //reference to add in.
     }
 
+    public splayNode(Data toInsert){
+        super(toInsert);
+    }
+
     //returns a directional child reference based on the passed direction.
     //if true, we go right, if false, we left.
     public splayNode getBool(boolean dir) {

@@ -1,0 +1,110 @@
+package Characters.Inventory;
+
+import Characters.combatEffect;
+import Characters.gameCharacter;
+import Characters.playerCharacter;
+
+/**
+ * Created by Miles Sanguinetti on 3/29/15.
+ */
+public abstract class Weapon extends Item implements equipableItem, combatEffect {
+    private int Damage; //the weapon's damage value (a shield's equals its armor bonus)
+    private String weaponType; //the class of the weapon in question
+    private boolean isRightHand; //boolean value denotes which hand the weapon goes in
+    private boolean isTwoHand; //denotes whether or not the weapon requires two hands
+    private String Property; //the weapon's property
+
+    //default constructor
+    public Weapon(){}
+
+    //constructor that effectively handles all data members
+    public Weapon(String Name, String Description, int damage, String weapontype, String property){
+        super(Name, Description);
+        Damage = damage;
+        weaponType = weapontype;
+        Property = property;
+        //beyond setting those, we set the righthand/twohand variables based on
+        //the type that we are looking at.
+        if(weapontype.equals("Knife")){
+            isRightHand = true;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("1h Melee")){
+            isRightHand = true;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("2h Melee")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+        else if(weapontype.equals("1h Staff")){
+            isRightHand = true;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("2h Staff")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+        else if(weapontype.equals("Shield")){
+            isRightHand = false;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("Gun")){
+            isRightHand = false;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("Bow")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+    }
+
+    @Override
+    public void printName() {
+        System.out.print(itemName);
+    }
+
+    @Override //equip the item to the passed character
+    public boolean Use(gameCharacter toUseOn){
+        if(!canUse(toUseOn))
+            return false;
+        playerCharacter useOn = ((playerCharacter) toUseOn);
+        Weapon rightTemp = useOn.getRight();
+        Weapon leftTemp = useOn.getLeft();
+        if(isTwoHand){ //unequip both weapons
+            if(rightTemp != null)
+                rightTemp.Unequip(useOn);
+            else if(leftTemp != null)
+                leftTemp.Unequip(useOn);
+            useOn.setRight(this);
+            useOn.setLeft(this);
+        }
+        else if(isRightHand){ //unequip just the right hand weapon
+            if(rightTemp != null)
+                leftTemp.Unequip(useOn);
+            useOn.setRight(this);
+        }
+        else{ //unequip just the left hand weapon
+            if(leftTemp != null)
+                leftTemp.Unequip(useOn);
+            useOn.setLeft(this);
+        }
+        addStats(useOn); //finally, we add this weapon's stats to the character
+        return true;
+    }
+
+    @Override //unequip the item from the passed character
+    public void Unequip(playerCharacter toEquipTo) {
+        if(isTwoHand){
+            toEquipTo.setRight(null);
+            toEquipTo.setLeft(null);
+        }
+        else if(isRightHand){
+            toEquipTo.setRight(null);
+        }
+        else{
+            toEquipTo.setLeft(null);
+        }
+        subtractStats(toEquipTo); //subtract stats
+    }
+}
