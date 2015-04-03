@@ -270,16 +270,25 @@ public class Stats {
 
         else if(toIncrement == 3) { //vit case
             Vit += Value;
+            MSP += Value * 10;
+            if(MHP < HP)
+                HP = MHP;
             return Vit;
         }
 
         else if(toIncrement == 4) { //int case
             Int += Value;
+            MSP += Value * 5;
+            if(MSP < SP)
+                SP = MSP;
             return Int;
         }
 
         else if(toIncrement == 5){ //fth case
             Fth += Value;
+            MSP += Value * 5;
+            if(MSP < SP)
+                SP = MSP;
             return Fth;
         }
 

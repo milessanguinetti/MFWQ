@@ -51,16 +51,20 @@ public class Inventory {
             String strInput = scanner.nextLine();
             if(!strInput.equals("0")){ //only do anything if the user didn't enter 0
                 Item Retrieved = ((Item)selected.Retrieve(strInput).returnData());
-                if(Retrieved.compareTo(strInput) == 0)
-                    Retrieved.Use();
+                if(Retrieved.compareTo(strInput) == 0) {
+                    if(Retrieved.Use())
+                        selected.Remove(Retrieved.returnKey()); //use and remove from inventory
+                }
                 else{
                     System.out.println("Item not found. Closest match is:");
                     Retrieved.Display();
                     System.out.println("Use this item? Enter '0' for no or '1' for yes.");
                     input = scanner.nextInt();
                     scanner.nextLine();
-                    if(input == 1)
-                        Retrieved.Use();
+                    if(input == 1) {
+                        if(Retrieved.Use()); //use and remove from inventory
+                            selected.Remove(Retrieved.returnKey());
+                    }
                 }
             }
             System.out.println("Would you like to do more with your inventory?");
@@ -88,8 +92,11 @@ public class Inventory {
                 System.out.println("Use this item? Enter '0' for no or '1' for yes.");
                 input = scanner.nextInt();
                 scanner.nextLine();
-                if (input == 1)
-                    return ((Consumable)Retrieved);
+                if (input == 1) {
+                    Item temp = Retrieved;
+                    Items[0].Remove(temp.returnKey()); //remove the item from the inventory
+                    return ((Consumable) Retrieved); //return the item.
+                }
             }
         }
         return null; //if they didn't want to use an item after all, return null.

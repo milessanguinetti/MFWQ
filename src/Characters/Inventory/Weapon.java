@@ -3,6 +3,7 @@ package Characters.Inventory;
 import Characters.combatEffect;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -67,7 +68,7 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
     @Override //equip the item to the passed character
     public boolean Use(gameCharacter toUseOn){
         if(!canUse(toUseOn))
-            return false;
+            return false; //item was not used
         playerCharacter useOn = ((playerCharacter) toUseOn);
         Weapon rightTemp = useOn.getRight();
         Weapon leftTemp = useOn.getLeft();
@@ -106,5 +107,6 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
             toEquipTo.setLeft(null);
         }
         subtractStats(toEquipTo); //subtract stats
+        Game.Player.Insert(this); //insert the item into global inventory
     }
 }

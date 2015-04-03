@@ -7,7 +7,7 @@ import Characters.Inventory.Inventory;
  */
 public class userProfile extends Inventory{
     private int Coins; //how much money the player has.
-    private int difficultyModifier; //difficulty modifier; typically used for new game+
+    private int difficultyModifier; //difficulty modifier; typically used for new game
 
     //add a passed sum of coins
     public int addCoins(int toAdd){

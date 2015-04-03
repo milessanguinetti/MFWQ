@@ -1,39 +1,30 @@
 package Characters.Skills;
 
-import Characters.combatEffect;
 import Characters.gameCharacter;
 import Structures.Data;
 
 /**
- * Created by Miles Sanguinetti on 3/22/15.
+ * Created by Miles Sanguinetti on 4/2/15.
  */
-public abstract class Skill implements Data, combatEffect{
+public abstract class passiveSkill implements Data{
     String skillName;
     String Description;
-    int mpCost;
 
     //default constructor
-    Skill(){}
+    passiveSkill(){}
 
     //special constructor
-    Skill(String passedName, String passedDescription, int passedCost){
+    passiveSkill(String passedName, String passedDescription){
         skillName = passedName;
         Description = passedDescription;
-        mpCost = passedCost;
     }
 
-    @Override
-    public boolean canUse(gameCharacter toCheck){
-        if(toCheck.getSP() < mpCost)
-            return false;
-        return true;
-    }
+    public abstract void passiveEffect(gameCharacter toEffect);
 
     @Override
     public void Display() {
         System.out.println(skillName + ':');
         System.out.println(Description);
-        System.out.println("MP Cost: " + mpCost);
     }
 
     @Override
@@ -46,15 +37,6 @@ public abstract class Skill implements Data, combatEffect{
             System.out.print("      ");
         }
         System.out.println(Description);
-        for(int i = 0; i < indent; ++i){
-            System.out.print("      ");
-        }
-        System.out.println("MP Cost: " + mpCost);
-    }
-
-    @Override
-    public void printName(){
-        System.out.print(skillName);
     }
 
     @Override

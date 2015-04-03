@@ -23,8 +23,9 @@ public abstract class Item implements incrementableData {
         Quantity = 1;
     }
 
-    public void Use(){
+    public boolean Use(){
         //INTERFACING METHOD FOR CHARACTERS
+        return true;
     }
 
     public abstract boolean Use(gameCharacter toUseOn);

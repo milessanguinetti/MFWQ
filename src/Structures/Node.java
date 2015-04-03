@@ -57,7 +57,7 @@ public class Node {
 
     //incrementation wrapper function for incrementable data
     public int Increment(int toIncrement){
-        if(Data instanceof  incrementableData){
+        if(Data instanceof incrementableData){
             return ((incrementableData)Data).Increment(toIncrement);
         }
         return 1;

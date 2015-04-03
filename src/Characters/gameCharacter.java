@@ -1,5 +1,7 @@
 package Characters;
 
+import Characters.Skills.passiveSkill;
+
 /**
  * Created by Miles Sanguinetti on 3/17/15.
  */
@@ -7,6 +9,7 @@ package Characters;
 //abstract character base class--derived from stats
 public abstract class gameCharacter extends Stats {
     private String Name; //character name
+    protected passiveSkill currentPassive; //the character's passive skill.
 
     //default constructor
     public gameCharacter(){}

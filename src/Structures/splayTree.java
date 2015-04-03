@@ -173,11 +173,18 @@ public class splayTree extends Structure{
             root = toInsert; //we insert at root.
         else { //otherwise...
             root = splay(toInsert, root);
-            boolean dir = toInsert.goesToRight(root); //directional bool; true is right
-            toInsert.setBool(dir, root.getBool(dir)); //toinsert points to root's child in that direction
-            root.setBool(dir, null); //root's pointer in that direction becomes null
-            toInsert.setBool(!dir, root); //point toinsert's other pointer to root
-            root = toInsert; //root now points to toinsert, placing it at the top of the structure
+            if(!(root.returnData() instanceof incrementableData) || !root.isEqual(nodeToInsert)) {
+                //if root isn't incrementable or it does not exist in this tree...
+                boolean dir = toInsert.goesToRight(root); //directional bool; true is right
+                toInsert.setBool(dir, root.getBool(dir)); //toinsert points to root's child in that direction
+                root.setBool(dir, null); //root's pointer in that direction becomes null
+                toInsert.setBool(!dir, root); //point toinsert's other pointer to root
+                root = toInsert; //root now points to toinsert, placing it at the top of the structure
+            }
+            else{
+                    root.Increment(1); //try to increment the data, doing nothing if it's
+                                       //non-incrementable data.
+            }
         }
         return 1;
         //recursive call; return 1 because the method cannot be expected to fail at this point
