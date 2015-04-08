@@ -1,6 +1,7 @@
 package Profile;
 
 import Characters.Inventory.Inventory;
+import Characters.playerCharacter;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -8,6 +9,8 @@ import Characters.Inventory.Inventory;
 public class userProfile extends Inventory{
     private int Coins; //how much money the player has.
     private int difficultyModifier; //difficulty modifier; typically used for new game
+
+    playerCharacter [] Party = new playerCharacter[4]; //party of 4
 
     //add a passed sum of coins
     public int addCoins(int toAdd){

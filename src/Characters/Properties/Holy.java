@@ -11,12 +11,12 @@ public class Holy extends Property{
     }
 
     @Override
-    int calculateDamage(int Damage, String attackProperty) {
-        if(attackProperty.equals("Spooky") || attackProperty.equals("Holy"))
+    public int calculateDamage(int Damage, String attackProperty) {
+        if(attackProperty.equals("Ghost") || attackProperty.equals("Holy"))
             return Math.round(Damage/2);
-        if(attackProperty.equals("Moist") || attackProperty.equals("Hot") || attackProperty.equals("Wood"))
+        if(attackProperty.equals("Water") || attackProperty.equals("Fire") || attackProperty.equals("Organic"))
             return Math.round(Damage*(3/4));
-        if(attackProperty.equals("Grimdark"))
+        if(attackProperty.equals("Dark"))
             return Damage*2;
         return Damage;
     }

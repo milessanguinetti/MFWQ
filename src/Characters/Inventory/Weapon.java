@@ -60,6 +60,12 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         }
     }
 
+    public boolean isOfProperty(String toCheck){
+        if(Property.compareTo(toCheck) == 0)
+            return true;
+        return false;
+    }
+
     @Override
     public void printName() {
         System.out.print(itemName);

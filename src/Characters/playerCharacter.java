@@ -4,7 +4,9 @@ import Characters.Classes.characterClass;
 import Characters.Inventory.Accessory;
 import Characters.Inventory.Armor;
 import Characters.Inventory.Weapon;
+import Characters.Properties.Neutral;
 import Characters.Skills.passiveSkill;
+import Profile.Game;
 import Structures.LLLnode;
 import Structures.orderedLLL;
 
@@ -31,6 +33,7 @@ public class playerCharacter extends gameCharacter{
     //default constructor
     public playerCharacter(){
         expCap = 1000;
+        charProperty = new Neutral();
     }
 
     //special constructor
@@ -38,6 +41,7 @@ public class playerCharacter extends gameCharacter{
         super(name, toAdd);
         Race = race;
         expCap = 1000;
+        charProperty = new Neutral();
     }
 
     public boolean isOfRace(String toCompare){
@@ -172,6 +176,7 @@ public class playerCharacter extends gameCharacter{
 
     //applies this character's automatic buffs for each equipped item
     public void applyAutoBuffs(){
+        tempProperty = charProperty;
         if(!(Right == Left)){ //if this isn't a two-handed weapon
             if(Right != null)
                 Right.applyBuffs(this); //apply right's buffs
@@ -206,5 +211,28 @@ public class playerCharacter extends gameCharacter{
         if(primaryClass.canUseHeavyArmor())
             return true;
         return false;
+    }
+
+    //function for dropping loot at the end of a battle.
+    //if a player character dies, they drop their equipment
+    //so that it isn't lost.
+    public void Loot(){
+        System.out.println(Name + " dropped their equipment.");
+        if(!(Right == Left)){ //if this isn't a two-handed weapon
+            if(Right != null)
+                Game.Player.Insert(Right); //add right to inventory
+            if(Left != null)
+                Game.Player.Insert(Left); //and left to inventory
+        }
+        else{ //if this is a two-handed weapon
+            if(Right != null)
+                Game.Player.Insert(Right); //add the weapon to inventory
+        }
+        if(Armor1 != null)
+            Game.Player.Insert(Armor1);
+        if(Accessory1 != null)
+            Game.Player.Insert(Accessory1);
+        if(Accessory2 != null)
+            Game.Player.Insert(Accessory2);
     }
 }

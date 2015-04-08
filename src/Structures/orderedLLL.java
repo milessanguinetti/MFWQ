@@ -48,7 +48,7 @@ public class orderedLLL extends Structure{
     public LLLnode decrementAllRecursively(LLLnode current){
         if(current == null)
             return null;
-        if(current.Decrement(1) == 0) //if we're out of this...
+        if(current.Decrement(1) <= 0) //if this data item has a value of 0 now
             return decrementAllRecursively(current.getNext()); //cut out of the structure
         current.setNext(decrementAllRecursively(current.getNext())); //recursive call
         return current; //maintain current structure
