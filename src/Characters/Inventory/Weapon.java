@@ -60,15 +60,34 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         }
     }
 
+    @Override //weapons are literally always offensive
+    public boolean isOffensive() {
+        return true;
+    }
+
     public boolean isOfProperty(String toCheck){
         if(Property.compareTo(toCheck) == 0)
             return true;
         return false;
     }
 
+    public boolean isOfType(String toCheck){
+        if(weaponType.compareTo(toCheck) == 0)
+            return true;
+        return false;
+    }
+
+    public int getDamage(){
+        return Damage;
+    }
+
+    public String getProperty(){
+        return Property;
+    }
+
     @Override
     public void printName() {
-        System.out.print(itemName);
+        System.out.print("their weapon");
     }
 
     @Override //equip the item to the passed character

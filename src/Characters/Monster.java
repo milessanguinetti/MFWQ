@@ -34,8 +34,97 @@ public abstract class Monster extends gameCharacter{
         Combo = monsterSkills[toSet];
     }
 
+    //the AI for choosing a target from two arrays of targets. Targets characters rather
+    //than minions 2/3 of the time to avoid minion stacking as a defense mechanism. returns
+    //what is effectively an index specified between the two arrays.
+    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins){
+        Random Rand = new Random();
+        int roll = Rand.nextInt(12);
+        if(roll < 8) { //it's more likely to target a character than a minion
+            roll = roll % 4;
+            if (chars[roll] != null) {
+                if (chars[roll].isAlive()) {
+                    return roll + 1; //if the character exists and is alive, return roll + 1
+                }
+            } //if we get here, the initial roll chose a nonexistent/dead character
+            for (int i = 1; i < 3; ++i) { //first we search every other character in the array
+                if ((roll + i) >= 0) { //if this index is part of the array
+                    if (chars[roll + i] != null) {
+                        if (chars[roll + i].isAlive())
+                            return roll + i + 1; //return the character's index if they exist
+                    }
+                }
+                if ((roll - i) < 4) { //if this index is part of the array
+                    if (chars[roll - i] != null) {
+                        if (chars[roll - i].isAlive())
+                            return roll - i + 1; //return the character's index if they exist
+                    }
+                }
+            }
+            if(mins[roll] != null){
+                if(mins[roll].isAlive())
+                    return roll + 5; //if a minion at the index exists, target them.
+            } //otherwise, search for another minion.
+            for (int j = 1; j < 3; ++j){
+                if ((roll + j) >= 0) { //if this index is part of the array
+                    if (mins[roll + j] != null) {
+                        if (mins[roll + j].isAlive())
+                            return roll + j + 5; //return the minion's index if they exist
+                    }
+                }
+                if ((roll - j) < 4) { //if this index is part of the array
+                    if (mins[roll - j] != null) {
+                        if (mins[roll - j].isAlive())
+                            return roll - j + 5; //return the minion's index if they exist
+                    }
+                }
+            }
+        }
+        else{ //if it's a minion that we're targeting; minions' positions are offset by 4.
+            roll = roll % 4;
+            if (mins[roll] != null) {
+                if (mins[roll].isAlive()) {
+                    return roll + 5; //if the minion exists and is alive, return roll + 5
+                }
+            } //if we get here, the initial roll chose a nonexistent/dead minion
+            for (int i = 1; i < 3; ++i) { //first we search every other character in the array
+                if ((roll + i) >= 0) { //if this index is part of the array
+                    if (mins[roll + i] != null) {
+                        if (mins[roll + i].isAlive())
+                            return roll + i + 5; //return the minion's index if they exist
+                    }
+                }
+                if ((roll - i) < 4) { //if this index is part of the array
+                    if (mins[roll - i] != null) {
+                        if (mins[roll - i].isAlive())
+                            return roll - i + 5; //return the character's index if they exist
+                    }
+                }
+            }
+            if(chars[roll] != null){ //next we check for a character at this index
+                if(chars[roll].isAlive())
+                    return roll + 1; //if a character at the index exists, target them.
+            } //otherwise, search for another character.
+            for (int j = 1; j < 3; ++j){
+                if ((roll + j) >= 0) { //if this index is part of the array
+                    if (chars[roll + j] != null) {
+                        if (chars[roll + j].isAlive())
+                            return roll + j + 1; //return the character's index if they exist
+                    }
+                }
+                if ((roll - j) < 4) { //if this index is part of the array
+                    if (chars[roll - j] != null) {
+                        if (chars[roll - j].isAlive())
+                            return roll - j + 1; //return the character's index if they exist
+                    }
+                }
+            }
+        }
+        return 0; //there is not a viable target if we get to this line. bug.
+    }
+
     //basically the AI for choosing a skill to use.
-    public Skill skillAI(){
+    public combatEffect chooseSkill(){
         if(Combo != null)
             return Combo; //return combo if we're in the midst of a combo
         //int i = Math.random();
@@ -44,7 +133,7 @@ public abstract class Monster extends gameCharacter{
         for(int j = 0; j < 6; ++j){ //for each skill
             if(roll <= skillProbabilities[j]) { //if the roll is less than the probability...
                 if(!monsterSkills[j].canUse(this))
-                    return skillAI(); //reroll if we don't have mana for this skill or something
+                    return chooseSkill(); //reroll if we don't have mana for this skill or something
                 return monsterSkills[j]; //otherwise return the corresponding skill
             }
             else
@@ -61,5 +150,38 @@ public abstract class Monster extends gameCharacter{
         tempProperty = charProperty;
         if(currentPassive != null)
             currentPassive.passiveEffect(this);
+    }
+
+    //since monsters have no weapons, it is assumed that this is always true.
+    //this and the following functions are in place to allow reusability
+    //between player skills that hinge on specific player character class
+    //attributes and monsters that lack those attributes.
+    public boolean hasWeaponType(String toCompare, boolean isRight){
+        return true;
+    }
+
+    //compares the monster's defense property with the requested property.
+    public boolean hasWeaponProperty(String toCompare, boolean isRight){
+        if(tempProperty.getName().compareTo(toCompare) == 0)
+            return true;
+        return false;
+    }
+
+    //monsters use their current defense property as their attack property.
+    public String getWeaponProperty(boolean isRight){
+        return tempProperty.getName();
+    }
+
+    //since monsters have no real weapon, their weapon damage is registered
+    //as their highest offensive base stat.
+    public int getWeaponDamage(boolean isRight){
+        int Highest = Fth;
+        if(Int > Highest)
+            Highest = Int;
+        if(Str > Highest)
+            Highest = Str;
+        if(Dex > Highest)
+            Highest = Dex;
+        return Highest;
     }
 }

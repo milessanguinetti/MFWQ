@@ -37,9 +37,9 @@ public abstract class characterClass implements Data {
     //adds stat bonuses to a character according to the class in question
     public abstract void baseDing(playerCharacter toLevel, int level);
 
-    //adds skills according to the class in question
-    //passive skills are returned, others are added directly.
-    public abstract Skill jobDing(playerCharacter toLevel);
+    //adds skills according to the class in question. Character is included
+    //to the end of adding passive skills to their passive skill list.
+    public abstract void jobDing(playerCharacter toLevel);
 
     public Skill getSkill(int toGet){
         LLLnode Retrieved = Skills.retrieveInt(toGet);

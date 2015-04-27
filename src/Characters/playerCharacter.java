@@ -5,6 +5,7 @@ import Characters.Inventory.Accessory;
 import Characters.Inventory.Armor;
 import Characters.Inventory.Weapon;
 import Characters.Properties.Neutral;
+import Characters.Skills.Skill;
 import Characters.Skills.passiveSkill;
 import Profile.Game;
 import Structures.LLLnode;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 /**
  * Created by Miles Sanguinetti on 3/31/15.
  */
-public class playerCharacter extends gameCharacter{
+public class playerCharacter extends gameCharacter {
     private String Race;
     private int Level;
     private int Exp;
@@ -31,23 +32,206 @@ public class playerCharacter extends gameCharacter{
     private orderedLLL Passives;
 
     //default constructor
-    public playerCharacter(){
+    public playerCharacter() {
         expCap = 1000;
         charProperty = new Neutral();
     }
 
     //special constructor
-    public playerCharacter(String name, String race, Stats toAdd){
+    public playerCharacter(String name, String race, Stats toAdd) {
         super(name, toAdd);
         Race = race;
         expCap = 1000;
         charProperty = new Neutral();
     }
 
+    //chooses a target from two passed arrays of targets
+    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a target from the following or enter 0 to cancel:");
+        int k = 1; //counter for the number of targets that have been displayed
+        for(int i = 0; i < 4; ++i){
+            if(chars[i] != null) {
+                if(chars[i].isAlive()) { //if the character exists and is still alive
+                    System.out.print(k + ": ");
+                    chars[i].printName();
+                    System.out.println();
+                    ++k; //increment k
+                }
+            }
+        }
+        for(int j = 0; j < 4; ++j) {
+            if (mins[j] != null) {
+                if (mins[j].isAlive()) { //if the character exists and is still alive
+                    System.out.print(k + ": ");
+                    mins[j].printName();
+                    System.out.println();
+                    ++k; //increment k
+                }
+            }
+        }
+        int Input = scanner.nextInt(); //user input variable
+        scanner.nextLine(); //remove anything typed after the first int
+        if(Input == 0)
+            return 0; //return 0 if the user cancels
+        for(int l = 0; l < 4; ++l) {
+            if (chars[l] != null) {
+                if (chars[l].isAlive()) { //if the character exists and is still alive
+                    if (Input == 1)
+                        return l + 1; //return l+1 to essentially have a meaningful
+                    else              //reference to where the target is located.
+                        --Input; //otherwise decrement input by 1 so that we know that
+                }                //we have passed a character and are closer to the input value
+            }
+        }
+        for(int m = 0; m < 4; ++m) {
+            if (chars[m] != null) {
+                if (chars[m].isAlive()) { //if the character exists and is still alive
+                    if (Input == 1)
+                        return m + 5; //return l+5 to essentially have a meaningful
+                    else              //reference to where the target is located; +5 denotes a minion.
+                        --Input; //otherwise decrement input by m so that we know that
+                }                //we have passed a character and are closer to the input value
+            }
+        }   //if we get here, the user has not input a number denoting a valid target.
+            System.out.println("Input invalid. Please choose a valid target."); //error message.
+            return chooseTarget(chars, mins); //recursive call
+    }
+
+    //selects a skill to use/attacks with weapons/runs
+    public combatEffect chooseSkill() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Would you like to attack with a weapon or use a skill?");
+        System.out.println("Enter '1' for a weapon attack or '2' for a skill. '0' will make the character wait.");
+        System.out.println("'3' will use an item and '4' will attempt to flee the battle.");
+        int Input = scanner.nextInt();
+        scanner.nextLine();
+        if (Input == 0)
+            return null; //return a null pointer to cause the character to wait.
+        if (Input == 2) {
+            System.out.println("Would you like to use a skill from the character's primary or secondary class?");
+            System.out.println("Enter '1' for primary or '2' for secondary class. '0' will cancel skill use.");
+            Input = scanner.nextInt();
+            scanner.nextLine();
+            if (Input == 1) {
+                if (primaryClass == null) {
+                    System.out.println("This character has no primary class.");
+                    return chooseSkill();
+                }
+                primaryClass.displaySkills();
+                System.out.println("Enter the number of the corresponding skill or '0' to cancel.");
+                Input = scanner.nextInt();
+                scanner.nextLine();
+                if (Input != 0) {
+                    Skill toReturn = primaryClass.getSkill(Input);
+                    if (toReturn == null) {
+                        System.out.println("Input invalid. Please enter a valid skill.");
+                    }
+                    else
+                        return toReturn;
+                }
+            } else if (Input == 2) {
+                if (secondaryClass == null) {
+                    System.out.println("This character has no secondary class.");
+                    return chooseSkill();
+                }
+                secondaryClass.displaySkills();
+                System.out.println("Enter the number of the corresponding skill or '0' to cancel.");
+                Input = scanner.nextInt();
+                scanner.nextLine();
+                if (Input != 0) {
+                    Skill toReturn = secondaryClass.getSkill(Input);
+                    if (toReturn == null) {
+                        System.out.println("Input invalid. Please enter a valid skill.");
+                    }
+                    else
+                        return toReturn;
+                }
+            }
+            return chooseSkill(); //return recursive call's return value if the user cancelled.
+        } else if (Input == 1) {
+            if (Right != null)
+                return Right;
+            if (Left != null)
+                return Left;
+            return null; //wait if the character cannot use a weapon.
+            //implement a fist damage case for this in the future
+        } else if (Input == 3) {
+            //CASE FOR INVENTORY USE
+            combatEffect itemReturn = Game.Player.combatInterface();
+            if (itemReturn == null)
+                return chooseSkill(); //return recursive call's value if the user cancelled.
+            return itemReturn; //otherwise return the selected item.
+        } else if (Input == 4) {
+            //CASE FOR RUNNING
+            return null; //NYI
+        }
+        else{
+            System.out.println("Input invalid.");
+            return chooseSkill();
+        }
+    }
+
+    //is the character of the passed race?
     public boolean isOfRace(String toCompare){
         if(Race.compareTo(toCompare) == 0)
             return true;
         return false;
+    }
+
+    //does the character have the passed weapon type?
+    public boolean hasWeaponType(String toCompare, boolean isRight){
+        if(isRight){ //right weapon case
+            if(Right == null) //if there is no right weapon
+                return false; //false case
+            return Right.isOfType(toCompare); //otherwise compare & return
+        }
+        else { //left weapon case
+            if (Left == null) //if there is no left weapon
+                return false; //false case
+            return Left.isOfType(toCompare); //otherwise compare & return
+        }
+    }
+
+    //checks to see if the character's weapon's property matches the passed string
+    public boolean hasWeaponProperty(String toCompare, boolean isRight){
+        if(isRight){ //right weapon case
+            if(Right == null) //if there is no right weapon
+                return toCompare.equals("Neutral"); //check neutral
+            return Right.isOfProperty(toCompare); //otherwise compare & return
+        }
+        else{ //left weapon case
+            if(Left == null) //if there is no left weapon
+                return toCompare.equals("Neutral"); //check neutral
+            return Left.isOfProperty(toCompare); //otherwise compare & return
+        }
+    }
+
+    //gets the character's weapon's property.
+    public String getWeaponProperty(boolean isRight){
+        if(isRight){ //right weapon case
+            if(Right == null) //if there is no right weapon
+                return "Neutral"; //return neutral
+            return Right.getProperty();
+        }
+        else{ //left weapon case
+            if(Left == null) //if there is no left weapon
+                return "Neutral"; //return neutral
+            return Left.getProperty();
+        }
+    }
+
+    public int getWeaponDamage(boolean isRight){
+        if(isRight){ //right weapon case
+            if(Right == null) //if there is no right weapon
+                return Str; //return strength for a fist attack
+            return Right.getDamage();
+        }
+        else{ //left weapon case
+            if(Left == null) //if there is no left weapon
+                return Str; //return strength for a fist attack
+            return Left.getDamage();
+        }
     }
 
     //add a class to the ordered LLL

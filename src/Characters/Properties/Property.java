@@ -27,4 +27,9 @@ public abstract class Property {
             return true;
         return false;
     }
+
+    //returns name; used more sparingly than isproperty.
+    public String getName(){
+        return name;
+    }
 }

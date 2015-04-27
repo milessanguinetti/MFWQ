@@ -27,12 +27,13 @@ public class orderedLLL extends Structure{
     }
 
     //remove the first item from the data structure (useful for emulating stack removal)
-    public int Pop(){
+    public Data Pop(){
         if(head != null){ //if there's something to pop
+            Data temp = head.returnData();
             head = head.getNext(); //go to next item
-            return 1; //success
+            return temp; //return the popped item's data
         }
-        return 0;
+        return null;
     }
 
     //remove all by setting head to null

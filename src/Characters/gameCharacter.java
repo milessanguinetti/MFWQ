@@ -1,6 +1,7 @@
 package Characters;
 
 import Characters.Properties.Property;
+import Characters.Skills.Skill;
 import Characters.Skills.passiveSkill;
 import Characters.Status.damageEffect;
 import Characters.Status.endOfTurn;
@@ -38,6 +39,13 @@ public abstract class gameCharacter extends Stats {
         Name = toName;
     }
 
+    //retrieves a combat effect to use during the character's turn.
+    public abstract combatEffect chooseSkill();
+
+    //picks a target (via AI or input, depending on whether this is a monster, player or minion)
+    //from two passed arrays of game characters representing appropriate targets--minions or game chars
+    public abstract int chooseTarget(gameCharacter[] CTargets, gameCharacter[] MTargets);
+
     //takes damage; returns remaining health.
     boolean takeDamage(int toTake, String property){
         toTake = calculateDamage(toTake, property); //take status into account
@@ -67,7 +75,7 @@ public abstract class gameCharacter extends Stats {
 
     //print name, but not stats
     public void printName(){
-        System.out.println(Name);
+        System.out.print(Name);
     }
 
     //full display function
@@ -130,13 +138,13 @@ public abstract class gameCharacter extends Stats {
         return false;
     }
 
-    //wrapper for damage calculation in endofturnlist
+    //wrapper for damage calculation via the damage effect list.
     public int calculateDamage(int toCalculate, String Property){
         toCalculate = damageEffectList.calculateDamage(toCalculate, Property);
         return toCalculate;
     }
 
-    //called at the end of each turn.
+    //called at the end of each turn to decrement durations and handle end of turn effects.
     public void endTurn(){
         if(isAlive()) { //if the character is still alive...
             endOfTurnList.endTurn(this); //apply end of turn effects
@@ -155,4 +163,16 @@ public abstract class gameCharacter extends Stats {
     public void updateStatTemps(){
         statChangeList.changeStats(this);
     }
+
+    //does the character have the passed weapon type?
+    abstract public boolean hasWeaponType(String toCompare, boolean isRight);
+
+    //checks to see if the character's weapon's property matches the passed string
+    abstract public boolean hasWeaponProperty(String toCompare, boolean isRight);
+
+    //gets the character's attack property.
+    abstract public String getWeaponProperty(boolean isRight);
+
+    //gets attack damage
+    abstract public int getWeaponDamage(boolean isRight);
 }

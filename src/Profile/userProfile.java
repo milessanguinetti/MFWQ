@@ -12,6 +12,13 @@ public class userProfile extends Inventory{
 
     playerCharacter [] Party = new playerCharacter[4]; //party of 4
 
+    //essentially kills a character if they died. passed integer is index of character
+    public void killCharacter(int Index){
+        Party[Index].printName();
+        System.out.println(" has succumbed to their wounds and died."); //death message
+        Party[Index] = null; //set index to null
+    }
+
     //add a passed sum of coins
     public int addCoins(int toAdd){
         Coins += toAdd;

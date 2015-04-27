@@ -23,13 +23,6 @@ public abstract class Skill implements Data, combatEffect{
     }
 
     @Override
-    public boolean canUse(gameCharacter toCheck){
-        if(toCheck.getSP() < mpCost)
-            return false;
-        return true;
-    }
-
-    @Override
     public void Display() {
         System.out.println(skillName + ':');
         System.out.println(Description);
