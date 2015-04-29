@@ -16,6 +16,12 @@ public class Inventory {
     //3 = accessories
     //4 = quest items
 
+    public Inventory(){
+        for(int i = 0; i < 5; ++i){
+            Items[i] = new splayTree(); //allocate all splay trees.
+        }
+    }
+
     //interfaces the inventory with the user.
     public void Interface(){
         Scanner scanner = new Scanner(System.in);
@@ -80,8 +86,12 @@ public class Inventory {
     public Consumable combatInterface() {
         Scanner scanner = new Scanner(System.in);
         int input;
-        System.out.println("Enter the item's name or enter '0' to cancel.");
+        System.out.println("Enter the item's name to use it, '1' to display usable items or '0' to cancel.");
         String strInput = scanner.nextLine();
+        if(strInput.equals("1")){
+            Items[0].Display();
+            return combatInterface();
+        }
         if (!strInput.equals("0")) { //only do anything if the user didn't enter 0
             Item Retrieved = ((Item) Items[0].Retrieve(strInput).returnData());
             if (Retrieved.compareTo(strInput) == 0)

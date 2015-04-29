@@ -4,6 +4,8 @@ import Characters.combatEffect;
 import Characters.gameCharacter;
 import Structures.Data;
 
+import java.io.PrintWriter;
+
 /**
  * Created by Miles Sanguinetti on 3/22/15.
  */
@@ -68,5 +70,10 @@ public abstract class Skill implements Data, combatEffect{
     @Override
     public int compareTo(Data toCompare) {
         return skillName.compareTo(toCompare.returnKey());
+    }
+
+    @Override
+    public void writeOut(PrintWriter toWrite) {
+        //TO BE IMPLEMENTED
     }
 }

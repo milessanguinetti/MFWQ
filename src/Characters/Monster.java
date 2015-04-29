@@ -23,9 +23,12 @@ public abstract class Monster extends gameCharacter{
     }
 
     //constructor with name and stats
-    public Monster(String toName, Stats toAdd){
-        super(toName, toAdd);
+    public Monster(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
+        super(toName, hp, sp, str, dex, spd, vit, inte, fth, arm);
     }
+
+    public abstract int getExp(); //abstract functions to return variable amounts of exp and jexp.
+    public abstract int getJexp();
 
     //sets the monster's combo to the passed skill index
     public void setCombo(int toSet){
@@ -48,13 +51,13 @@ public abstract class Monster extends gameCharacter{
                 }
             } //if we get here, the initial roll chose a nonexistent/dead character
             for (int i = 1; i < 3; ++i) { //first we search every other character in the array
-                if ((roll + i) >= 0) { //if this index is part of the array
+                if ((roll + i) < 4) { //if this index is part of the array
                     if (chars[roll + i] != null) {
                         if (chars[roll + i].isAlive())
                             return roll + i + 1; //return the character's index if they exist
                     }
                 }
-                if ((roll - i) < 4) { //if this index is part of the array
+                if ((roll - i) >= 0) { //if this index is part of the array
                     if (chars[roll - i] != null) {
                         if (chars[roll - i].isAlive())
                             return roll - i + 1; //return the character's index if they exist
@@ -66,13 +69,13 @@ public abstract class Monster extends gameCharacter{
                     return roll + 5; //if a minion at the index exists, target them.
             } //otherwise, search for another minion.
             for (int j = 1; j < 3; ++j){
-                if ((roll + j) >= 0) { //if this index is part of the array
+                if ((roll + j) < 4) { //if this index is part of the array
                     if (mins[roll + j] != null) {
                         if (mins[roll + j].isAlive())
                             return roll + j + 5; //return the minion's index if they exist
                     }
                 }
-                if ((roll - j) < 4) { //if this index is part of the array
+                if ((roll - j) >= 0) { //if this index is part of the array
                     if (mins[roll - j] != null) {
                         if (mins[roll - j].isAlive())
                             return roll - j + 5; //return the minion's index if they exist
@@ -88,13 +91,13 @@ public abstract class Monster extends gameCharacter{
                 }
             } //if we get here, the initial roll chose a nonexistent/dead minion
             for (int i = 1; i < 3; ++i) { //first we search every other character in the array
-                if ((roll + i) >= 0) { //if this index is part of the array
+                if ((roll + i) < 4) { //if this index is part of the array
                     if (mins[roll + i] != null) {
                         if (mins[roll + i].isAlive())
                             return roll + i + 5; //return the minion's index if they exist
                     }
                 }
-                if ((roll - i) < 4) { //if this index is part of the array
+                if ((roll - i) >= 0) { //if this index is part of the array
                     if (mins[roll - i] != null) {
                         if (mins[roll - i].isAlive())
                             return roll - i + 5; //return the character's index if they exist
@@ -106,13 +109,13 @@ public abstract class Monster extends gameCharacter{
                     return roll + 1; //if a character at the index exists, target them.
             } //otherwise, search for another character.
             for (int j = 1; j < 3; ++j){
-                if ((roll + j) >= 0) { //if this index is part of the array
+                if ((roll + j) < 4) { //if this index is part of the array
                     if (chars[roll + j] != null) {
                         if (chars[roll + j].isAlive())
                             return roll + j + 1; //return the character's index if they exist
                     }
                 }
-                if ((roll - j) < 4) { //if this index is part of the array
+                if ((roll - j) >= 0) { //if this index is part of the array
                     if (chars[roll - j] != null) {
                         if (chars[roll - j].isAlive())
                             return roll - j + 1; //return the character's index if they exist
@@ -148,6 +151,7 @@ public abstract class Monster extends gameCharacter{
     @Override //apply the monster's passive buff
     public void applyAutoBuffs() {
         tempProperty = charProperty;
+        setTemps();
         if(currentPassive != null)
             currentPassive.passiveEffect(this);
     }

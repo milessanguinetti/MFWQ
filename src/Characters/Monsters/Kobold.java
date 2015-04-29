@@ -1,0 +1,51 @@
+package Characters.Monsters;
+
+import Characters.Inventory.Consumables.Potion;
+import Characters.Monster;
+import Characters.Properties.Neutral;
+import Characters.Skills.genericMonsterAttack;
+import Characters.Skills.koboldStrike;
+import Characters.Skills.poopOutaBaby;
+import Profile.Game;
+
+import java.util.Random;
+
+/**
+ * Created by Miles Sanguinetti on 4/27/15.
+ */
+public class Kobold extends Monster{
+    public Kobold(){
+        super("Kobold", 50, 50, 5, 4, 2, 5, 1, 1, 1);
+        charProperty = new Neutral();
+        buildSkills(); //build the monster's skills.
+    }
+
+    @Override
+    public void Loot() {
+        Random Rand = new Random();
+        if(Rand.nextInt(4) == 0) {
+            System.out.println("Kobold dropped a potion!");
+            Game.Player.Insert(new Potion());
+        }
+    }
+
+    @Override
+    public int getExp() {
+        return 500;
+    }
+
+    @Override
+    public int getJexp() {
+        return 500;
+    }
+
+    @Override
+    public void buildSkills() {
+        monsterSkills[0] = new genericMonsterAttack();
+        skillProbabilities[0] = 60;
+        monsterSkills[1] = new koboldStrike();
+        skillProbabilities[1] = 30;
+        monsterSkills[2] = new poopOutaBaby();
+        skillProbabilities[2] = 10;
+    }
+}

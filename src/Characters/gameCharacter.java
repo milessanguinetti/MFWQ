@@ -10,6 +10,8 @@ import Structures.LLLnode;
 import Structures.statusEffectData;
 import Structures.statusStructure;
 
+import java.util.Random;
+
 /**
  * Created by Miles Sanguinetti on 3/17/15.
  */
@@ -20,9 +22,9 @@ public abstract class gameCharacter extends Stats {
     protected passiveSkill currentPassive; //the character's passive skill.
     protected Property charProperty; //the character's property
     protected Property tempProperty; //temporary battle property based on buffs
-    private statusStructure statChangeList; //LLL structure for effects that change stats
-    private statusStructure damageEffectList; //effects that impact damage taken
-    private statusStructure endOfTurnList; //effects that take place at the end of a turn
+    private statusStructure statChangeList = new statusStructure(); //LLL structure for effects that change stats
+    private statusStructure damageEffectList = new statusStructure(); //effects that impact damage taken
+    private statusStructure endOfTurnList = new statusStructure(); //effects that take place at the end of a turn
 
 
     //default constructor
@@ -34,8 +36,8 @@ public abstract class gameCharacter extends Stats {
     }
 
     //constructor with name and stats
-    public gameCharacter(String toName, Stats toAdd){
-        super(toAdd);
+    public gameCharacter(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
+        super(hp, sp, str, dex, spd, vit, inte, fth, arm);
         Name = toName;
     }
 
@@ -46,30 +48,37 @@ public abstract class gameCharacter extends Stats {
     //from two passed arrays of game characters representing appropriate targets--minions or game chars
     public abstract int chooseTarget(gameCharacter[] CTargets, gameCharacter[] MTargets);
 
-    //takes damage; returns remaining health.
-    boolean takeDamage(int toTake, String property){
+    //takes damage; returns remaining health
+    public int takeDamage(int toTake, String property){
+        Random Rand = new Random(); //initiate RNG
+
+        float Roll = (float)((Rand.nextInt(31) - 15)*.01); //get a value between .15 and -.15
+        toTake = Math.round(toTake * (1 + Roll)); //we deal somewhere between 85% and 115% damage.
+        //this gives the game some variation in damage numbers.
         toTake = calculateDamage(toTake, property); //take status into account
         if(toTake <= 0)
-            return isAlive();
+            return HP;
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
             System.out.println("The attack had no effect.");
-            return(isAlive());
+            return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
         if(toTake <= 0)
             toTake = 1; //damage is 1 minimum
         subtractHP(toTake); //take the damage
         System.out.println(Name + " took " + toTake + " damage.");
-        return(isAlive());
+        if(!isAlive())
+            System.out.println(Name + " was downed!");
+        return HP; //some skills' effects hinge on whether or not the target died.
     }
 
     //takes absolute damage, ignoring defenses; returns remaining health
-    boolean takeAbsoluteDamage(int toTake){
+    public boolean takeAbsoluteDamage(int toTake){
         if(toTake > 0)
             System.out.println(Name + " took " + toTake + " damage.");
         else
-            System.out.println(Name + " was healed for " + toTake + ".");
+            System.out.println(Name + " was healed for " + toTake*-1 + ".");
         return(subtractHP(toTake));
     }
 
@@ -147,11 +156,12 @@ public abstract class gameCharacter extends Stats {
     //called at the end of each turn to decrement durations and handle end of turn effects.
     public void endTurn(){
         if(isAlive()) { //if the character is still alive...
+            subtractSP(Math.round((SP/20)*-19)); //every turn, regenerate 5% SP.
             endOfTurnList.endTurn(this); //apply end of turn effects
             statChangeList.decrementAll(); //decrement duration of
             endOfTurnList.decrementAll();  //all effects by one
             damageEffectList.decrementAll();
-            updateStatTemps(); //updata stats in case any were removed.
+            updateStatTemps(); //update stats in case any were removed.
         }
         if(!isAlive()){ //if the character was dead, or died after the end of turn effects...
             if(clearStatus()) //clear status if the character is dead.

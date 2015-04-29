@@ -9,4 +9,8 @@ public class Game {
     //the player's user profile; public and static because only one will be used at a time;
     //it would be nonsensical to pass it around into virtually every function I call
     public static userProfile Player;
+
+    public Game(){
+        Player = new userProfile();
+    }
 }

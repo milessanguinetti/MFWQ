@@ -139,6 +139,12 @@ public class orderedLLL extends Structure{
             return 0; //can't insert a null reference or a node object that isn't of type BSTnode
         LLLnode toInsert = ((LLLnode)nodeToInsert);
         if(!toInsert.goesToRight(head)) { //if head is empty or toInsert is larger...
+            if(head != null){ //prevents stacking of extant debuffs at head.
+                if(head.isEqual(toInsert)){
+                    head.Increment(1); //increment by one if it's a repeat and return
+                    return 1;
+                }
+            }
             toInsert.setNext(head);
             head = toInsert; //we insert at head.
         }

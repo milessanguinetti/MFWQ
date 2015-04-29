@@ -5,7 +5,9 @@ import Characters.Inventory.Accessory;
 import Characters.Inventory.Armor;
 import Characters.Inventory.Weapon;
 import Characters.Properties.Neutral;
+import Characters.Skills.Flee;
 import Characters.Skills.Skill;
+import Characters.Skills.Wait;
 import Characters.Skills.passiveSkill;
 import Profile.Game;
 import Structures.LLLnode;
@@ -26,10 +28,10 @@ public class playerCharacter extends gameCharacter {
     private Armor Armor1; //the character's armor
     private Accessory Accessory1; //two accessories
     private Accessory Accessory2;
-    private orderedLLL Classes;
+    private orderedLLL Classes = new orderedLLL();
     private characterClass primaryClass;
     private characterClass secondaryClass;
-    private orderedLLL Passives;
+    private orderedLLL Passives = new orderedLLL();
 
     //default constructor
     public playerCharacter() {
@@ -38,8 +40,9 @@ public class playerCharacter extends gameCharacter {
     }
 
     //special constructor
-    public playerCharacter(String name, String race, Stats toAdd) {
-        super(name, toAdd);
+    public playerCharacter(String name, String race, int hp, int sp, int str,
+                           int dex, int spd, int vit, int inte, int fth, int arm) {
+        super(name, hp, sp, str, dex, spd, vit, inte, fth, arm);
         Race = race;
         expCap = 1000;
         charProperty = new Neutral();
@@ -107,7 +110,7 @@ public class playerCharacter extends gameCharacter {
         int Input = scanner.nextInt();
         scanner.nextLine();
         if (Input == 0)
-            return null; //return a null pointer to cause the character to wait.
+            return new Wait(); //return a new "wait" skill object
         if (Input == 2) {
             System.out.println("Would you like to use a skill from the character's primary or secondary class?");
             System.out.println("Enter '1' for primary or '2' for secondary class. '0' will cancel skill use.");
@@ -163,8 +166,7 @@ public class playerCharacter extends gameCharacter {
                 return chooseSkill(); //return recursive call's value if the user cancelled.
             return itemReturn; //otherwise return the selected item.
         } else if (Input == 4) {
-            //CASE FOR RUNNING
-            return null; //NYI
+            return new Flee();
         }
         else{
             System.out.println("Input invalid.");
@@ -236,8 +238,7 @@ public class playerCharacter extends gameCharacter {
 
     //add a class to the ordered LLL
     public void addClass(characterClass toAdd){
-        LLLnode temp = new LLLnode(toAdd);
-        Classes.Insert(temp);
+        Classes.Insert(new LLLnode(toAdd));
     }
 
     //add a passive skill to the ordered LLL
@@ -286,8 +287,9 @@ public class playerCharacter extends gameCharacter {
             currentPassive = ((passiveSkill)Retrieved.returnData());
     }
 
-    void Ding(int exp, int jexp){
+    public void Ding(int exp, int jexp){
         if((Exp + exp) >= expCap){ //if we've received enough exp to level...
+            System.out.println(Name + " gained a level! " + Name + "'s stats increased!");
             exp -= (expCap - exp);
             ++Level;
             expCap += Math.round(expCap*1.2); //exp cap goes up by 20%
@@ -305,7 +307,7 @@ public class playerCharacter extends gameCharacter {
     }
 
     //calculates base stat gains upon leveling
-    void baseStatGains(){
+    public void baseStatGains(){
         MHP += 10; //MHP and SP necessarily increase
         MSP += 5;
         HP = MHP; //full heal
@@ -361,6 +363,7 @@ public class playerCharacter extends gameCharacter {
     //applies this character's automatic buffs for each equipped item
     public void applyAutoBuffs(){
         tempProperty = charProperty;
+        setTemps();
         if(!(Right == Left)){ //if this isn't a two-handed weapon
             if(Right != null)
                 Right.applyBuffs(this); //apply right's buffs

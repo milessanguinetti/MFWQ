@@ -17,7 +17,11 @@ public abstract class characterClass implements Data {
     int jlevel = 1;
     int jexp = 0; //job experience and job experience need to reach next level.
     int jexpCap = 1000;
-    orderedLLL Skills; //skills for this class
+    orderedLLL Skills = new orderedLLL(); //skills for this class
+
+    public characterClass(String toName){
+        className = toName;
+    }
 
     //add job experience to the character's class.
     public void gainJexp(int Gains, playerCharacter toLevel){

@@ -39,11 +39,42 @@ public class Stats {
         Armor = toCopy.Armor;
     }
 
+    //constructor with a mountain of arguments
+    public Stats(int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
+        MHP = hp;
+        HP = MHP;
+        MSP = sp;
+        SP = MSP;
+        Str = str;
+        Dex = dex;
+        Spd = spd;
+        Vit = vit;
+        Int = inte;
+        Fth = fth;
+        Armor = arm;
+    }
+
     //checks to see if the character is alive
     public boolean isAlive(){
         if(HP != 0)
             return true;
         return false;
+    }
+
+    //scales all stats by a factor included as a parameter. Used to ramp up difficulty
+    //for new game + or perhaps for inclusion of a tougher version of an extant monster.
+    public void scaleDifficulty(float scaleFactor){
+        MHP = Math.round(MHP * scaleFactor);
+        HP = MHP;
+        SP = Math.round(MSP * scaleFactor);
+        SP = MSP;
+        Str = Math.round(Str * scaleFactor);
+        Dex = Math.round(Dex * scaleFactor);
+        Spd = Math.round(Spd * scaleFactor);
+        Vit = Math.round(Vit * scaleFactor);
+        Int = Math.round(Int * scaleFactor);
+        Fth = Math.round(Fth * scaleFactor);
+        Armor = Math.round(Armor * scaleFactor);
     }
 
     //long list of getters. annoying, but important for combat calculations in other classes.
@@ -73,6 +104,10 @@ public class Stats {
 
     public int getSP(){
         return SP;
+    }
+
+    public int getHP(){
+        return HP;
     }
 
     //temp setters

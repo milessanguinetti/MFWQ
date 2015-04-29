@@ -1,5 +1,7 @@
 package Characters;
 
+import Characters.Skills.fleeObject;
+
 /**
  * Created by Miles Sanguinetti on 3/21/15.
  */
@@ -9,7 +11,7 @@ public interface combatEffect {
     //prints the combat effect's name
     public void printName();
     public boolean canUse(gameCharacter toCheck);
-    public void takeAction(gameCharacter Caster, gameCharacter Defender);
+    public void takeAction(gameCharacter Caster, gameCharacter Defender)throws fleeObject;
     public boolean isOffensive();
     public int getAoE();
     public void spLoss(gameCharacter Caster);

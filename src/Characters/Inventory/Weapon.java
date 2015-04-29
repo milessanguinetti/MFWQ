@@ -9,7 +9,7 @@ import Profile.Game;
  * Created by Miles Sanguinetti on 3/29/15.
  */
 public abstract class Weapon extends Item implements equipableItem, combatEffect {
-    private int Damage; //the weapon's damage value (a shield's equals its armor bonus)
+    protected int Damage; //the weapon's damage value (a shield's equals its armor bonus)
     private String weaponType; //the class of the weapon in question
     private boolean isRightHand; //boolean value denotes which hand the weapon goes in
     private boolean isTwoHand; //denotes whether or not the weapon requires two hands

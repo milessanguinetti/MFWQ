@@ -1,5 +1,6 @@
 package Structures;
 
+import Characters.Skills.fleeObject;
 import Characters.combatEffect;
 import Characters.gameCharacter;
 
@@ -62,34 +63,43 @@ public class battleData implements Data {
 
     //executes the skill, used when this piece of data is popped from the
     //LLL structure in the battle class. returns the defender.
-    public void executeCombat(gameCharacter Defender){
-        if(Attacker.isAlive() && Defender.isAlive()) {
+    public void executeCombat(gameCharacter Defender) throws fleeObject{
+        if(Attacker.isAlive()){
             if(targetIndex == 0) { //if the character is targeting themselves
                 Attacker.printName(); //display a simple message
-                System.out.println(" used ");
+                System.out.print(" used ");
                 toCast.printName();
                 System.out.println("!!");
                 Defender = Attacker; //change defender to attacker.
             }
-            if (primaryTarget) { //only display this message once.
-                if (toCast.isOffensive()) {
-                    Attacker.printName();
-                    System.out.print(" attacked ");
-                    Defender.printName();
-                    System.out.print(" with ");
-                    toCast.printName();
-                    System.out.println("!!");
-                } else {
-                    Attacker.printName();
-                    System.out.print(" used ");
-                    toCast.printName();
-                    System.out.print(" on ");
-                    Defender.printName();
-                    System.out.println("!!");
+            if(Defender != null) {
+                if (Defender.isAlive()) {
+                    if (primaryTarget) { //only display this message once.
+                        if (toCast.isOffensive()) {
+                            Attacker.printName();
+                            System.out.print(" attacked ");
+                            Defender.printName();
+                            System.out.print(" with ");
+                            toCast.printName();
+                            System.out.println("!!");
+                        } else {
+                            Attacker.printName();
+                            System.out.print(" used ");
+                            toCast.printName();
+                            System.out.print(" on ");
+                            Defender.printName();
+                            System.out.println("!!");
+                        }
+                        primaryTarget = false; //after the first cast, the defender is no
+                    }                          //longer the primary target.
+                    try {
+                        toCast.takeAction(Attacker, Defender);
+                    }
+                    catch(fleeObject Caught){
+                        throw Caught; //if the "attacker" fled, throw the caught flee object
+                    }
                 }
-                primaryTarget = false; //after the first cast, the defender is no
-            }                          //longer the primary target.
-            toCast.takeAction(Attacker, Defender);
+            }
         }
     }
 
