@@ -121,6 +121,7 @@ public class playerCharacter extends gameCharacter {
                     System.out.println("This character has no primary class.");
                     return chooseSkill();
                 }
+                System.out.println("SP remaining: " + SP + "/" + MSP);
                 primaryClass.displaySkills();
                 System.out.println("Enter the number of the corresponding skill or '0' to cancel.");
                 Input = scanner.nextInt();
@@ -134,6 +135,7 @@ public class playerCharacter extends gameCharacter {
                         return toReturn;
                 }
             } else if (Input == 2) {
+                System.out.println("SP remaining: " + SP + "/" + MSP);
                 if (secondaryClass == null) {
                     System.out.println("This character has no secondary class.");
                     return chooseSkill();

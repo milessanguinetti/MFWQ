@@ -1,17 +1,16 @@
 package Characters.Classes;
 
-import Characters.Skills.*;
+import Characters.Skills.Skill;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
-
 /**
- * Created by Miles Sanguinetti on 4/27/15.
+ * Created by Miles on 4/28/2015.
  */
-//rudimentary melee class focusing on str and vit.
-public class Soldier extends characterClass {
-    public Soldier(){
-        super("Soldier");
+//rudimentary speed/strength melee class
+public class Rogue extends characterClass{
+    public Rogue(){
+        super("Rogue");
     }
 
     @Override
@@ -19,28 +18,28 @@ public class Soldier extends characterClass {
         if(level % 2 == 0)
             toLevel.incrementStat(0, 1); //add a str
         else
-            toLevel.incrementStat(3, 1); //add a vit
+            toLevel.incrementStat(2, 1); //add a spd
     }
 
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierBash()));
+            Skills.Insert(new LLLnode());
             toLevel.printName();
             System.out.println(" learned Bash!");
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+            Skills.Insert(new LLLnode());
             toLevel.printName();
             System.out.println(" learned Wide Slash!");
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode());
             toLevel.printName();
             System.out.println(" learned Rend!");
         }
         if(jlevel == 5)
-            Skills.Insert(new LLLnode(new soldierUnbreakableShield()));
+            Skills.Insert(new LLLnode());
     }
 
     @Override
     public boolean canUseHeavyArmor() {
-        return true;
+        return false;
     }
 }
