@@ -39,8 +39,11 @@ public class koboldStrike extends Skill{
                 (Caster).getWeaponDamage(true)), "Neutral");
 
         Random Rand = new Random();
-        if(Rand.nextInt(4) == 0)
+        if(Rand.nextInt(4) == 0) {
             Defender.addStatus(new Bleeding((Caster).getWeaponDamage(true), 5));
+            Defender.printName();
+            System.out.println(" was afflicted with bleeding!");
+        }
         //25% of the time, the defender will also bleed for the attacker's weapon damage for 3 turns.
     }
 }

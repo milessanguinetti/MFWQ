@@ -246,39 +246,39 @@ public class Stats {
 
     //increment and return a given temp parameter
     //based on the passed integer
-    public int incrementTemp(int toIncrement, int Value){
+    public int incrementTemp(int toIncrement, float Value){
         if(toIncrement == 0) { //str case
-            tempStr += Value;
+            tempStr *= Value;
             return tempStr;
         }
 
         else if(toIncrement == 1) { // dex case
-            tempDex += Value;
+            tempDex *= Value;
             return tempDex;
         }
 
         else if(toIncrement == 2) { //speed case
-            tempSpd += Value;
+            tempSpd *= Value;
             return tempSpd;
         }
 
         else if(toIncrement == 3) { //vit case
-            tempVit += Value;
+            tempVit *= Value;
             return tempVit;
         }
 
         else if(toIncrement == 4) { //int case
-            tempInt += Value;
+            tempInt *= Value;
             return tempInt;
         }
 
         else if(toIncrement == 5){ //fth case
-            tempFth += Value;
+            tempFth *= Value;
             return tempFth;
         }
 
         else if(toIncrement == 6){ //armor case
-            tempArmor += Value;
+            tempArmor *= Value;
             return tempArmor;
         }
 

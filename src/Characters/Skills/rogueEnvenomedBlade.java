@@ -1,6 +1,10 @@
 package Characters.Skills;
 
+import Characters.Status.Poisoned;
+import Characters.Status.deliriantPoison;
 import Characters.gameCharacter;
+
+import java.util.Random;
 
 /**
  * Created by Miles on 4/29/2015.
@@ -28,12 +32,26 @@ public class rogueEnvenomedBlade extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return true;
+        return toCheck.getSP() >= 10;
     }
 
-    @Override //deal 125% damage calculated by strength and right weapon damage.
+    @Override //deal 80% damage calculated by strength and right weapon damage.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.takeDamage(Math.round((5/4)*(Caster.getTempStr() +
-                (Caster).getWeaponDamage(true))), "Neutral");
+        Defender.takeDamage(Math.round((.8f)*(Caster.getTempStr() +
+                (Caster).getWeaponDamage(true))), "Organic");
+        //deal 80% weapon/str damage of organic type
+        Random Rand = new Random();
+        int Roll = Rand.nextInt(3);
+        if(Roll == 1){ //1/3 of the time, inflict standard poison
+            Defender.addStatus(new Poisoned(Caster.getWeaponDamage(true), 5));
+            Defender.printName();
+            System.out.println(" was afflicted with poison!");
+        }
+        if(Roll == 2){ //1/3 of the time, inflict deliriant poison
+            Defender.addStatus(new deliriantPoison(5));
+            Defender.printName();
+            System.out.println(" was afflicted with deliriant poison!");
+        }
+        //otherwise the skill fails to poison.
     }
 }

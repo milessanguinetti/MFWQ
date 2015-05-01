@@ -1,6 +1,9 @@
 package Characters.Classes;
 
 import Characters.Skills.Skill;
+import Characters.Skills.rogueEnvenomedBlade;
+import Characters.Skills.rogueKnifeBarrage;
+import Characters.Skills.rogueSteal;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -11,6 +14,7 @@ import Structures.LLLnode;
 public class Rogue extends characterClass{
     public Rogue(){
         super("Rogue");
+        Skills.Insert(new LLLnode(new rogueEnvenomedBlade())); //initial skill
     }
 
     @Override
@@ -23,19 +27,56 @@ public class Rogue extends characterClass{
 
     @Override
     public void jobDing(playerCharacter toLevel) {
-        if(jlevel == 2){
-            Skills.Insert(new LLLnode());
+        if(jlevel == 2){ //level 2 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
             toLevel.printName();
-            System.out.println(" learned Bash!");
-            Skills.Insert(new LLLnode());
-            toLevel.printName();
-            System.out.println(" learned Wide Slash!");
-            Skills.Insert(new LLLnode());
-            toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Steal!");
         }
-        if(jlevel == 5)
-            Skills.Insert(new LLLnode());
+        if(jlevel == 4){ //level 4 active skill
+            Skills.Insert(new LLLnode(new rogueKnifeBarrage()));
+            toLevel.printName();
+            System.out.println(" learned Knife Barrage!");
+        }
+        if(jlevel == 6){ //level 6 active skill
+            Skills.Insert(new LLLnode(new rogueSteal())); //NYI
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 8){ //level 8 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 10){ //level 10 passive skill
+            toLevel.addPassive(null);
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 12){ //level 12 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 14){ //level 14 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 16){ //level 16 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 18){ //level 18 active skill
+            Skills.Insert(new LLLnode(new rogueSteal()));
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
+        if(jlevel == 20){ //level 20 passive skill
+            toLevel.addPassive(null);
+            toLevel.printName();
+            System.out.println(" learned !");
+        }
     }
 
     @Override

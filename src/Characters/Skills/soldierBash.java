@@ -28,12 +28,12 @@ public class soldierBash extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return true;
+        return toCheck.getSP() >= 5;
     }
 
     @Override //deal 125% damage calculated by strength and right weapon damage.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.takeDamage(Math.round((5/4)*(Caster.getTempStr() +
+        Defender.takeDamage(Math.round(1.25f*(Caster.getTempStr() +
                 ((playerCharacter)Caster).getWeaponDamage(true))), "Neutral");
     }
 }

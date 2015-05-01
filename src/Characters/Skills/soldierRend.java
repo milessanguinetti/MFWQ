@@ -31,7 +31,12 @@ public class soldierRend extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return true;
+        if(!(toCheck.getSP() >= 10))
+            return false; //doesn't have SP for this
+        if(toCheck.hasWeaponType("2h Melee", true) || toCheck.hasWeaponType("1h Melee", true)
+                ||toCheck.hasWeaponType("Knife", true))
+            return true; //rend can only be used with bladed weapons.
+        return false;
     }
 
     @Override //deal str + right weapon damage and apply a ticking DoT.
@@ -40,8 +45,11 @@ public class soldierRend extends Skill{
                 ((playerCharacter)Caster).getWeaponDamage(true)), "Neutral");
 
         Random Rand = new Random();
-        if(Rand.nextInt(2) == 0)
-            Defender.addStatus(new Bleeding(((playerCharacter)Caster).getWeaponDamage(true), 5));
+        if(Rand.nextInt(2) == 0) {
+            Defender.addStatus(new Bleeding(((playerCharacter) Caster).getWeaponDamage(true), 5));
+            Defender.printName();
+            System.out.println(" was afflicted with bleeding!");
+        }
         //50% of the time, the defender will also bleed for the attacker's weapon damage for 5 turns.
     }
 }
