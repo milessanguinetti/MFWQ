@@ -183,7 +183,7 @@ public class Stats {
     //multiply SP by passed integer; returns number of sp lost; rounds
     public int multiplySP(float toMultiply){
         int toReturn = (Math.round(SP * toMultiply) - SP) *-1; //find out how much SP we are losing
-        SP = Math.round(SP * toMultiply); //multiply
+        SP -= toReturn; //actually lose SP now that we know how much we lost
         if(SP > MSP)
             SP = MSP; //no SP pools above max after gaining SP
         else if(SP < 0)
@@ -305,7 +305,7 @@ public class Stats {
 
         else if(toIncrement == 3) { //vit case
             Vit += Value;
-            MSP += Value * 10;
+            MHP += Value * 10;
             if(MHP < HP)
                 HP = MHP;
             return Vit;
@@ -333,5 +333,22 @@ public class Stats {
         }
 
         return 0; //stat not found
+    }
+
+    //increments all stats by one; kind of a weird function, but useful because
+    //all jobs give +1 to all stats at jlvl20
+    public void incrementAll() {
+            ++Str;
+            ++Dex;
+            ++Spd;
+            ++Vit;
+            MHP += 10;
+            if (MHP < HP)
+                HP = MHP;
+            ++Int;
+            ++Fth;
+            MSP += 5;
+            if (MSP < SP)
+                SP = MSP;
     }
 }

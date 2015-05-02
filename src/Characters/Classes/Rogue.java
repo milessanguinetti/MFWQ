@@ -67,15 +67,13 @@ public class Rogue extends characterClass{
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 18){ //level 18 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
-            toLevel.printName();
-            System.out.println(" learned !");
-        }
-        if(jlevel == 20){ //level 20 passive skill
+        if(jlevel == 18){ //level 18 passive skill
             toLevel.addPassive(null);
             toLevel.printName();
             System.out.println(" learned !");
+        }
+        if(jlevel == 20){ //level 20 stat boost
+            toLevel.incrementAll(); //increment every stat
         }
     }
 
