@@ -1,5 +1,7 @@
 package Characters.Classes;
 
+import Characters.Skills.Passive.armorOfStone;
+import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -10,7 +12,7 @@ import Structures.LLLnode;
 public class Enchanter extends characterClass{
     public Enchanter(){
         super("Enchanter");
-        Skills.Insert(new LLLnode(new soldierBash()));
+        Skills.Insert(new LLLnode(new enchanterInvokeFlame()));
     }
 
     @Override
@@ -24,44 +26,44 @@ public class Enchanter extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode(new enchanterInvokeStone()));
             toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Invoke Stone!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+            Skills.Insert(new LLLnode(new enchanterInvokeStorm()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Invoke Storm!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash())); //NEED NEW SKILL HERE
+            Skills.Insert(new LLLnode(new enchanterInvokeWater()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Invoke Water!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
+            Skills.Insert(new LLLnode(new enchanterImbueWeapon()));
             toLevel.printName();
-            System.out.println(" learned Unbreakable Shield!");
+            System.out.println(" learned Imbue Weapon!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
-            toLevel.addPassive(null);
+            toLevel.addPassive(new armorOfStone());
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned the passive skill Armor of Stone!");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new enchanterInvokeSteel()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Invoke Steel!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new enchanterElementalStorm()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Elemental Storm!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new enchanterEtherealArmor()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Ethereal Armor!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);

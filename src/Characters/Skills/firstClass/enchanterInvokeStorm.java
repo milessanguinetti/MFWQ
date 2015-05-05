@@ -9,12 +9,12 @@ import Characters.gameCharacter;
 public class enchanterInvokeStorm extends Skill{
     public enchanterInvokeStorm(){
         super("Invoke Storm",
-                "Electrocutes the target with a thunderbolt, dealing double damage on aqueous foes.", 15);
+                "Electrocutes the target with a thunderbolt, dealing double damage on aqueous foes.", 20);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(15);
+        Caster.subtractSP(20);
     }
 
     @Override
@@ -34,13 +34,14 @@ public class enchanterInvokeStorm extends Skill{
         return false;
     }
 
-    @Override //2.2 * int damage (with staff mod) apply a
+    @Override //2 * int damage (with staff mod); double if target is water property
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         float staffMod = 1; //staff damage modifier
         int waterMod = 1; //deals double damage if the target is water property
         if(Caster.hasWeaponType("1h staff", false) || Caster.hasWeaponType("2h staff", false))
             staffMod = 1.5f; //magic with staves deals 150% damage.
-        if(Defender.prop) //START HERE
-        Defender.takeDamage(Math.round(Caster.getTempInt() * 2 * staffMod), "Neutral");
+        if(Defender.hasProperty("Water"))
+            waterMod = 2; //lightning does 2x damage v.s. water property
+        Defender.takeDamage(Math.round(Caster.getTempInt() * 2 * staffMod * waterMod), "Neutral");
     }
 }

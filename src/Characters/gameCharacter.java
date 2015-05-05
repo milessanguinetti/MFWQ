@@ -187,6 +187,10 @@ public abstract class gameCharacter extends Stats {
     //gets the character's attack property.
     abstract public String getWeaponProperty(boolean isRight);
 
+    public boolean hasProperty(String toCompare){
+        return tempProperty.isProperty(toCompare);
+    }
+
     //gets attack damage
     abstract public int getWeaponDamage(boolean isRight);
 }

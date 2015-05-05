@@ -1,8 +1,6 @@
 package Characters.Classes;
 
-import Characters.Skills.firstClass.alchemistTransmuteBlood;
-import Characters.Skills.firstClass.alchemistTransmuteGoldenBullet;
-import Characters.Skills.firstClass.alchemistTransmutePStone;
+import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -18,9 +16,9 @@ public class Alchemist extends characterClass{
     @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
-            toLevel.incrementStat(0, 1); //add a str
+            toLevel.incrementStat(1, 1); //add a dex
         else
-            toLevel.incrementStat(2, 1); //add a spd
+            toLevel.incrementStat(4, 1); //add an int
     }
 
     @Override
@@ -31,19 +29,19 @@ public class Alchemist extends characterClass{
             System.out.println(" learned Transmute: Golden Bullet!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new rogueKnifeBarrage()));
+            Skills.Insert(new LLLnode(new alchemistPotionMixing()));
             toLevel.printName();
-            System.out.println(" learned Knife Barrage!");
+            System.out.println(" learned Potion Mixing!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new rogueSteal())); //NYI
+            Skills.Insert(new LLLnode(new alchemistIncendiaryBullet()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Incendiary Bullet!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new alchemistAlchemicalTreatment()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Alchemical Treatment!");
         }
         if(jlevel == 10){ //level 10 passive skill
             toLevel.addPassive(null);
@@ -63,7 +61,7 @@ public class Alchemist extends characterClass{
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new LLLnode(new alchemistTransmutePStone()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Transmute: Philosopher's Stone!");
         }
         if(jlevel == 18){ //level 18 passive skill
             toLevel.addPassive(null);
