@@ -1,5 +1,8 @@
 package Characters.Classes;
 
+import Characters.Skills.inquisitorArdensLux;
+import Characters.Skills.inquisitorHymnOfHealing;
+import Characters.Skills.inquisitorSoothingLight;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -10,7 +13,7 @@ import Structures.LLLnode;
 public class Inquisitor extends characterClass{
     public Inquisitor(){
         super("Inquisitor");
-        Skills.Insert(new LLLnode(new soldierBash()));
+        Skills.Insert(new LLLnode(new inquisitorSoothingLight()));
     }
 
     @Override
@@ -24,14 +27,14 @@ public class Inquisitor extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode(new inquisitorArdensLux()));
             toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Ardens Lux!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+            Skills.Insert(new LLLnode(new inquisitorHymnOfHealing()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Hymn of Healing!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new LLLnode(new soldierWideSlash())); //NEED NEW SKILL HERE

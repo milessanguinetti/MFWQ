@@ -4,19 +4,19 @@ import Characters.gameCharacter;
 import Structures.statusEffectData;
 
 /**
- * Created by Miles Sanguinetti on 4/30/2015.
+ * Created by Miles on 5/5/2015.
  */
-public class Poison extends statusEffectData implements endOfTurn{
+public class Burning extends statusEffectData implements endOfTurn{
     int Damage;
 
-    public Poison(int damage, int duration){
-        super("Poisoned", duration);
+    public Burning(int damage, int duration){
+        super("Burning", duration);
         Damage = damage;
     }
 
     public void endOfTurnEffects(gameCharacter toAffect) {
         toAffect.printName();
-        System.out.println( " is poisoned.");
+        System.out.println( " is aflame.");
         toAffect.takeAbsoluteDamage(Damage);
     }
 }
