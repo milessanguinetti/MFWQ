@@ -12,6 +12,6 @@ public class unbreakableShield extends statusEffectData implements damageEffect 
     }
 
     public int calculateDamage(int toCalculate, String Property) {
-        return Math.round(toCalculate / 4);
+        return Math.round(toCalculate*.75f);
     }
 }

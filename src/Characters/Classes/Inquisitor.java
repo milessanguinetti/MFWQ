@@ -1,24 +1,22 @@
 package Characters.Classes;
 
-import Characters.Skills.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
-
 /**
- * Created by Miles Sanguinetti on 4/27/15.
+ * Created by Miles Sanguinetti on 5/4/15.
  */
-//rudimentary melee class focusing on str and vit.
-public class Soldier extends characterClass {
-    public Soldier(){
-        super("Soldier");
+//
+public class Inquisitor extends characterClass{
+    public Inquisitor(){
+        super("Inquisitor");
         Skills.Insert(new LLLnode(new soldierBash()));
     }
 
     @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
-            toLevel.incrementStat(0, 1); //add a str
+            toLevel.incrementStat(0, 5); //add a faith
         else
             toLevel.incrementStat(3, 1); //add a vit
     }
@@ -77,6 +75,6 @@ public class Soldier extends characterClass {
 
     @Override
     public boolean canUseHeavyArmor() {
-        return true;
+        return false;
     }
 }

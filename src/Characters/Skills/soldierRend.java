@@ -42,7 +42,7 @@ public class soldierRend extends Skill{
     @Override //deal str + right weapon damage and apply a ticking DoT.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.takeDamage((Caster.getTempStr() +
-                ((playerCharacter)Caster).getWeaponDamage(true)), "Neutral");
+                ((playerCharacter)Caster).getWeaponDamage(true)), Caster.getWeaponProperty(true));
 
         Random Rand = new Random();
         if(Rand.nextInt(2) == 0) {

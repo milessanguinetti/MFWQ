@@ -8,7 +8,7 @@ import Characters.playerCharacter;
 import Structures.LLLnode;
 
 /**
- * Created by Miles on 4/28/2015.
+ * Created by Miles Sanguinetti on 4/28/2015.
  */
 //rudimentary speed/strength melee class
 public class Rogue extends characterClass{

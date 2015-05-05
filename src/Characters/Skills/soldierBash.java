@@ -34,6 +34,6 @@ public class soldierBash extends Skill{
     @Override //deal 125% damage calculated by strength and right weapon damage.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.takeDamage(Math.round(1.25f*(Caster.getTempStr() +
-                ((playerCharacter)Caster).getWeaponDamage(true))), "Neutral");
+                ((playerCharacter)Caster).getWeaponDamage(true))), Caster.getWeaponProperty(true));
     }
 }

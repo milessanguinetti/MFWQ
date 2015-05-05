@@ -1,5 +1,8 @@
 package Characters.Classes;
 
+import Characters.Skills.alchemistTransmuteBlood;
+import Characters.Skills.alchemistTransmuteGoldenBullet;
+import Characters.Skills.alchemistTransmutePStone;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +12,7 @@ import Structures.LLLnode;
 public class Alchemist extends characterClass{
     public Alchemist(){
         super("Alchemist");
-        Skills.Insert(new LLLnode(new rogueEnvenomedBlade())); //initial skill
+        Skills.Insert(new LLLnode(new alchemistTransmuteBlood())); //initial skill
     }
 
     @Override
@@ -23,9 +26,9 @@ public class Alchemist extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new alchemistTransmuteGoldenBullet()));
             toLevel.printName();
-            System.out.println(" learned Steal!");
+            System.out.println(" learned Transmute: Golden Bullet!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new LLLnode(new rogueKnifeBarrage()));
@@ -58,7 +61,7 @@ public class Alchemist extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new alchemistTransmutePStone()));
             toLevel.printName();
             System.out.println(" learned !");
         }

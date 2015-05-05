@@ -28,7 +28,7 @@ public class alchemistTransmuteGoldenBullet extends Skill{
 
     @Override
     public int getAoE() {
-        return 4;
+        return 0;
     }
 
     @Override
@@ -43,8 +43,9 @@ public class alchemistTransmuteGoldenBullet extends Skill{
         return true; //otherwise, the skill can be used
     }
 
-    @Override //deal 20% damage calculated by strength and right weapon damage.
+    @Override //deal (dex + 2 * weapon damage) * 1.5 damage
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-
+        Defender.takeDamage(Math.round((Caster.getWeaponDamage(false) * 2 +
+                Caster.getTempDex()) * 1.5f), Caster.getWeaponProperty(false));
     }
 }

@@ -33,7 +33,7 @@ public class soldierWideSlash extends Skill{
 
     @Override //deal 80% of right weapon damage + strength
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.takeDamage(Math.round(4 * (Caster.getTempStr() +
-                Caster.getWeaponDamage(true))/5), "Neutral");
+        Defender.takeDamage(Math.round(.8f * (Caster.getTempStr() +
+                Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));
     }
 }

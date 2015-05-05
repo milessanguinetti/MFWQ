@@ -7,14 +7,14 @@ import Characters.gameCharacter;
  * Created by Miles Sanguinetti on 4/27/15.
  */
 //makes the character all but immune to damage for 10 turns
-public class soldierUnbreakableShield extends Skill{
-    public soldierUnbreakableShield(){
-        super("Unbreakable Shield", "The caster guards themselves with all of their might.", 100);
+public class defenderUnbreakableShield extends Skill{
+    public defenderUnbreakableShield(){
+        super("Unbreakable Shield", "The caster guards themselves with all of their might.", 30);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(100);
+        Caster.subtractSP(30);
     }
 
     @Override

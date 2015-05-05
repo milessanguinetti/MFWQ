@@ -30,7 +30,9 @@ public class koboldStrike extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return true;
+        if(toCheck.getSP() >= 15)
+            return true;
+        return false;
     }
 
     @Override //deal 125% damage calculated by strength and right weapon damage.
