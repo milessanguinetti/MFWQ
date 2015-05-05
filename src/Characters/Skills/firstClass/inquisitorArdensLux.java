@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.Burning;
 import Characters.gameCharacter;
 
@@ -9,14 +10,14 @@ import java.util.Random;
  * Created by Miles Sanguinetti on 5/5/2015.
  */
 //offensive, holy based inquisitor skill
-public class inquisitorArdensLux extends Skill{
+public class inquisitorArdensLux extends Skill {
     public inquisitorArdensLux(){
         super("Ardens Lux", "Burns the target with searing light from the heavens.", 10);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(15);
+        Caster.subtractSP(10);
     }
 
     @Override

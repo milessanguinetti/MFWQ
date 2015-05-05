@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.Monster;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 
 import java.util.Random;
@@ -7,7 +8,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 4/27/15.
  */
-public class genericMonsterAttack extends Skill{
+public class genericMonsterAttack extends Skill {
     public genericMonsterAttack(){
         super("its sharp claws", "", 0);
     }
@@ -42,8 +43,7 @@ public class genericMonsterAttack extends Skill{
             largestvalue = Caster.getTempInt();
         if(largestvalue < Caster.getTempFth())
             largestvalue = Caster.getTempFth();
-        Defender.takeDamage(Math.round((largestvalue/2)*3), Defender.getWeaponProperty(true));
-        //we deal damage based on 1.5 times the largest value of a property equal to a monster's
-        //defensive property, which is what getweaponproperty does for monsters.
+        Defender.takeDamage(Math.round((largestvalue/2)*3), "Neutral");
+        //we deal damage based on 1.5 times the largest value damage of neutral property
     }
 }

@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.Monster;
 
+import Characters.Skills.Skill;
 import Characters.Status.Bleeding;
 import Characters.gameCharacter;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 4/27/15.
  */
-public class koboldStrike extends Skill{
+public class koboldStrike extends Skill {
     public koboldStrike(){
         super("Kobold Strike", "", 15);
     }

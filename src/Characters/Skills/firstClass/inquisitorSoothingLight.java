@@ -1,12 +1,13 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.soothingLight;
 import Characters.gameCharacter;
 
 /**
  * Created by Miles Sanguinetti on 5/4/15.
  */
-public class inquisitorSoothingLight extends Skill{
+public class inquisitorSoothingLight extends Skill {
     public inquisitorSoothingLight(){
         super("Soothing Light",
                 "Bathes the target in soothing light to heal injuries over time.", 10);

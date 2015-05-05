@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Profile.Game;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 5/1/2015.
  */
-public class alchemistTransmuteGoldenBullet extends Skill{
+public class alchemistTransmuteGoldenBullet extends Skill {
     public alchemistTransmuteGoldenBullet(){
         super("Transmute: Golden Bullet",
                 "Transmutes coins into a powerful bullet. Requires a gun to cast.", 5);

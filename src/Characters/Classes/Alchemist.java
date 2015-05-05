@@ -1,8 +1,8 @@
 package Characters.Classes;
 
-import Characters.Skills.alchemistTransmuteBlood;
-import Characters.Skills.alchemistTransmuteGoldenBullet;
-import Characters.Skills.alchemistTransmutePStone;
+import Characters.Skills.firstClass.alchemistTransmuteBlood;
+import Characters.Skills.firstClass.alchemistTransmuteGoldenBullet;
+import Characters.Skills.firstClass.alchemistTransmutePStone;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 

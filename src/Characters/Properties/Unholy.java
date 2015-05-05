@@ -6,7 +6,7 @@ package Characters.Properties;
 public class Unholy extends Property{
 
     //default constructor sets name to Unholy
-    Unholy(){
+    public Unholy(){
         super("Unholy");
     }
 

@@ -6,7 +6,7 @@ package Characters.Properties;
 public class Water extends Property{
 
     //default constructor sets name to Water
-    Water(){
+    public Water(){
         super("Water");
     }
 

@@ -1,7 +1,8 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
 import Characters.Inventory.Item;
 import Characters.Monster;
+import Characters.Skills.Skill;
 import Characters.Status.Poisoned;
 import Characters.gameCharacter;
 import Profile.Game;

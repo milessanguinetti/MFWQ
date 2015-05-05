@@ -6,7 +6,7 @@ package Characters.Properties;
 public class Fire extends Property{
 
     //default constructor sets name to Fire
-    Fire(){
+    public Fire(){
         super("Fire");
     }
 

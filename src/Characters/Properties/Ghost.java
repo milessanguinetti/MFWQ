@@ -7,7 +7,7 @@ package Characters.Properties;
 public class Ghost extends Property {
 
     //default constructor sets name to ghost
-    Ghost(){
+    public Ghost(){
         super("Ghost");
     }
 

@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 
@@ -7,7 +8,7 @@ import Characters.playerCharacter;
  * Created by Miles Sanguinetti on 4/27/15.
  */
 //a general low-SP cleave attack.
-public class soldierWideSlash extends Skill{
+public class soldierWideSlash extends Skill {
     public soldierWideSlash(){
         super("Wide Slash", "Slashes around the user to cleave through multiple foes.", 20);
     }

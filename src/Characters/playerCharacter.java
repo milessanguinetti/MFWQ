@@ -8,7 +8,7 @@ import Characters.Properties.Neutral;
 import Characters.Skills.Flee;
 import Characters.Skills.Skill;
 import Characters.Skills.Wait;
-import Characters.Skills.passiveSkill;
+import Characters.Skills.Passive.passiveSkill;
 import Profile.Game;
 import Structures.LLLnode;
 import Structures.orderedLLL;

@@ -1,12 +1,13 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 
 /**
  * Created by Miles Sanguinetti on 4/27/15.
  */
-public class soldierBash extends Skill{
+public class soldierBash extends Skill {
     public soldierBash(){
         super("Bash", "Bashes the target with an equipped weapon.", 5);
     }

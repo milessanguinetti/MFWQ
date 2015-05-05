@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.Poisoned;
 import Characters.Status.deliriantPoison;
 import Characters.gameCharacter;
@@ -9,7 +10,7 @@ import java.util.Random;
 /**
  * Created by Miles on 4/29/2015.
  */
-public class rogueEnvenomedBlade extends Skill{
+public class rogueEnvenomedBlade extends Skill {
     public rogueEnvenomedBlade(){
         super("Envenomed Blade",
                 "Strikes the target with a poisoned weapon. Can cause a variety of negative effects.", 10);

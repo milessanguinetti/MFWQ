@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.Poisoned;
 import Characters.gameCharacter;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 5/1/15.
  */
-public class rogueKnifeBarrage extends Skill{
+public class rogueKnifeBarrage extends Skill {
     public rogueKnifeBarrage(){
         super("Knife Barrage",
                 "Hurls hand-fulls of poisoned knives at the enemy. Liable to miss.", 25);

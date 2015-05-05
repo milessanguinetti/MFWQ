@@ -1,13 +1,14 @@
-package Characters.Skills;
+package Characters.Skills.Monster;
 
 import Characters.Monsters.babyKobold;
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 4/27/15.
  */
-public class poopOutaBaby extends Skill{
+public class poopOutaBaby extends Skill {
     public poopOutaBaby(){
         super("Poop Out a Baby", "", 50);
     }

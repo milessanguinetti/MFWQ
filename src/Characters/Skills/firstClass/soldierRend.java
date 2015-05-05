@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.Bleeding;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
@@ -9,7 +10,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 4/27/15.
  */
-public class soldierRend extends Skill{
+public class soldierRend extends Skill {
     public soldierRend(){
         super("Rend", "Rends the target with a bladed weapon.", 10);
     }
@@ -31,8 +32,8 @@ public class soldierRend extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(!(toCheck.getSP() >= 10))
-            return false; //doesn't have SP for this
+        if(toCheck.getSP() >= 10)
+            return true; //doesn't have SP for this
         if(toCheck.hasWeaponType("2h Melee", true) || toCheck.hasWeaponType("1h Melee", true)
                 ||toCheck.hasWeaponType("Knife", true))
             return true; //rend can only be used with bladed weapons.

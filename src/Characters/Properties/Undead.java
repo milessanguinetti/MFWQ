@@ -6,7 +6,7 @@ package Characters.Properties;
 public class Undead extends Property{
 
     //default constructor sets name to undead
-    Undead(){
+    public Undead(){
         super("Undead");
     }
 

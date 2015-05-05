@@ -1,5 +1,6 @@
-package Characters.Skills;
+package Characters.Skills.secondClass;
 
+import Characters.Skills.Skill;
 import Characters.Status.unbreakableShield;
 import Characters.gameCharacter;
 
@@ -7,7 +8,7 @@ import Characters.gameCharacter;
  * Created by Miles Sanguinetti on 4/27/15.
  */
 //makes the character all but immune to damage for 10 turns
-public class defenderUnbreakableShield extends Skill{
+public class defenderUnbreakableShield extends Skill {
     public defenderUnbreakableShield(){
         super("Unbreakable Shield", "The caster guards themselves with all of their might.", 30);
     }
@@ -29,6 +30,8 @@ public class defenderUnbreakableShield extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
+        if(toCheck.getSP() < 30)
+            return false;
         return true;
     }
 

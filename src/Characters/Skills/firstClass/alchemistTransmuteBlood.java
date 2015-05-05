@@ -1,12 +1,13 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/4/15.
  */
-public class alchemistTransmuteBlood extends Skill{
+public class alchemistTransmuteBlood extends Skill {
     public alchemistTransmuteBlood(){
         super("Transmute: Blood",
                 "Attacks the target and transmutes their blood into gold.", 5);

@@ -1,8 +1,7 @@
 package Characters;
 
 import Characters.Properties.Property;
-import Characters.Skills.Skill;
-import Characters.Skills.passiveSkill;
+import Characters.Skills.Passive.passiveSkill;
 import Characters.Status.damageEffect;
 import Characters.Status.endOfTurn;
 import Characters.Status.statChange;
@@ -39,6 +38,11 @@ public abstract class gameCharacter extends Stats {
     public gameCharacter(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
         super(hp, sp, str, dex, spd, vit, inte, fth, arm);
         Name = toName;
+    }
+
+    //sets the character's temp property to a passed property.
+    public void setTempProperty(Property tempProperty) {
+        this.tempProperty = tempProperty;
     }
 
     //retrieves a combat effect to use during the character's turn.

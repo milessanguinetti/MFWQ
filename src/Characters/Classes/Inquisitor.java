@@ -1,15 +1,16 @@
 package Characters.Classes;
 
-import Characters.Skills.inquisitorArdensLux;
-import Characters.Skills.inquisitorHymnOfHealing;
-import Characters.Skills.inquisitorSoothingLight;
+import Characters.Skills.firstClass.inquisitorAbsolution;
+import Characters.Skills.firstClass.inquisitorArdensLux;
+import Characters.Skills.firstClass.inquisitorHymnOfHealing;
+import Characters.Skills.firstClass.inquisitorSoothingLight;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
 /**
  * Created by Miles Sanguinetti on 5/4/15.
  */
-//
+//essentially a faith-based hybrid support/damage dealer
 public class Inquisitor extends characterClass{
     public Inquisitor(){
         super("Inquisitor");
@@ -37,9 +38,9 @@ public class Inquisitor extends characterClass{
             System.out.println(" learned Hymn of Healing!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash())); //NEED NEW SKILL HERE
+            Skills.Insert(new LLLnode(new inquisitorAbsolution()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Absolve!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new LLLnode(new defenderUnbreakableShield()));

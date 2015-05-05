@@ -15,10 +15,10 @@ public abstract class Skill implements Data, combatEffect{
     int mpCost;
 
     //default constructor
-    Skill(){}
+    public Skill(){}
 
     //special constructor
-    Skill(String passedName, String passedDescription, int passedCost){
+    public Skill(String passedName, String passedDescription, int passedCost){
         skillName = passedName;
         Description = passedDescription;
         mpCost = passedCost;

@@ -6,7 +6,7 @@ package Characters.Properties;
 public class Organic extends Property{
 
     //default constructor sets name to organic
-    Organic(){
+    public Organic(){
         super("Organic");
     }
 

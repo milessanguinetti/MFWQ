@@ -1,12 +1,13 @@
-package Characters.Skills;
+package Characters.Skills.firstClass;
 
+import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/4/15.
  */
-public class alchemistTransmutePStone extends Skill{
+public class alchemistTransmutePStone extends Skill {
     public alchemistTransmutePStone(){
         super("Transmute: Philosopher's Stone",
                 "A weak attack that transmutes the victim's essence into a philosopher's stone if they die.", 50);

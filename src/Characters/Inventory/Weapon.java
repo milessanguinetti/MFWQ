@@ -39,11 +39,11 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
             isTwoHand = true;
         }
         else if(weapontype.equals("1h Staff")){
-            isRightHand = true;
+            isRightHand = false;
             isTwoHand = false;
         }
         else if(weapontype.equals("2h Staff")){
-            isRightHand = true;
+            isRightHand = false;
             isTwoHand = true;
         }
         else if(weapontype.equals("Shield")){

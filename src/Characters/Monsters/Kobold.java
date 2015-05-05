@@ -3,9 +3,9 @@ package Characters.Monsters;
 import Characters.Inventory.Consumables.Potion;
 import Characters.Monster;
 import Characters.Properties.Neutral;
-import Characters.Skills.genericMonsterAttack;
-import Characters.Skills.koboldStrike;
-import Characters.Skills.poopOutaBaby;
+import Characters.Skills.Monster.genericMonsterAttack;
+import Characters.Skills.Monster.koboldStrike;
+import Characters.Skills.Monster.poopOutaBaby;
 import Profile.Game;
 
 import java.util.Random;

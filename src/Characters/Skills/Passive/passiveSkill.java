@@ -1,7 +1,9 @@
-package Characters.Skills;
+package Characters.Skills.Passive;
 
 import Characters.gameCharacter;
 import Structures.Data;
+
+import java.io.PrintWriter;
 
 /**
  * Created by Miles Sanguinetti on 4/2/15.
@@ -57,5 +59,10 @@ public abstract class passiveSkill implements Data{
     @Override
     public int compareTo(Data toCompare) {
         return skillName.compareTo(toCompare.returnKey());
+    }
+
+    @Override
+    public void writeOut(PrintWriter toWrite) {
+        toWrite.println(skillName);
     }
 }
