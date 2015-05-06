@@ -6,7 +6,7 @@ import java.io.PrintWriter;
  * Created by Miles Sanguinetti on 3/18/15.
  */
 public class statusEffectData implements Data, incrementableData{
-    private String Name; //name of status effect
+    protected String Name; //name of status effect
     private int Turns; //turns remaining
 
     //default constructor

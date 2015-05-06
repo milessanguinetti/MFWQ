@@ -8,11 +8,12 @@ import Characters.playerCharacter;
 import java.util.Random;
 
 /**
- * Created by Miles Sanguinetti on 4/27/15.
+ * Created by Miles on 5/5/2015.
  */
-public class soldierRend extends Skill {
-    public soldierRend(){
-        super("Rend", "Rends the target with a bladed weapon.", 10);
+public class archerLaceratingArrow extends Skill {
+    public archerLaceratingArrow(){
+        super("Lacerating Arrow",
+                "Shoots a barbed arrow at the target that cuts deep into the flesh and can leave them bleeding.", 10);
     }
 
     @Override
@@ -34,15 +35,14 @@ public class soldierRend extends Skill {
     public boolean canUse(gameCharacter toCheck) {
         if(toCheck.getSP() < 10)
             return false; //doesn't have SP for this
-        if(!toCheck.hasWeaponType("2h Melee", true) && !toCheck.hasWeaponType("1h Melee", true)
-                && !toCheck.hasWeaponType("Knife", true))
-            return false; //rend can only be used with bladed weapons.
+        if(!toCheck.hasWeaponType("Bow", true))
+            return false; //lacerating arrow can only be used with bow
         return true;
     }
 
-    @Override //deal str + right weapon damage and apply a ticking DoT.
+    @Override //deal dex + right weapon damage and apply a ticking DoT.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.takeDamage((Caster.getTempStr() +
+        Defender.takeDamage((Caster.getTempDex() +
                 ((playerCharacter)Caster).getWeaponDamage(true)), Caster.getWeaponProperty(true));
 
         Random Rand = new Random();

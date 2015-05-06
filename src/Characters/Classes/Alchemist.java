@@ -49,9 +49,9 @@ public class Alchemist extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new alchemistCorrosiveVial()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Corrosive Vial!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new LLLnode(new rogueSteal()));
