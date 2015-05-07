@@ -13,7 +13,7 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
     private String weaponType; //the class of the weapon in question
     private boolean isRightHand; //boolean value denotes which hand the weapon goes in
     private boolean isTwoHand; //denotes whether or not the weapon requires two hands
-    private String Property; //the weapon's property
+    protected String Property; //the weapon's property
 
     //default constructor
     public Weapon(){}
@@ -24,6 +24,49 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         Damage = damage;
         weaponType = weapontype;
         Property = property;
+        //beyond setting those, we set the righthand/twohand variables based on
+        //the type that we are looking at.
+        if(weapontype.equals("Knife")){
+            isRightHand = true;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("1h Melee")){
+            isRightHand = true;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("2h Melee")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+        else if(weapontype.equals("1h Staff")){
+            isRightHand = false;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("2h Staff")){
+            isRightHand = false;
+            isTwoHand = true;
+        }
+        else if(weapontype.equals("Shield")){
+            isRightHand = false;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("Gun")){
+            isRightHand = false;
+            isTwoHand = false;
+        }
+        else if(weapontype.equals("Bow")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+    }
+
+    //constructor that handles all data except name and property. Principally used to
+    //provide an efficient way to construct randomly generated weapons with names and
+    //properties that are not known when I make a "super" call in the constructor
+    public Weapon(String Description, int damage, String weapontype){
+        super(Description);
+        Damage = damage;
+        weaponType = weapontype;
         //beyond setting those, we set the righthand/twohand variables based on
         //the type that we are looking at.
         if(weapontype.equals("Knife")){
@@ -87,7 +130,7 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
 
     @Override
     public void printName() {
-        System.out.print("their weapon");
+        System.out.print("their " + itemName);
     }
 
     @Override //equip the item to the passed character

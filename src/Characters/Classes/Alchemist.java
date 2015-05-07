@@ -24,9 +24,9 @@ public class Alchemist extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
-            Skills.Insert(new LLLnode(new alchemistTransmuteGoldenBullet()));
+            Skills.Insert(new LLLnode(new alchemistIncendiaryBullet()));
             toLevel.printName();
-            System.out.println(" learned Transmute: Golden Bullet!");
+            System.out.println(" learned Incendiary Bullet!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new LLLnode(new alchemistPotionMixing()));
@@ -34,9 +34,9 @@ public class Alchemist extends characterClass{
             System.out.println(" learned Potion Mixing!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new alchemistIncendiaryBullet()));
+            Skills.Insert(new LLLnode(new alchemistTransmuteGoldenBullet()));
             toLevel.printName();
-            System.out.println(" learned Incendiary Bullet!");
+            System.out.println(" learned Transmute: Golden Bullet!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new LLLnode(new alchemistAlchemicalTreatment()));
@@ -54,9 +54,9 @@ public class Alchemist extends characterClass{
             System.out.println(" learned Corrosive Vial!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new alchemistUnpredictablePotion()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Unpredictable Potion!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new LLLnode(new alchemistTransmutePStone()));

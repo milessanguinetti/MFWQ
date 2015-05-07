@@ -1,5 +1,7 @@
 package Characters.Classes;
 
+import Characters.Skills.firstClass.primalistBogMiasma;
+import Characters.Skills.firstClass.primalistCallStorm;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +11,7 @@ import Structures.LLLnode;
 public class Primalist extends characterClass{
     public Primalist(){
         super("Primalist");
-        Skills.Insert(new LLLnode(new soldierBash()));
+        Skills.Insert(new LLLnode(new primalistBogMiasma()));
     }
 
     @Override
@@ -23,11 +25,11 @@ public class Primalist extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode(new primalistCallStorm()));
             toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Call Storm!");
         }
-        if(jlevel == 4){ //level 4 active skill
+/*        if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new LLLnode(new soldierWideSlash()));
             toLevel.printName();
             System.out.println(" learned Wide Slash!");
@@ -69,7 +71,7 @@ public class Primalist extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }
+        }*/
     }
 
     @Override

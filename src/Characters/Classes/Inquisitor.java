@@ -1,9 +1,6 @@
 package Characters.Classes;
 
-import Characters.Skills.firstClass.inquisitorAbsolution;
-import Characters.Skills.firstClass.inquisitorArdensLux;
-import Characters.Skills.firstClass.inquisitorHymnOfHealing;
-import Characters.Skills.firstClass.inquisitorSoothingLight;
+import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -43,16 +40,16 @@ public class Inquisitor extends characterClass{
             System.out.println(" learned Absolve!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
+            Skills.Insert(new LLLnode(new inquisitorExpellereSpiritusImmundus()));
             toLevel.printName();
-            System.out.println(" learned Unbreakable Shield!");
+            System.out.println(" learned Expellere Spiritus Immundus!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 12){ //level 12 active skill
+/*        if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new LLLnode(new rogueSteal()));
             toLevel.printName();
             System.out.println(" learned !");
@@ -74,7 +71,7 @@ public class Inquisitor extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }
+        }*/
     }
 
     @Override

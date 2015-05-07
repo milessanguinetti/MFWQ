@@ -16,6 +16,12 @@ public abstract class Item implements incrementableData {
     //default constructor
     Item(){}
 
+    //constructor with just a description.
+    Item(String description){
+        Description = description;
+        Quantity = 1;
+    }
+
     //constructor with name and description
     Item(String name, String description){
         itemName = name;

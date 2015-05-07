@@ -42,6 +42,7 @@ public class Battle {
         int totaljexp = 0; //total values for exp and jexp.
         for (int i = 0; i < 4; ++i) { //for the entirety of the user's party
             if (playerParty[i] != null) { //if a character exists
+                playerParty[i].clearStatus(); //clear their status.
                 if (!playerParty[i].isAlive()) { //if they are dead
                     playerParty[i].Loot(); //get their equipment
                     Game.Player.killCharacter(i); //and kill them

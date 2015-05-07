@@ -10,8 +10,12 @@ public class strBuff extends statusEffectData implements statChange{
     float Value; //the boost to strength
 
     public strBuff(int duration, float value){
-        super("strBuff", duration);
+        super(duration);
         Value = value;
+        if (Value < 1)
+            Name = "strDebuff";
+        else
+            Name = "strBuff";
     }
 
     @Override

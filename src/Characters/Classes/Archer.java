@@ -1,5 +1,7 @@
 package Characters.Classes;
 
+import Characters.Skills.firstClass.archerArmorPiercingArrow;
+import Characters.Skills.firstClass.archerLaceratingArrow;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +11,7 @@ import Structures.LLLnode;
 public class Archer extends characterClass{
     public Archer(){
         super("Archer");
-        Skills.Insert(new LLLnode(new soldierBash()));
+        Skills.Insert(new LLLnode(new archerLaceratingArrow()));
     }
 
     @Override
@@ -23,11 +25,11 @@ public class Archer extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode(new archerArmorPiercingArrow()));
             toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Armor Piercing Arrow!");
         }
-        if(jlevel == 4){ //level 4 active skill
+/*        if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new LLLnode(new soldierWideSlash()));
             toLevel.printName();
             System.out.println(" learned Wide Slash!");
@@ -69,7 +71,7 @@ public class Archer extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }
+        }*/
     }
 
     @Override

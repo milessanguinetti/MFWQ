@@ -18,7 +18,12 @@ public class statusEffectData implements Data, incrementableData{
         Name = name;
     }
 
-    //constructor with duration
+    //constructor with just duration
+    public statusEffectData(int Duration){
+        Turns = Duration;
+    }
+
+    //constructor with duration and name
     public statusEffectData(String toName, int Duration){
         Name = toName;
         Turns = Duration;

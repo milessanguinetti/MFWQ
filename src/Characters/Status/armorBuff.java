@@ -10,10 +10,12 @@ public class armorBuff extends statusEffectData implements statChange{
     float Value; //the boost to armor
 
     public armorBuff(int duration, float value){
-        super("armorBuff", duration);
+        super(duration);
         Value = value;
         if(Value < 1)
             Name = "armorDebuff";
+        else
+            Name = "armorBuff";
     }
 
     @Override
