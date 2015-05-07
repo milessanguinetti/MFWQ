@@ -56,12 +56,10 @@ public abstract class gameCharacter extends Stats {
     public int takeDamage(int toTake, String property){
         Random Rand = new Random(); //initiate RNG
 
-        float Roll = (float)((Rand.nextInt(31) - 15)*.01); //get a value between .15 and -.15
+        float Roll = (Rand.nextInt(31) - 15)*.01f; //get a value between .15 and -.15
         toTake = Math.round(toTake * (1 + Roll)); //we deal somewhere between 85% and 115% damage.
         //this gives the game some variation in damage numbers.
         toTake = calculateDamage(toTake, property); //take status into account
-        if(toTake <= 0)
-            return HP;
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
             System.out.println("The attack had no effect.");

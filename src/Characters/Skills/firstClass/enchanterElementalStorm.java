@@ -9,8 +9,6 @@ import java.util.Random;
  * Created by Miles Sanguinetti on 5/5/15.
  */
 public class enchanterElementalStorm extends Skill{
-
-
     public enchanterElementalStorm(){
         super("Elemental Storm",
                 "Conjures a storm of raging elements; deals highly random damage of random properties.", 40);
@@ -50,6 +48,5 @@ public class enchanterElementalStorm extends Skill{
             Defender.takeDamage(Caster.getTempInt() * Roll, "Fire");
         else
             Defender.takeDamage(Caster.getTempInt() * Roll, "Water");
-
     }
 }

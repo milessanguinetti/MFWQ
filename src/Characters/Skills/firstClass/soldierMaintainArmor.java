@@ -36,8 +36,8 @@ public class soldierMaintainArmor extends Skill {
 
     @Override //20% armor buff for 10 turns
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.addStatus(new armorBuff(10, 1.2f));
-        Defender.printName();
+        Caster.addStatus(new armorBuff(10, 1.2f));
+        Caster.printName();
         System.out.println(" repaired their armor!");
     }
 }

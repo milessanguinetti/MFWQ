@@ -1,15 +1,15 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.strBuff;
 import Characters.gameCharacter;
 
 /**
- * Created by Miles Sanguinetti on 5/5/15.
+ * Created by Miles Sanguinetti on 5/7/15.
  */
-public class soldierMaintainWeapon extends Skill {
-    public soldierMaintainWeapon(){
-        super("Maintain Weapon", "Sharpens the caster's weapon, increasing the damage of strength-based weapons.", 10);
+public class primalistRejuvenatingBreeze extends Skill{
+    public primalistRejuvenatingBreeze(){
+        super("Rejuvenating Breeze",
+                "Rejuvenates' several allies' SP with a calming breeze.", 10);
     }
 
     @Override
@@ -24,20 +24,18 @@ public class soldierMaintainWeapon extends Skill {
 
     @Override
     public int getAoE() {
-        return -1;
+        return 1;
     }
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(!(toCheck.getSP() >= 10))
+        if(toCheck.getSP() < 10)
             return false; //doesn't have SP for this
-        return false;
+        return true;
     }
 
-    @Override //20% strength buff for 10 turns
+    @Override //regenerate the defender's mana equal to the caster's int.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Caster.addStatus(new strBuff(10, 1.2f));
-        Caster.printName();
-        System.out.println(" sharpened their weapon!");
+        Defender.subtractSP(Caster.getTempInt() * -1);
     }
 }
