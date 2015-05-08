@@ -112,6 +112,8 @@ public class Stats {
         return HP;
     }
 
+    public int getHPCap(){ return MHP; }
+
     //temp setters
     public void setTempFth(int ptempFth) {
         tempFth = ptempFth;

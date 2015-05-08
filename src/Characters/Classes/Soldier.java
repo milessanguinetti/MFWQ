@@ -26,9 +26,9 @@ public class Soldier extends characterClass {
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new LLLnode(new soldierGloriousExecution()));
             toLevel.printName();
-            System.out.println(" learned Rend!");
+            System.out.println(" learned Glorious Execution!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new LLLnode(new soldierWideSlash()));
@@ -36,14 +36,14 @@ public class Soldier extends characterClass {
             System.out.println(" learned Wide Slash!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierMaintainWeapon())); //NEED NEW SKILL HERE
+            Skills.Insert(new LLLnode(new soldierRend()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Rend!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new soldierMaintainArmor()));
+            Skills.Insert(new LLLnode(new soldierDefend()));
             toLevel.printName();
-            System.out.println(" learned Unbreakable Shield!");
+            System.out.println(" learned Defend!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
@@ -51,19 +51,19 @@ public class Soldier extends characterClass {
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new soldierMaintainWeapon()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Maintain Weapon!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new soldierMaintainArmor()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Maintain Armor!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new soldierSeverHamstring()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Sever Hamstring!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);

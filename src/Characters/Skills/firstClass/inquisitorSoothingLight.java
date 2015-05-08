@@ -38,6 +38,5 @@ public class inquisitorSoothingLight extends Skill {
     @Override //heals the entire party for .8 * faith
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.addStatus(new soothingLight(Caster.getTempFth(), 5));
-
     }
 }

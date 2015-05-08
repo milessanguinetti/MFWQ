@@ -7,10 +7,10 @@ import Characters.gameCharacter;
 /**
  * Created by Miles Sanguinetti on 5/7/15.
  */
-public class primalistEarthenWard extends Skill{
-    public primalistEarthenWard(){
-        super("Earthen Ward",
-                "Shields the target with a ward of earth, wood and stone. Reduces damage taken.", 15);
+public class roguePilferDefenses extends Skill{
+    public roguePilferDefenses(){
+        super("Pilfer Defenses",
+                "Steals the target's armor, increasing their damage taken while decreasing the user's.", 15);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class primalistEarthenWard extends Skill{
 
     @Override
     public boolean isOffensive() {
-        return false;
+        return true;
     }
 
     @Override
@@ -33,10 +33,9 @@ public class primalistEarthenWard extends Skill{
         return toCheck.getSP() >= 15;
     }
 
-    @Override //reduce damage taken for 5 turns after it is cast based on int
+    @Override //increases target damage taken by str/5 while decreasing the user's by the same value
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.addStatus(new damageAdditive(
-                Math.round(.3f * Caster.getTempInt()), 6));
-        //defender takes 1/3 of the caster's int less damage per attack
+        Defender.addStatus(new damageAdditive(Caster.getTempStr()/5, 5));
+        Caster.addStatus(new damageAdditive(-Caster.getTempStr()/5, 5));
     }
 }

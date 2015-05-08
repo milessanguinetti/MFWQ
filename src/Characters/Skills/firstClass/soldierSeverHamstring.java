@@ -1,18 +1,16 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Bleeding;
+import Characters.Status.spdBuff;
 import Characters.gameCharacter;
-import Characters.playerCharacter;
-
-import java.util.Random;
 
 /**
- * Created by Miles Sanguinetti on 4/27/15.
+ * Created by Miles Sanguinetti on 5/7/15.
  */
-public class soldierRend extends Skill {
-    public soldierRend(){
-        super("Rend", "Rends the target with a bladed weapon.", 10);
+public class soldierSeverHamstring extends Skill{
+    public soldierSeverHamstring(){
+        super("Sever Hamstring",
+                "Severs the target's hamstring, dramatically limiting their speed.", 10);
     }
 
     @Override
@@ -40,17 +38,10 @@ public class soldierRend extends Skill {
         return true;
     }
 
-    @Override //deal str + right weapon damage and apply a ticking DoT.
+    @Override //deal str + right weapon damage and halves speed
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.takeDamage((Caster.getTempStr() +
                 Caster.getWeaponDamage(true)), Caster.getWeaponProperty(true));
-
-        Random Rand = new Random();
-        if(Rand.nextInt(2) == 0) {
-            Defender.addStatus(new Bleeding(Caster.getWeaponDamage(true), 5));
-            Defender.printName();
-            System.out.println(" was afflicted with bleeding!");
-        }
-        //50% of the time, the defender will also bleed for the attacker's weapon damage for 5 turns.
+        Defender.addStatus(new spdBuff(5, .5f));
     }
 }

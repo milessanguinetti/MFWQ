@@ -1,7 +1,6 @@
 package Characters.Classes;
 
-import Characters.Skills.firstClass.archerArmorPiercingArrow;
-import Characters.Skills.firstClass.archerLaceratingArrow;
+import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -24,25 +23,25 @@ public class Archer extends characterClass{
 
     @Override
     public void jobDing(playerCharacter toLevel) {
-        if(jlevel == 2){
+        if(jlevel == 2){ //level 2 active skill
             Skills.Insert(new LLLnode(new archerArmorPiercingArrow()));
             toLevel.printName();
             System.out.println(" learned Armor Piercing Arrow!");
         }
-/*        if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+        if(jlevel == 4){ //level 4 active skill
+            Skills.Insert(new LLLnode(new archerArrowStorm()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Arrow Storm!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash())); //NEED NEW SKILL HERE
+            Skills.Insert(new LLLnode(new archerArcingArrow()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Arcing Arrow!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
+            Skills.Insert(new LLLnode(new archerExposingArrow()));
             toLevel.printName();
-            System.out.println(" learned Unbreakable Shield!");
+            System.out.println(" learned Exposing Arrow!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
@@ -50,19 +49,19 @@ public class Archer extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new archerCripplingShot()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Crippling Shot!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new archerOverdraw()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Overdraw!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new archerFinishingShot()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Finishing Shot!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
@@ -71,7 +70,7 @@ public class Archer extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }*/
+        }
     }
 
     @Override

@@ -36,7 +36,7 @@ public class soldierMaintainWeapon extends Skill {
 
     @Override //20% strength buff for 10 turns
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Caster.addStatus(new strBuff(10, 1.2f));
+        Caster.addStatus(new strBuff(10, 1.4f));
         Caster.printName();
         System.out.println(" sharpened their weapon!");
     }

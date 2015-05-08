@@ -7,7 +7,7 @@ import java.io.PrintWriter;
  */
 public class statusEffectData implements Data, incrementableData{
     protected String Name; //name of status effect
-    private int Turns; //turns remaining
+    protected int Turns; //turns remaining
 
     //default constructor
     public statusEffectData() {

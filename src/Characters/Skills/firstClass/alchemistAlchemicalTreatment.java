@@ -9,7 +9,7 @@ import Characters.gameCharacter;
 public class alchemistAlchemicalTreatment extends Skill{
     public alchemistAlchemicalTreatment(){
         super("Alchemical Treatment",
-                "Uses alchemy to treat an ally of poison, bleeding and burning..", 10);
+                "Uses alchemy to treat an ally of poison, bleeding and burning.", 10);
     }
 
     @Override

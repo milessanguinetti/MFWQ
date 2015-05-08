@@ -109,10 +109,10 @@ public class genericGun extends Weapon{
         int Roll = Rand.nextInt(5);
         if(Roll == 0){ //20% of the time, the attack does extra damage
             System.out.println("A critical hit!");
-            Defender.takeDamage(Math.round(4/3*(Damage + Caster.getTempStr())) + Damage, Property);
+            Defender.takeDamage(Math.round(1.25f*(Damage + Caster.getTempStr())), Property);
         }
         else{ //but most of the time it just does neutral damage
-            Defender.takeDamage(Math.round(3/4*(Damage + Caster.getTempStr())) + Damage, Property);
+            Defender.takeDamage(Math.round(.75f*(Damage + Caster.getTempStr())), Property);
         }
     }
 

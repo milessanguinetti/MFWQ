@@ -1,7 +1,6 @@
 package Characters.Classes;
 
-import Characters.Skills.firstClass.primalistBogMiasma;
-import Characters.Skills.firstClass.primalistCallStorm;
+import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -29,20 +28,20 @@ public class Primalist extends characterClass{
             toLevel.printName();
             System.out.println(" learned Call Storm!");
         }
-/*        if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+        if(jlevel == 4){ //level 4 active skill
+            Skills.Insert(new LLLnode(new primalistEarthenWard()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Earthern Ward!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash())); //NEED NEW SKILL HERE
+            Skills.Insert(new LLLnode(new primalistAnimalisticStrike()));
             toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            System.out.println(" learned Animalistic Strike!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
+            Skills.Insert(new LLLnode(new primalistRejuvenatingBreeze()));
             toLevel.printName();
-            System.out.println(" learned Unbreakable Shield!");
+            System.out.println(" learned Rejuvenating Breeze!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
@@ -71,7 +70,7 @@ public class Primalist extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }*/
+        }
     }
 
     @Override

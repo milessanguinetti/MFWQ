@@ -1,16 +1,17 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.damageAdditive;
+import Characters.Status.dexBuff;
+import Characters.Status.strBuff;
 import Characters.gameCharacter;
 
 /**
  * Created by Miles Sanguinetti on 5/7/15.
  */
-public class primalistEarthenWard extends Skill{
-    public primalistEarthenWard(){
-        super("Earthen Ward",
-                "Shields the target with a ward of earth, wood and stone. Reduces damage taken.", 15);
+public class inquisitorCorpusBenedictus extends Skill{
+    public inquisitorCorpusBenedictus(){
+        super("Corpus Benedictus",
+                "Blesses the target's body, increasing strength and dexterity.", 15);
     }
 
     @Override
@@ -33,10 +34,9 @@ public class primalistEarthenWard extends Skill{
         return toCheck.getSP() >= 15;
     }
 
-    @Override //reduce damage taken for 5 turns after it is cast based on int
+    @Override //buff strength and dexterity by 25%
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.addStatus(new damageAdditive(
-                Math.round(.3f * Caster.getTempInt()), 6));
-        //defender takes 1/3 of the caster's int less damage per attack
+        Defender.addStatus(new strBuff(5, 1.25f));
+        Defender.addStatus(new dexBuff(5, 1.25f));
     }
 }

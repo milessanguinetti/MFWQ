@@ -7,15 +7,15 @@ import Characters.gameCharacter;
 /**
  * Created by Miles Sanguinetti on 5/7/15.
  */
-public class primalistEarthenWard extends Skill{
-    public primalistEarthenWard(){
-        super("Earthen Ward",
-                "Shields the target with a ward of earth, wood and stone. Reduces damage taken.", 15);
+public class soldierDefend extends Skill{
+    public soldierDefend(){
+        super("Defend",
+                "Assumes a defensive stance for a turn, reducing damage taken.", 0);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(15);
+        //takes no SP to cast.
     }
 
     @Override
@@ -25,18 +25,19 @@ public class primalistEarthenWard extends Skill{
 
     @Override
     public int getAoE() {
-        return 0;
+        return -1;
     }
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return toCheck.getSP() >= 15;
+        return true;
     }
 
-    @Override //reduce damage taken for 5 turns after it is cast based on int
+    @Override
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.addStatus(new damageAdditive(
-                Math.round(.3f * Caster.getTempInt()), 6));
-        //defender takes 1/3 of the caster's int less damage per attack
+                Math.round(.75f * Caster.getWeaponDamage(true)), 2));
+        //reduces damage taken by .75 for the turn this is casted and the next
     }
+
 }

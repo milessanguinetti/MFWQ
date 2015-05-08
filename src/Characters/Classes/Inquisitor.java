@@ -49,20 +49,20 @@ public class Inquisitor extends characterClass{
             toLevel.printName();
             System.out.println(" learned !");
         }
-/*        if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+        if(jlevel == 12){ //level 12 active skill
+            Skills.Insert(new LLLnode(new inquisitorCorpusBenedictus()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Corpus Benedictus!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new inquisitorAnimusBenedictus()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Animus Benedictus!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new inquisitorDecretum()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Decretum!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
@@ -71,7 +71,7 @@ public class Inquisitor extends characterClass{
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
-        }*/
+        }
     }
 
     @Override
