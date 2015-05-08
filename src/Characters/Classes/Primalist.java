@@ -49,19 +49,19 @@ public class Primalist extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new primalistSeedOfHealing()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Seed Of Healing!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new primalistDevouringGrowth()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Devouring Growth!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new primalistDevouringBloom()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Devouring Bloom!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);

@@ -8,7 +8,7 @@ import Characters.gameCharacter;
 import java.util.Random;
 
 /**
- * Created by Miles on 4/29/2015.
+ * Created by Miles Sanguinetti on 4/29/2015.
  */
 public class rogueEnvenomedBlade extends Skill {
     public rogueEnvenomedBlade(){

@@ -36,12 +36,12 @@ public class Rogue extends characterClass{
             System.out.println(" learned Knife Barrage!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new rogueSteal())); //NYI
+            Skills.Insert(new LLLnode(new rogueAmplifyPoison()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new LLLnode(new roguePilferDefenses()));
             toLevel.printName();
             System.out.println(" learned !");
         }
@@ -51,19 +51,19 @@ public class Rogue extends characterClass{
             System.out.println(" learned the passive skill Alertness!");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
-            toLevel.printName();
-            System.out.println(" learned !");
-        }
-        if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new LLLnode(new rogueQuickenReflexes()));
             toLevel.printName();
             System.out.println(" learned Quicken Reflexes!");
         }
-        if(jlevel == 16){ //level 16 active skill
+        if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new LLLnode(new rogueRapidStriking()));
             toLevel.printName();
             System.out.println(" learned Rapid Striking!");
+        }
+        if(jlevel == 16){ //level 16 active skill
+            Skills.Insert(new LLLnode(new rogueDisorientingSmokeBomb()));
+            toLevel.printName();
+            System.out.println(" learned Disorienting Smoke Bomb!");
         }
         if(jlevel == 18){ //level 18 passive skill
             toLevel.addPassive(null);

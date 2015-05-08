@@ -335,4 +335,26 @@ public class Battle {
         System.out.println(".");
         Minions[weakest] = toAdd; //replace weakest with toadd.
     }
+
+    //removes a passed combatant from the fight.
+    public void nullCombatant(gameCharacter toRemove){
+        for(int i = 0; i < 4; ++i){
+            if(toRemove == playerMinions[i]) {
+                playerMinions[i] = null;
+                return;
+            }
+            if(toRemove == playerParty[i]) {
+                playerParty[i] = null;
+                return;
+            }
+            if(toRemove == enemyParty[i]) {
+                enemyParty[i] = null;
+                return;
+            }
+            if(toRemove == enemyMinions[i]) {
+                enemyMinions[i] = null;
+                return;
+            }
+        }
+    }
 }
