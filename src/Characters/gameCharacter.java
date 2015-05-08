@@ -77,6 +77,8 @@ public abstract class gameCharacter extends Stats {
 
     //takes absolute damage, ignoring defenses; returns remaining health
     public boolean takeAbsoluteDamage(int toTake){
+        if(!isAlive())
+            return false; //dead characters cannot be healed and cannot take damage.
         if(toTake > 0)
             System.out.println(Name + " took " + toTake + " damage.");
         else

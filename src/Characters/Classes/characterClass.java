@@ -13,18 +13,30 @@ import java.io.PrintWriter;
  * Created by Miles Sanguinetti on 3/21/15.
  */
 public abstract class characterClass implements Data {
-    String className; //the name of the class
-    int jlevel = 1;
-    int jexp = 0; //job experience and job experience need to reach next level.
-    int jexpCap = 1000;
-    orderedLLL Skills = new orderedLLL(); //skills for this class
+    private String className; //the name of the class
+    protected int jlevel = 1;
+    private int jexp = 0; //job experience and job experience need to reach next level.
+    private int jexpCap = 1000;
+    protected orderedLLL Skills = new orderedLLL(); //skills for this class
 
+    //default constructor
+    public characterClass(){}
+
+    //constructor with class name
     public characterClass(String toName){
         className = toName;
     }
 
+    //constructor with class name and replacement jexpcap value (used for second classes)
+    public characterClass(String toName, int experiencecap){
+        className = toName;
+        jexpCap = experiencecap;
+    }
+
     //add job experience to the character's class.
     public void gainJexp(int Gains, playerCharacter toLevel){
+        if(jlevel == 20 || jexpCap > 60000)
+            return; //no leveling past 20 for first classes or 10 for second classes
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
             Gains -= (jexpCap - jexp);
             ++jlevel;

@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         Game newGame = new Game(); //initialize a new game
-        playerCharacter bob = new playerCharacter("Sergeant Pepper", "Human (Faithful)",
+        playerCharacter bob = new playerCharacter("Sergeant Pepper", "Faithful",
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         newGame.Player.addCharacter(bob);
         bob.setLeft(new genericGun(6));

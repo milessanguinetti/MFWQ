@@ -38,12 +38,12 @@ public class Rogue extends characterClass{
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new LLLnode(new rogueAmplifyPoison()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Amplify Poison!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new LLLnode(new roguePilferDefenses()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Pilfer Defenses!");
         }
         if(jlevel == 10){ //level 10 passive skill
             toLevel.addPassive(new Alertness());

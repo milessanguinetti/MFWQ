@@ -45,10 +45,29 @@ public class Soldier extends characterClass {
             toLevel.printName();
             System.out.println(" learned Defend!");
         }
-        if(jlevel == 10){ //level 10 passive skill NYI
+        if(jlevel == 10){ //level 10 passive skill/second classes
             toLevel.addPassive(null);
             toLevel.printName();
             System.out.println(" learned !");
+            if(toLevel.isOfRace("Faithful")){
+                toLevel.addClass(new Crusader()); //add crusader class
+                toLevel.addClass(new Defender()); //add defender class
+                System.out.println("The Crusader and Defender classes are now available!");
+            }
+            else if(toLevel.isOfRace("Heretic")){
+                toLevel.addClass(new Berserker()); //add berserker class
+                toLevel.addClass(new Idolator()); //add idolator class
+                System.out.println("The Berserker and Idolator classes are now available!");
+            }
+            else if(toLevel.isOfRace("Alraune")){
+                toLevel.addClass(new Berserker()); //add berserker class
+                toLevel.addClass(new Defender()); //add defender class
+                System.out.println("The Berserker and Defender classes are now available!");
+            }
+            else{//homunculus case
+                toLevel.addClass(new Titan()); //add titan class
+                System.out.println("The Titan class is now available!");
+            }
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new LLLnode(new soldierMaintainWeapon()));
