@@ -26,15 +26,19 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         Property = property;
         //beyond setting those, we set the righthand/twohand variables based on
         //the type that we are looking at.
-        if(weapontype.equals("Knife")){
+        if(weapontype.equals("1h Edged")){
             isRightHand = true;
             isTwoHand = false;
         }
-        else if(weapontype.equals("1h Melee")){
+        else if(weapontype.equals("2h Edged")){
+            isRightHand = true;
+            isTwoHand = true;
+        }
+        else if(weapontype.equals("1h Blunt")){
             isRightHand = true;
             isTwoHand = false;
         }
-        else if(weapontype.equals("2h Melee")){
+        else if(weapontype.equals("2h Blunt")){
             isRightHand = true;
             isTwoHand = true;
         }

@@ -34,6 +34,12 @@ public abstract class gameCharacter extends Stats {
         Name = toName;
     }
 
+    //constructor with name and stats object.
+    public gameCharacter(String toName, Stats toCopy){
+        super(toCopy); //copy stats
+        Name = toName;
+    }
+
     //constructor with name and stats
     public gameCharacter(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
         super(hp, sp, str, dex, spd, vit, inte, fth, arm);
@@ -160,7 +166,7 @@ public abstract class gameCharacter extends Stats {
     //called at the end of each turn to decrement durations and handle end of turn effects.
     public void endTurn(){
         if(isAlive()) { //if the character is still alive...
-            subtractSP(Math.round((SP/20)*-19)); //every turn, regenerate 5% SP.
+            subtractSP(Math.round((SP / 20) * -19)); //every turn, regenerate 5% SP.
             endOfTurnList.endTurn(this); //apply end of turn effects
             statChangeList.decrementAll(); //decrement duration of
             endOfTurnList.decrementAll();  //all effects by one
@@ -175,6 +181,7 @@ public abstract class gameCharacter extends Stats {
 
     //update the character's temporary stat values
     public void updateStatTemps(){
+        setTemps();
         statChangeList.changeStats(this);
     }
 

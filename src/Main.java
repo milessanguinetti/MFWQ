@@ -2,16 +2,14 @@ import Characters.Classes.Alchemist;
 import Characters.Classes.Inquisitor;
 import Characters.Classes.Rogue;
 import Characters.Classes.Soldier;
-import Characters.Inventory.Weapons.generic1hMelee;
+import Characters.Inventory.Weapons.generic1hEdged;
 import Characters.Inventory.Weapons.genericGun;
-import Characters.Inventory.Weapons.koboldSlayingSword;
 import Characters.Monsters.Kobold;
 import Characters.Monsters.babyKobold;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Profile.Battle;
 import Profile.Game;
-import sun.org.mozilla.javascript.tools.shell.Global;
 
 import java.util.Random;
 
@@ -24,7 +22,7 @@ public class Main {
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         newGame.Player.addCharacter(bob);
         bob.setLeft(new genericGun(6));
-        bob.setRight(new generic1hMelee(6)); //equip the good sergeant with a randomly generated weapon
+        bob.setRight(new generic1hEdged(6)); //equip the good sergeant with a randomly generated weapon
         bob.addClass(new Soldier());
         bob.addClass(new Rogue());
         bob.addClass(new Alchemist());

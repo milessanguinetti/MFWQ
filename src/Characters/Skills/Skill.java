@@ -10,8 +10,8 @@ import java.io.PrintWriter;
  * Created by Miles Sanguinetti on 3/22/15.
  */
 public abstract class Skill implements Data, combatEffect{
-    String skillName;
-    String Description;
+    protected String skillName;
+    private String Description;
     int mpCost;
 
     //default constructor

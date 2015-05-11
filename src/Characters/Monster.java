@@ -22,6 +22,11 @@ public abstract class Monster extends gameCharacter{
         Name = toName;
     }
 
+    //constructor with name and stats object
+    public Monster(String toName, Stats toCopy){
+        super(toName, toCopy); //copy stats
+    }
+
     //constructor with name and stats
     public Monster(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
         super(toName, hp, sp, str, dex, spd, vit, inte, fth, arm);

@@ -29,7 +29,9 @@ public class Stats {
     //copy constructor
     public Stats(Stats toCopy){
         MHP = toCopy.MHP;
+        HP = MHP;
         MSP = toCopy.MSP;
+        SP = MSP;
         Str = toCopy.Str;
         Dex = toCopy.Dex;
         Spd = toCopy.Spd;
@@ -113,6 +115,8 @@ public class Stats {
     }
 
     public int getHPCap(){ return MHP; }
+
+    public int getTempArmor(){ return tempArmor; }
 
     //temp setters
     public void setTempFth(int ptempFth) {

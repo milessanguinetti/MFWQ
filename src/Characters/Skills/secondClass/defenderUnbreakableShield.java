@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.unbreakableShield;
+import Characters.Status.damageMultiplier;
 import Characters.gameCharacter;
 
 /**
@@ -37,6 +37,6 @@ public class defenderUnbreakableShield extends Skill {
 
     @Override
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.addStatus(new unbreakableShield());
+        Defender.addStatus(new damageMultiplier(.5f, 5));
     }
 }

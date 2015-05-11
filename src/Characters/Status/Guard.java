@@ -14,15 +14,17 @@ public class Guard extends statusEffectData implements damageEffect{
         super("Guard", duration);
         Percent = percent;
         toRedirect = Guarder;
-
     }
 
     public int calculateDamage(int toCalculate, String Property) {
-        toRedirect.printName(); //print the guardian's name
-        System.out.println(" took most of the hit!");
-        toRedirect.takeDamage(Math.round(toCalculate * Percent), Property);
-        //the guardian takes damage equal to however much they are avoiding.
-        //this damage is effected by their armor and other variables, however.
-        return Math.round(toCalculate * (1 - Percent)); //take the damage
+        if(toRedirect.isAlive()) { //this only does anything is the guardian is alive
+            toRedirect.printName(); //print the guardian's name
+            System.out.println(" took most of the hit!");
+            toRedirect.takeDamage(Math.round(toCalculate * Percent), Property);
+            //the guardian takes damage equal to however much they are avoiding.
+            //this damage is effected by their armor and other variables, however.
+            return Math.round(toCalculate * (1 - Percent)); //take the damage
+        }
+        return toCalculate;
     }
 }

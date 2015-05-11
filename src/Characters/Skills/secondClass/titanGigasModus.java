@@ -1,6 +1,9 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
+import Characters.Status.Guard;
+import Characters.Status.Modus;
+import Characters.Status.armorBuff;
 import Characters.gameCharacter;
 
 /**
@@ -9,7 +12,7 @@ import Characters.gameCharacter;
 public class titanGigasModus extends Skill{
     public titanGigasModus(){
         super("Gigas Modus",
-                "Adapts the user's anatomy to serve as a mighty defender, shielding allies and boosting armor.", 0);
+                "Adapts the user's anatomy to serve as a mighty defender, boosting armor and shielding their allies.", 0);
     }
 
     @Override
@@ -32,8 +35,13 @@ public class titanGigasModus extends Skill{
         return true;
     }
 
-    @Override //deal 20% damage calculated by strength and right weapon damage.
+    @Override //buff caster's armor by 50%, shield allies for 50% of damage taken.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-
+        if(Defender == Caster){ //case for when the caster is casting the spell on themself
+            Caster.addStatus(new Modus(1));
+        }
+        else{ //case for when the caster is guarding an ally
+            Defender.addStatus(new Guard(.5f, 6, Caster));
+        }
     }
 }

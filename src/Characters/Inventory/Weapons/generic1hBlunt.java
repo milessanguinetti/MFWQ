@@ -7,16 +7,14 @@ import Characters.playerCharacter;
 import java.util.Random;
 
 /**
- * Created by Miles Sanguinetti on 5/7/15.
+ * Created by Miles Sanguinetti on 5/11/15.
  */
-//constructor that randomly generates a one-handed melee weapon based on
-//a passed integer representing damage. Rarely, will be elementally infused.
-public class generic1hMelee extends Weapon{
-    public generic1hMelee(){}
+public class generic1hBlunt extends Weapon {
+    public generic1hBlunt(){}
 
-    public generic1hMelee(int damage){
-        super("A standard one-handed melee weapon with little remarkable about it.",
-                damage, "1h Melee");
+    public generic1hBlunt(int damage){
+        super("A standard one-handed blunted weapon with little remarkable about it.",
+                damage, "1h Blunt");
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -79,19 +77,19 @@ public class generic1hMelee extends Weapon{
         }
         int subType = Roll % 6; //things like saber v.s. mace that are purely for flavor
         if(subType == 0)
-            itemName += "Sword +";
-        else if(subType == 1)
             itemName += "Mace +";
+        else if(subType == 1)
+            itemName += "Hammer +";
         else if(subType == 2)
-            itemName += "Axe +";
-        else if(subType == 3)
-            itemName += "Rapier +";
-        else if(subType == 4)
             itemName += "Morning Star +";
+        else if(subType == 3)
+            itemName += "Flail +";
+        else if(subType == 4)
+            itemName += "Club +";
         else
-            itemName += "Short Spear +";
+            itemName += "Cane +";
         itemName += Damage/3; //to give us a damage-based qualifier to add
-                              //more insight into the weapon's strength.
+        //more insight into the weapon's strength.
     }
 
     //combat effect methods
@@ -113,20 +111,20 @@ public class generic1hMelee extends Weapon{
             System.out.println("A critical hit!");
             Defender.takeDamage(Math.round(1.25f*(Damage + Caster.getTempStr())), Property);
         }
-        else{ //but most of the time it just does neutral damage
+        else{ //but most of the time it just does 75% of strength plus damage
             Defender.takeDamage(Math.round(.75f*(Damage + Caster.getTempStr())), Property);
         }
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-       //this weapon causes no SP loss.
+        //this weapon causes no SP loss.
     }
 
     //equippable item methods
     @Override
     public void applyBuffs(playerCharacter toBuff) {
-       //this weapon applies no buffs.
+        //this weapon applies no buffs.
     }
 
     @Override
