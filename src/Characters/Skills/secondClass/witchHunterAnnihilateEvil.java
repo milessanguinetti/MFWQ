@@ -1,21 +1,20 @@
-package Characters.Skills.firstClass;
+package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
 
 /**
- * Created by Miles Sanguinetti on 5/5/15.
+ * Created by Miles Sanguinetti on 5/12/15.
  */
-//physical attack based on speed and strength. Hits speed/10 + 1 times for 40% of (weapon damage + str)
-public class rogueRapidStriking extends Skill {
-    public rogueRapidStriking(){
-        super("Rapid Strike",
-                "Attacks the target repeatedly with an equipped weapon, striking more times if the user is faster.", 40);
+public class witchHunterAnnihilateEvil extends Skill{
+    public witchHunterAnnihilateEvil(){
+        super("Annihilate Evil",
+                "Repeatedly assaults the target with blade and righteous power alike.", 60);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(40);
+        Caster.subtractSP(60);
     }
 
     @Override
@@ -30,17 +29,18 @@ public class rogueRapidStriking extends Skill {
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return toCheck.getSP() >= 40;
+        return toCheck.getSP() >= 60;
     }
 
-    @Override //hit more times based on speed
+    @Override //deal 125% damage calculated by strength and right weapon damage.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         int Strikes = (Caster.getTempSpd() + 10) / 10; //strike once per ten speed
         Caster.printName();
-        System.out.println(" struck " + Strikes + " times!");
+        System.out.println(" attacked " + Strikes + " times!");
         for (int i = Strikes; i > 0; --i) {
             Defender.takeDamage(Math.round(.4f * (Caster.getTempStr() +
                     Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));
+            Defender.takeDamage(Math.round((.8f) * Caster.getTempFth()), "Holy");
         }
     }
 }

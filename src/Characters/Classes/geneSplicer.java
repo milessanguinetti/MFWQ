@@ -54,4 +54,9 @@ public class geneSplicer extends characterClass{
             System.out.println(" learned the passive skill !");
         }
     }
+
+    @Override
+    public boolean canUseHeavyArmor() {
+        return false;
+    }
 }

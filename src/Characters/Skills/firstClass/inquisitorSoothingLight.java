@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.soothingLight;
+import Characters.Status.healOverTime;
 import Characters.gameCharacter;
 
 /**
@@ -37,6 +37,6 @@ public class inquisitorSoothingLight extends Skill {
 
     @Override //heals the entire party for .8 * faith
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Defender.addStatus(new soothingLight(Caster.getTempFth(), 5));
+        Defender.addStatus(new healOverTime(Caster.getTempFth(), 5));
     }
 }

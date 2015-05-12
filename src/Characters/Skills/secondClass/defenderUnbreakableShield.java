@@ -10,7 +10,7 @@ import Characters.gameCharacter;
 //makes the character all but immune to damage for 10 turns
 public class defenderUnbreakableShield extends Skill {
     public defenderUnbreakableShield(){
-        super("Unbreakable Shield", "The caster guards themselves with all of their might.", 30);
+        super("Unbreakable Shield", "The caster assumes a defensive stance to guard themself with their shield.", 30);
     }
 
     @Override
@@ -30,9 +30,9 @@ public class defenderUnbreakableShield extends Skill {
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(toCheck.getSP() < 30)
+        if(!toCheck.hasWeaponType("Shield", false)) //can only be used with a shield
             return false;
-        return true;
+        return toCheck.getSP() >= 30;
     }
 
     @Override

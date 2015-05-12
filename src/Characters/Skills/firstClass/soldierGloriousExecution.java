@@ -29,6 +29,10 @@ public class soldierGloriousExecution extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
+        if(toCheck.hasWeaponType("Bow", true)) //can only be used with right handed melee weapons
+            return false;
+        if(toCheck.hasWeaponType("2h Staff", true))
+            return false;
         return toCheck.getSP() >= 10;
     }
 

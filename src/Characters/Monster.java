@@ -35,6 +35,11 @@ public abstract class Monster extends gameCharacter{
     public abstract int getExp(); //abstract functions to return variable amounts of exp and jexp.
     public abstract int getJexp();
 
+    @Override
+    public boolean hasTwoHandedWeapon() {
+        return true;
+    }
+
     //sets the monster's combo to the passed skill index
     public void setCombo(int toSet){
         if(toSet < 0 || toSet > 5)

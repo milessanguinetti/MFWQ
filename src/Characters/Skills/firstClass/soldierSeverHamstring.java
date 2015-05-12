@@ -10,7 +10,7 @@ import Characters.gameCharacter;
 public class soldierSeverHamstring extends Skill{
     public soldierSeverHamstring(){
         super("Sever Hamstring",
-                "Severs the target's hamstring, dramatically limiting their speed.", 10);
+                "Severs the target's hamstring with an edged weapon, dramatically limiting their speed.", 10);
     }
 
     @Override
@@ -32,9 +32,8 @@ public class soldierSeverHamstring extends Skill{
     public boolean canUse(gameCharacter toCheck) {
         if(toCheck.getSP() < 10)
             return false; //doesn't have SP for this
-        if(!toCheck.hasWeaponType("2h Melee", true) && !toCheck.hasWeaponType("1h Melee", true)
-                && !toCheck.hasWeaponType("Knife", true))
-            return false; //rend can only be used with bladed weapons.
+        if(!toCheck.hasWeaponType("2h Edged", true) && !toCheck.hasWeaponType("1h Edged", true))
+            return false; //hamstring can only be used with bladed weapons.
         return true;
     }
 

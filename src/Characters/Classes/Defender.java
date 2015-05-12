@@ -24,29 +24,35 @@ public class Defender extends characterClass{
 
     @Override
     public void jobDing(playerCharacter toLevel) {
-        if(jlevel == 2){ //level 2 active skill
+        if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 4){ //level 4 active skill
+        if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 6){ //level 6 active skill
+        if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 8){ //level 8 active skill
+        if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if(jlevel == 10){ //level 10 passive skill
+        if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
             toLevel.printName();
             System.out.println(" learned the passive skill !");
         }
+    }
+
+    @Override
+    public boolean canUseHeavyArmor() {
+        return true;
+    }
 }

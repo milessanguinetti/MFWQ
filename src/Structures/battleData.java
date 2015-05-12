@@ -82,6 +82,8 @@ public class battleData implements Data {
                             System.out.print(" with ");
                             toCast.printName();
                             System.out.println("!!");
+                            if(Defender.isAlive())
+                                Defender.executeCounter(Attacker);
                         } else {
                             Attacker.printName();
                             System.out.print(" used ");

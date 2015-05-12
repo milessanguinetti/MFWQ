@@ -424,4 +424,11 @@ public class playerCharacter extends gameCharacter {
         if(Accessory2 != null)
             Game.Player.Insert(Accessory2);
     }
+
+    @Override
+    public boolean hasTwoHandedWeapon() {
+        if(Right == Left)
+            return true;
+        return false;
+    }
 }

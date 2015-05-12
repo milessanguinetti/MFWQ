@@ -34,8 +34,7 @@ public class soldierRend extends Skill {
     public boolean canUse(gameCharacter toCheck) {
         if(toCheck.getSP() < 10)
             return false; //doesn't have SP for this
-        if(!toCheck.hasWeaponType("2h Melee", true) && !toCheck.hasWeaponType("1h Melee", true)
-                && !toCheck.hasWeaponType("Knife", true))
+        if(!toCheck.hasWeaponType("2h Edged", true) && !toCheck.hasWeaponType("1h Edged", true))
             return false; //rend can only be used with bladed weapons.
         return true;
     }

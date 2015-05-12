@@ -2,6 +2,7 @@ package Characters;
 
 import Characters.Properties.Property;
 import Characters.Skills.Passive.passiveSkill;
+import Characters.Status.Counter;
 import Characters.Status.damageEffect;
 import Characters.Status.endOfTurn;
 import Characters.Status.statChange;
@@ -21,6 +22,7 @@ public abstract class gameCharacter extends Stats {
     protected passiveSkill currentPassive; //the character's passive skill.
     protected Property charProperty; //the character's property
     protected Property tempProperty; //temporary battle property based on buffs
+    private Counter charCounter; //a character's potential ability to counter.
     private statusStructure statChangeList = new statusStructure(); //LLL structure for effects that change stats
     private statusStructure damageEffectList = new statusStructure(); //effects that impact damage taken
     private statusStructure endOfTurnList = new statusStructure(); //effects that take place at the end of a turn
@@ -44,6 +46,15 @@ public abstract class gameCharacter extends Stats {
     public gameCharacter(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
         super(hp, sp, str, dex, spd, vit, inte, fth, arm);
         Name = toName;
+    }
+
+    public void setCounter(Counter counter){
+        charCounter = counter;
+    }
+
+    public void executeCounter(gameCharacter Attacker){
+        if(charCounter != null)
+            charCounter.executeCounter(Attacker, this);
     }
 
     //sets the character's temp property to a passed property.
@@ -117,6 +128,7 @@ public abstract class gameCharacter extends Stats {
         statChangeList.removeAll();
         damageEffectList.removeAll();
         endOfTurnList.removeAll();
+        charCounter = null;
         return statAdjustment;
     }
 
@@ -172,6 +184,10 @@ public abstract class gameCharacter extends Stats {
             endOfTurnList.decrementAll();  //all effects by one
             damageEffectList.decrementAll();
             updateStatTemps(); //update stats in case any were removed.
+            if(charCounter != null){
+                if(charCounter.Decrement() == 0)
+                    charCounter = null;
+            }
         }
         if(!isAlive()){ //if the character was dead, or died after the end of turn effects...
             if(clearStatus()) //clear status if the character is dead.
@@ -184,6 +200,56 @@ public abstract class gameCharacter extends Stats {
         setTemps();
         statChangeList.changeStats(this);
     }
+
+    //prints the character's name and stats.
+    public void printStats(){
+        System.out.print("Name: ");
+        System.out.println(Name);
+        System.out.print("Property");
+        System.out.println(charProperty.getName());
+        System.out.print("HP: " + HP + "/");
+        System.out.println(MHP);
+        System.out.print("SP: " + SP + "/");
+        System.out.println(MSP);
+        System.out.print("Vitality: ");
+        System.out.println(Vit);
+        System.out.print("Armor: ");
+        System.out.println(Armor);
+        System.out.print("Strength: ");
+        System.out.println(Str);
+        System.out.print("Dexterity: ");
+        System.out.println(Dex);
+        System.out.print("Intelligence: ");
+        System.out.println(Int);
+        System.out.print("Faith: ");
+        System.out.println(Fth);
+    }
+
+    //prints the character's name and TEMPORARY stats
+    public void printTempStats(){
+        System.out.print("Name: ");
+        System.out.println(Name);
+        System.out.print("Property");
+        System.out.println(tempProperty.getName());
+        System.out.print("HP: " + HP + "/");
+        System.out.println(MHP);
+        System.out.print("SP: " + SP + "/");
+        System.out.println(MSP);
+        System.out.print("Vitality: ");
+        System.out.println(tempVit);
+        System.out.print("Armor: ");
+        System.out.println(tempArmor);
+        System.out.print("Strength: ");
+        System.out.println(tempStr);
+        System.out.print("Dexterity: ");
+        System.out.println(tempDex);
+        System.out.print("Intelligence: ");
+        System.out.println(tempInt);
+        System.out.print("Faith: ");
+        System.out.println(tempFth);
+    }
+
+    abstract public boolean hasTwoHandedWeapon();
 
     //does the character have the passed weapon type?
     abstract public boolean hasWeaponType(String toCompare, boolean isRight);
@@ -200,4 +266,6 @@ public abstract class gameCharacter extends Stats {
 
     //gets attack damage
     abstract public int getWeaponDamage(boolean isRight);
+
+
 }
