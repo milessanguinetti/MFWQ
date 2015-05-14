@@ -9,13 +9,10 @@ import java.util.Random;
  * Created by Miles Sanguinetti on 5/5/15.
  */
 public class enchanterInvokeStone extends Skill{
-    int aoeVal; //whether the potion is single target or multitarget based on our roll
 
     public enchanterInvokeStone(){
         super("Invoke Stone",
                 "Invokes the power of an earthquake; hits a random number of enemies.", 20);
-        Random Rand = new Random();
-        aoeVal = Rand.nextInt(3) + 1; //roll a value between 1 and 3, inclusive.
     }
 
     @Override
@@ -30,7 +27,8 @@ public class enchanterInvokeStone extends Skill{
 
     @Override
     public int getAoE() {
-        return aoeVal;
+        Random Rand = new Random();
+        return Rand.nextInt(3) + 1; //roll a value between 0 and 1, inclusive.
     }
 
     @Override

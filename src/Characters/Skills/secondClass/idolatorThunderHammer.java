@@ -4,16 +4,20 @@ import Characters.Skills.Skill;
 import Characters.gameCharacter;
 
 /**
- * Created by Miles Sanguinetti on 5/12/15.
+ * Created by Miles Sanguinetti on 5/14/15.
  */
-public class idolatorProfaneBlade extends Skill{
-    public idolatorProfaneBlade(){
-        super("Profane Blade", "Strikes the target with a ghastly weapon, damaging them and healing the user.", 35);
+public class idolatorThunderHammer extends Skill{
+    int AoE = 0;
+
+    public idolatorThunderHammer(){
+        super("Thunder Hammer",
+                "Slams the target with a pagan god's power, hitting multiple targets with blunt weapons "
+                + "and dealing bonus damage to aquatic foes.", 45);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(35);
+        Caster.subtractSP(45);
     }
 
     @Override
@@ -32,14 +36,19 @@ public class idolatorProfaneBlade extends Skill{
             return false;
         if(toCheck.hasWeaponType("2h Staff", true))
             return false;
-        return toCheck.getSP() >= 35;
+        if(toCheck.hasWeaponType("1h Blunt", true) || toCheck.hasWeaponType("2h Blunt", true))
+            AoE = 1; //set aoe to one with a blunt weapon.
+        else
+            AoE = 0;
+        return toCheck.getSP() >= 45;
     }
 
     @Override //deals (str + fth + weapon damage) of unholy property, heals for same amount.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        int Dealt = Defender.getHP();
-        Dealt -= Defender.takeDamage(Caster.getTempStr()
+        int Multiplier = 1;
+        if (Defender.hasProperty("Water"))
+            Multiplier = 2;
+        Defender.takeDamage(Caster.getTempStr()
                 + Caster.getTempFth() + Caster.getWeaponDamage(true), "Unholy");
-        Caster.takeAbsoluteDamage(-Dealt); //heal for however much damage was dealt
     }
 }

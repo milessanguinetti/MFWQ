@@ -8,12 +8,12 @@ import Characters.gameCharacter;
  */
 public class crusaderHolyBlade extends Skill{
     public crusaderHolyBlade(){
-        super("Holy Blade", "Strikes the target with a weapon infused with righteous might.", 40);
+        super("Holy Blade", "Strikes the target with a weapon infused with righteous might.", 35);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
-        Caster.subtractSP(40);
+        Caster.subtractSP(35);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class crusaderHolyBlade extends Skill{
             return false;
         if(toCheck.hasWeaponType("2h Staff", true))
             return false;
-        return toCheck.getSP() >= 40;
+        return toCheck.getSP() >= 35;
     }
 
     @Override //deals 1.5 * (str + fth + weapon damage) of holy property

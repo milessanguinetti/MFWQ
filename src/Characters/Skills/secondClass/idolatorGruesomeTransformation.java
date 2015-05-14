@@ -12,8 +12,8 @@ import Characters.gameCharacter;
 public class idolatorGruesomeTransformation extends Skill{
     public idolatorGruesomeTransformation(){
         super("Gruesome Transformation",
-                "Invokes the power of dark gods to increase strength and faith in proportion" +
-                        "to how much higher they are than intelligence and dexterity, but slows them", 50);
+                "Invokes the power of dark gods to increase strength and faith in proportion to how " +
+                        "much higher they are than intelligence and dexterity, but slows the user", 50);
     }
 
     @Override
