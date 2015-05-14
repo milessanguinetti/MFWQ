@@ -39,6 +39,11 @@ public class rogueDisorientingSmokeBomb extends Skill{
 
     @Override //half the time, confuses the target into joining your side for a turn (plus the turn this was cast on)
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
+        if (Defender.getHPCap() > Caster.getHPCap()){
+            Defender.printName();
+            System.out.println(" resisted the attack.");
+        return; //can't switch the sides of targets with more HP than the caster.
+    }
         Random Rand = new Random();
         if(Rand.nextInt(2) == 0){ //the skill fails 50% of the time.
             Defender.printName();

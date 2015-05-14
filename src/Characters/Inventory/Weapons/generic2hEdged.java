@@ -9,15 +9,15 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 5/12/15.
  */
+//generates a random two-handed edged weapon with a random property
+//with a damage value calculated from a passed integer.
 public class generic2hEdged extends Weapon{
     public generic2hEdged(){}
 
     public generic2hEdged(int damage){
         super("A standard two-handed edged weapon with little remarkable about it.",
-                damage, "2h Blunt");
-
-        Damage *= 1.5f; //two-handed weapons deal 150% damage
-
+                Math.round(damage * 1.5f), "2h Blunt");
+        //two handed weapons deal 150% damage
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
         int Quality = Roll % 3; //minor damage variation based on roll

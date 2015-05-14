@@ -14,9 +14,8 @@ public class generic2hBlunt extends Weapon{
 
     public generic2hBlunt(int damage){
         super("A standard two-handed blunted weapon with little remarkable about it.",
-                damage, "2h Blunt");
-
-        Damage *= 1.5f; //two-handed weapons deal 150% damage
+                Math.round(1.5f * damage), "2h Blunt");
+        //two-handed weapons deal 150% damage
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables

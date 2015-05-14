@@ -34,7 +34,7 @@ public class inquisitorAbsolution extends Skill {
         return false;
     }
 
-    @Override //regen 20% max SP for 5 turns.
+    @Override //regen 20% max SP over 5 turns.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Defender.addStatus(new spRegen(5));
         Defender.printName();
