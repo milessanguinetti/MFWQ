@@ -1,5 +1,9 @@
 package Characters.Classes;
 
+import Characters.Skills.secondClass.idolatorConvert;
+import Characters.Skills.secondClass.idolatorGruesomeTransformation;
+import Characters.Skills.secondClass.idolatorProfaneBlade;
+import Characters.Skills.secondClass.idolatorThunderHammer;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +13,7 @@ import Structures.LLLnode;
 public class Idolator extends characterClass{
     public Idolator(){
         super("Idolator", 10000);
-        Skills.Insert(new LLLnode(new ())); //initial skill
+        Skills.Insert(new LLLnode(new idolatorProfaneBlade())); //initial skill
     }
 
     @Override
@@ -25,30 +29,30 @@ public class Idolator extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new idolatorGruesomeTransformation()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Gruesome Transformation!");
         }
         if (jlevel == 4) { //level 4 active skill
+            Skills.Insert(new LLLnode(new idolatorThunderHammer()));
+            toLevel.printName();
+            System.out.println(" learned Thunder Hammer!");
+        }
+        /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
-        }
-        if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
-        }
+        }*/
         if (jlevel == 8) { //level 8 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new idolatorConvert()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Convert!");
         }
-        if (jlevel == 10) { //level 10 passive skill
+        /*if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
             toLevel.printName();
             System.out.println(" learned the passive skill !");
-        }
+        }*/
     }
 
     @Override

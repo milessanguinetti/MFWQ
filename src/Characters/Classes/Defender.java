@@ -1,5 +1,9 @@
 package Characters.Classes;
 
+import Characters.Skills.secondClass.defenderAnticipate;
+import Characters.Skills.secondClass.defenderBulwark;
+import Characters.Skills.secondClass.defenderShieldSmash;
+import Characters.Skills.secondClass.defenderUnbreakableShield;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +13,7 @@ import Structures.LLLnode;
 public class Defender extends characterClass{
     public Defender(){
         super("Defender", 10000);
-        Skills.Insert(new LLLnode(new ())); //initial skill
+        Skills.Insert(new LLLnode(new defenderBulwark())); //initial skill
     }
 
     @Override
@@ -25,21 +29,21 @@ public class Defender extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new defenderShieldSmash()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new defenderAnticipate()));
             toLevel.printName();
             System.out.println(" learned !");
         }
-        if (jlevel == 8) { //level 8 active skill
+        /*if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
@@ -48,7 +52,7 @@ public class Defender extends characterClass{
             toLevel.addPassive(new ());
             toLevel.printName();
             System.out.println(" learned the passive skill !");
-        }
+        }*/
     }
 
     @Override

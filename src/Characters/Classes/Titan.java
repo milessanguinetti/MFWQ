@@ -1,5 +1,8 @@
 package Characters.Classes;
 
+import Characters.Skills.secondClass.titanAmplifyMetabolism;
+import Characters.Skills.secondClass.titanGigasModus;
+import Characters.Skills.secondClass.titanRampage;
 import Characters.playerCharacter;
 import Structures.LLLnode;
 
@@ -9,7 +12,7 @@ import Structures.LLLnode;
 public class Titan extends characterClass{
     public Titan(){
         super("Titan", 10000);
-        Skills.Insert(new LLLnode(new ())); //initial skill
+        Skills.Insert(new LLLnode(new titanGigasModus())); //initial skill
     }
 
     @Override
@@ -25,16 +28,16 @@ public class Titan extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new titanRampage()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Rampage!");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new LLLnode(new titanAmplifyMetabolism()));
             toLevel.printName();
-            System.out.println(" learned !");
+            System.out.println(" learned Amplify Metabolism!");
         }
-        if (jlevel == 6) { //level 6 active skill
+/*        if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
@@ -48,7 +51,7 @@ public class Titan extends characterClass{
             toLevel.addPassive(new ());
             toLevel.printName();
             System.out.println(" learned the passive skill !");
-        }
+        }*/
     }
 
     @Override

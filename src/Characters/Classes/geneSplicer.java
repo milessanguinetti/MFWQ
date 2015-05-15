@@ -38,21 +38,21 @@ public class geneSplicer extends characterClass{
             toLevel.printName();
             System.out.println(" learned Create Caper Emissarius!");
         }
-        if (jlevel == 6) { //level 6 active skill
+        /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new LLLnode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
-        }
+        }*/
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new LLLnode(new geneSplicerGenomeBinding()));
             toLevel.printName();
             System.out.println(" learned Genome Binding!");
         }
-        if (jlevel == 10) { //level 10 passive skill
+        /*if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
             toLevel.printName();
             System.out.println(" learned the passive skill !");
-        }
+        }*/
     }
 
     @Override

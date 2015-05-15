@@ -11,7 +11,7 @@ import Structures.orderedLLL;
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
-public class Battle {
+public class Battle extends Frame{
     //two parties of four characters each each party has an
     //empty pool of minions that they can add to with some skills.
     gameCharacter [] playerParty = new gameCharacter[4];
