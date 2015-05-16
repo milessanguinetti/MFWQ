@@ -14,8 +14,8 @@ public abstract class Frame extends JPanel implements ActionListener{
     //default constructor
     public Frame(){
         setFocusable(true); //make the jpanel focusable
-        requestFocusInWindow();
-        setBackground(Color.BLACK);
+        requestFocusInWindow(); //set focus to the window
+        setBackground(Color.WHITE); //create a black background (PLACEHOLDER)
         setDoubleBuffered(true);
 
         timer = new Timer(5, this);

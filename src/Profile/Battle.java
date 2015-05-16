@@ -8,6 +8,8 @@ import Structures.LLLnode;
 import Structures.battleData;
 import Structures.orderedLLL;
 
+import java.awt.event.ActionEvent;
+
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
@@ -19,6 +21,11 @@ public class Battle extends Frame{
     gameCharacter [] enemyParty = new gameCharacter[4];
     gameCharacter [] enemyMinions = new gameCharacter[4];
     orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        //IMPLEMENT BATTLE INTERFACING
+    }
 
     //bool signifies whether or not the player won or escaped.
     public boolean commenceBattle(gameCharacter [] Allies, gameCharacter [] Enemies){
