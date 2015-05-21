@@ -2,11 +2,13 @@ package Profile;
 
 import Characters.Inventory.Inventory;
 import Characters.playerCharacter;
+import Maps.Map;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
  */
 public class userProfile extends Inventory{
+    private Map currentMap; //the map that the user is presently on
     private int Coins; //how much money the player has.
     private int philosophersStones; //quantity of philosopher's stones, a non-inventory "item" that
                                     //can be used to resurrect downed characters rather than having
@@ -14,6 +16,14 @@ public class userProfile extends Inventory{
     private int difficultyModifier = 1; //difficulty modifier; typically used for new game+
     private Battle currentBattle;
     private playerCharacter [] Party = new playerCharacter[4]; //party of 4
+
+    public Map getMap(){
+        return currentMap;
+    }
+
+    public void setMap(Map toSet){
+        currentMap = toSet;
+    }
 
     public playerCharacter [] getParty(){
         return Party;
