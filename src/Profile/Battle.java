@@ -8,12 +8,17 @@ import Structures.LLLnode;
 import Structures.battleData;
 import Structures.orderedLLL;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
 public class Battle extends Frame{
+    //COMBAT DATA MEMBERS
     //two parties of four characters each each party has an
     //empty pool of minions that they can add to with some skills.
     gameCharacter [] playerParty = new gameCharacter[4];
@@ -22,10 +27,54 @@ public class Battle extends Frame{
     gameCharacter [] enemyMinions = new gameCharacter[4];
     orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
 
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        //IMPLEMENT BATTLE INTERFACING
-    }
+    //INTERFACING DATA MEMBERS
+    int Selected = 0; //the user's current combat selection.
+
+    //default constructor; do not use
+    Battle(){}
+
+    /*public Battle(Game current){
+        super(current);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                //only act on released keys
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                int which = keyEvent.getKeyCode();
+                //which key was typed
+                if(which == KeyEvent.VK_DOWN){
+                    handleInput(1);
+                }
+                if(which == KeyEvent.VK_UP){
+                    //case for moving a selection up
+                    handleInput(0);
+                }
+                if(which == KeyEvent.VK_ENTER){
+                    //case for executing a given selection
+                    handleInput(2);
+                }
+            }
+        });
+        setLayout(new GridBagLayout()); //set layout and get a constraints var
+        GridBagConstraints Constraints = new GridBagConstraints(); //for formatting
+        Constraints.gridwidth = 0; //set width to 0 for a horizontal layout.
+
+        Labels[0] = new JLabel("New Game");
+        Labels[1] = new JLabel("Continue");
+        Labels[2] = new JLabel("Options");
+        Labels[3] = new JLabel("Exit to Desktop");
+        Bold = new Font("Verdana", Font.BOLD, 30);
+        Plain = new Font("Verdana", Font.PLAIN, 30);
+        Labels[0].setFont(Bold);
+        Labels[1].setFont(Plain);
+        Labels[2].setFont(Plain);
+        Labels[3].setFont(Plain);
+        for(int i = 0; i < 4; ++i)
+            add(Labels[i], Constraints);
+    }*/
 
     //bool signifies whether or not the player won or escaped.
     public boolean commenceBattle(gameCharacter [] Allies, gameCharacter [] Enemies){

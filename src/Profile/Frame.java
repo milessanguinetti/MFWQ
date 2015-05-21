@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Miles Sanguinetti on 5/15/15.
  */
-public abstract class Frame extends JPanel implements ActionListener{
-    private Timer timer;
+public abstract class Frame extends JPanel {
     protected Game currentGame;
 
     //default constructor
@@ -18,8 +17,6 @@ public abstract class Frame extends JPanel implements ActionListener{
         setBackground(Color.WHITE); //create a black background (PLACEHOLDER)
         setDoubleBuffered(true);
 
-        timer = new Timer(5, this);
-        timer.start();
     }
 
     //constructor with a current game.
@@ -30,7 +27,5 @@ public abstract class Frame extends JPanel implements ActionListener{
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
-        timer = new Timer(5, this);
-        timer.start();
     }
 }

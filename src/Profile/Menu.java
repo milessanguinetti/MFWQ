@@ -92,11 +92,6 @@ public class Menu extends Frame{
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-
-    }
-
     //gets an image corresponding to the highlighted user selection.
     /*public Image getImage(){
 
@@ -109,5 +104,4 @@ public class Menu extends Frame{
         Toolkit.getDefaultToolkit().sync();
         toDraw.dispose();
     }
-
 }
