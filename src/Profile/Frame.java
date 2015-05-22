@@ -2,7 +2,6 @@ package Profile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Miles Sanguinetti on 5/15/15.
@@ -14,9 +13,8 @@ public abstract class Frame extends JPanel {
     public Frame(){
         setFocusable(true); //make the jpanel focusable
         requestFocusInWindow(); //set focus to the window
-        setBackground(Color.WHITE); //create a black background (PLACEHOLDER)
+        setBackground(Color.WHITE); //create a white background (PLACEHOLDER)
         setDoubleBuffered(true);
-
     }
 
     //constructor with a current game.
@@ -26,6 +24,5 @@ public abstract class Frame extends JPanel {
         requestFocusInWindow();
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
-
     }
 }

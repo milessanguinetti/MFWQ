@@ -10,6 +10,7 @@ import Characters.Skills.Skill;
 import Characters.Skills.Wait;
 import Characters.Skills.Passive.passiveSkill;
 import Profile.Game;
+import Profile.battleUI;
 import Structures.LLLnode;
 import Structures.orderedLLL;
 
@@ -49,13 +50,14 @@ public class playerCharacter extends gameCharacter {
     }
 
     //chooses a target from two passed arrays of targets
-    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins){
+    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins, boolean notUsableOnDead){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a target from the following or enter 0 to cancel:");
         int k = 1; //counter for the number of targets that have been displayed
         for(int i = 0; i < 4; ++i){
             if(chars[i] != null) {
-                if(chars[i].isAlive()) { //if the character exists and is still alive
+                if(chars[i].isAlive() == notUsableOnDead) {
+                //if the character exists and the skill can be used on them
                     System.out.print(k + ": ");
                     chars[i].printName();
                     System.out.println();
@@ -65,7 +67,8 @@ public class playerCharacter extends gameCharacter {
         }
         for(int j = 0; j < 4; ++j) {
             if (mins[j] != null) {
-                if (mins[j].isAlive()) { //if the character exists and is still alive
+                if (mins[j].isAlive() == notUsableOnDead) {
+                //if the character exists and the skill can be used on them
                     System.out.print(k + ": ");
                     mins[j].printName();
                     System.out.println();
@@ -79,7 +82,8 @@ public class playerCharacter extends gameCharacter {
             return 0; //return 0 if the user cancels
         for(int l = 0; l < 4; ++l) {
             if (chars[l] != null) {
-                if (chars[l].isAlive()) { //if the character exists and is still alive
+                if (chars[l].isAlive() == notUsableOnDead) {
+                //if the character exists and the skill can be used on them
                     if (Input == 1)
                         return l + 1; //return l+1 to essentially have a meaningful
                     else              //reference to where the target is located.
@@ -89,7 +93,8 @@ public class playerCharacter extends gameCharacter {
         }
         for(int m = 0; m < 4; ++m) {
             if (chars[m] != null) {
-                if (chars[m].isAlive()) { //if the character exists and is still alive
+                if (chars[m].isAlive() == notUsableOnDead) {
+                //if the character exists and the skill can be used on them
                     if (Input == 1)
                         return m + 5; //return l+5 to essentially have a meaningful
                     else              //reference to where the target is located; +5 denotes a minion.
@@ -98,81 +103,155 @@ public class playerCharacter extends gameCharacter {
             }
         }   //if we get here, the user has not input a number denoting a valid target.
             System.out.println("Input invalid. Please choose a valid target."); //error message.
-            return chooseTarget(chars, mins); //recursive call
+            return chooseTarget(chars, mins, notUsableOnDead); //recursive call
     }
 
     //selects a skill to use/attacks with weapons/runs
     public combatEffect chooseSkill() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Would you like to attack with a weapon or use a skill?");
-        System.out.println("Enter '1' for a weapon attack or '2' for a skill. '0' will make the character wait.");
-        System.out.println("'3' will use an item and '4' will attempt to flee the battle.");
-        int Input = scanner.nextInt();
-        scanner.nextLine();
-        if (Input == 0)
-            return new Wait(); //return a new "wait" skill object
-        if (Input == 2) {
-            System.out.println("Would you like to use a skill from the character's primary or secondary class?");
-            System.out.println("Enter '1' for primary or '2' for secondary class. '0' will cancel skill use.");
-            Input = scanner.nextInt();
-            scanner.nextLine();
-            if (Input == 1) {
-                if (primaryClass == null) {
-                    System.out.println("This character has no primary class.");
-                    return chooseSkill();
-                }
-                System.out.println("SP remaining: " + SP + "/" + MSP);
-                primaryClass.displaySkills();
-                System.out.println("Enter the number of the corresponding skill or '0' to cancel.");
-                Input = scanner.nextInt();
-                scanner.nextLine();
-                if (Input != 0) {
-                    Skill toReturn = primaryClass.getSkill(Input);
-                    if (toReturn == null) {
-                        System.out.println("Input invalid. Please enter a valid skill.");
+        int Input; //user input
+        int Selection = 0; //the user's current selection
+        int uSelectionView = 0; //upper selection view
+        int lSelectionView = 3; //lower selection view
+        int lowerBound; //the upper bound of whatever menu we're in
+        battleUI Interface = Game.Player.getCurrentBattle().getInterface();
+        combatEffect [] primarySkills = null;
+        combatEffect [] secondarySkills = null;
+        combatEffect [] Items = null;
+        //three arrays of combat effects; only initialized if the user specifies as much
+        int State = 0;
+        /* integer to keep track of what we are presenting showing the user
+        0 = attack/skill/item/flee/wait selection
+        1 = select class
+        2 = select primary class skill
+        3 = select secondary class skill
+        4 = select item
+         */
+        while(true){ //loop infinitely until we arrive at a return value.
+            Input = 1; //reset input.
+            if(State == 0){ //attack/skill/item/flee/wait state
+                lowerBound = 4; //this state only has 5 possible selections.
+                while(Input != 3){ //while input isn't enter
+                    if(lSelectionView != 4) {
+                        Interface.printLeft("Attack", "Skill", "Item", "Flee");
+                        Interface.setTextFocus(Selection);
                     }
-                    else
-                        return toReturn;
-                }
-            } else if (Input == 2) {
-                System.out.println("SP remaining: " + SP + "/" + MSP);
-                if (secondaryClass == null) {
-                    System.out.println("This character has no secondary class.");
-                    return chooseSkill();
-                }
-                secondaryClass.displaySkills();
-                System.out.println("Enter the number of the corresponding skill or '0' to cancel.");
-                Input = scanner.nextInt();
-                scanner.nextLine();
-                if (Input != 0) {
-                    Skill toReturn = secondaryClass.getSkill(Input);
-                    if (toReturn == null) {
-                        System.out.println("Input invalid. Please enter a valid skill.");
+                    else {
+                        Interface.printLeft("Skill", "Item", "Flee", "Wait");
+                        Interface.setTextFocus(Selection - 1);
                     }
-                    else
-                        return toReturn;
+                    Input = Interface.getInput(); //get user input
+                    if(Input == 1){ //up case
+                        if(Selection > 0) //unless we're at the lowest selection value
+                            --Selection; //decrement selection
+                        if(Selection < uSelectionView) { //if the selection has left our view
+                            --uSelectionView;
+                            --lSelectionView;
+                        }
+                    }
+                    else if(Input == 2){ //down case
+                        if(Selection < lowerBound)
+                            ++Selection;
+                        if(Selection > lSelectionView) {
+                            ++uSelectionView;
+                            ++lSelectionView;
+                        }
+                    }
+                    else if(Input == 3) { //enter case
+                        if(Selection == 0) //attack case
+                            return Right; //return right hand weapon
+                        else if(Selection == 1){ //skill case
+                            State = 1; //select primary or secondary class
+                        }
+                        else if(Selection == 2){ //item case
+                            State = 4;
+                        }
+                        else if(Selection == 3){ //flee case
+                            return new Flee();
+                        }
+                        else if(Selection == 4){ //wait case
+                            return new Wait();
+                        }
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    }
                 }
             }
-            return chooseSkill(); //return recursive call's return value if the user cancelled.
-        } else if (Input == 1) {
-            if (Right != null)
-                return Right;
-            if (Left != null)
-                return Left;
-            return null; //wait if the character cannot use a weapon.
-            //implement a fist damage case for this in the future
-        } else if (Input == 3) {
-            //CASE FOR INVENTORY USE
-            combatEffect itemReturn = Game.Player.combatInterface();
-            if (itemReturn == null)
-                return chooseSkill(); //return recursive call's value if the user cancelled.
-            return itemReturn; //otherwise return the selected item.
-        } else if (Input == 4) {
-            return new Flee();
-        }
-        else{
-            System.out.println("Input invalid.");
-            return chooseSkill();
+            else if(State == 1){ //primary or secondary class state state
+                lowerBound = 1; //this state only has 5 possible selections.
+                while(Input != 3 && Input != 0){ //while input isn't enter or cancel
+                    Interface.printLeft(primaryClass.getClassName() + " Skills",
+                            secondaryClass.getClassName() + " Skills");
+                    Interface.setTextFocus(Selection);
+                    Input = Interface.getInput(); //get user input
+                    if(Input == 1){ //up case
+                        if(Selection > 0) //unless we're at the lowest selection value
+                            --Selection; //decrement selection
+                    }
+                    else if(Input == 2){ //down case
+                        if(Selection < lowerBound)
+                            ++Selection;
+                    }
+                    else if(Input == 3) { //enter case
+                        if(Selection == 0) { //Primary class case
+                            if(primaryClass != null)
+                                State = 2; //select primary class skill
+                            else
+                                Input = 1;
+                        }
+                        else if(Selection == 1){ //Secondary class case
+                            if(secondaryClass != null)
+                                State = 3; //select secondary class skill
+                            else
+                                Input = 2;
+                        }
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    }
+                    else if(Input == 0){ //cancel case
+                        State = 0; //base selection case
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    }
+                }
+            }
+            else if(State == 2) { //primary class skill selection state
+                lowerBound = primaryClass.getNumSkills();
+                if(primarySkills == null)
+                    primarySkills = primaryClass.getSkillArray(); //ensure we have an array
+                while (Input != 3 && Input != 0) { //while input isn't enter or cancel
+                    //IMPLEMENT SKILL PRINTING HERE
+                    //IMPLEMENT SKILL PRINTING HERE
+                    //IMPLEMENT SKILL PRINTING HERE
+                    Interface.printLeft(primaryClass.getClassName() + " Skills",
+                            secondaryClass.getClassName() + " Skills");
+                    Interface.setTextFocus(Selection);
+                    Input = Interface.getInput(); //get user input
+                    if (Input == 1) { //up case
+                        if (Selection > 0) //unless we're at the lowest selection value
+                            --Selection; //decrement selection
+                    } else if (Input == 2) { //down case
+                        if (Selection < lowerBound)
+                            ++Selection;
+                    } else if (Input == 3) { //enter case
+                        if (Selection == 0) //Primary class case
+                            State = 2; //select primary class skill
+                        else if (Selection == 1) { //Secondary class case
+                            State = 3; //select secondary class skill
+                        }
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    } else if (Input == 0) { //cancel case
+                        State = 0; //base selection case
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    }
+                }
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package Structures;
 
+import Characters.combatEffect;
+
 import java.io.PrintWriter;
 
 /**
@@ -165,5 +167,30 @@ public class orderedLLL extends Structure{
         }
         return 1;
         //return 1 because the method cannot be expected to fail at this point
+    }
+
+    public combatEffect [] toArray(){
+        int Size = getSize();
+        if(Size == 0)
+            return null;
+        combatEffect [] toReturn = new combatEffect[Size];
+        LLLnode Current = head;
+        for(int i = 0; i < Size; ++i){
+            toReturn[i] = ((combatEffect)Current.Data);
+            Current = Current.getNext();
+        }
+        return toReturn;
+    }
+
+    public int getSize(){
+        LLLnode Current = head;
+        if(head == null)
+            return 0;
+        int count = 0;
+        while(Current != null){
+            ++count;
+            Current = Current.getNext();
+        }
+        return count;
     }
 }

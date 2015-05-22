@@ -20,6 +20,11 @@ public class lichCircleofRot extends Skill {
     }
 
     @Override
+    public boolean notUsableOnDead(){
+        return true; //not usable on dead characters
+    }
+
+    @Override
     public boolean isOffensive() {
         return true;
     }

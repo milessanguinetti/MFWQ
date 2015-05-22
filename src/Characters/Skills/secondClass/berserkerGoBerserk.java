@@ -15,6 +15,11 @@ public class berserkerGoBerserk extends Skill{
     }
 
     @Override
+    public boolean notUsableOnDead(){
+        return true; //not usable on dead characters
+    }
+
+    @Override
     public void spLoss(gameCharacter Caster) {
         Caster.subtractSP(10);
     }

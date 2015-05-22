@@ -107,6 +107,11 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         }
     }
 
+    @Override
+    public boolean notUsableOnDead(){
+        return true; //not usable on dead characters
+    }
+
     @Override //weapons are literally always offensive
     public boolean isOffensive() {
         return true;

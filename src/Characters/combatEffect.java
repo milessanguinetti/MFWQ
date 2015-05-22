@@ -15,4 +15,5 @@ public interface combatEffect {
     public boolean isOffensive();
     public int getAoE();
     public void spLoss(gameCharacter Caster);
+    public boolean notUsableOnDead();
 }

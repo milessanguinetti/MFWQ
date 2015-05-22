@@ -48,6 +48,10 @@ public abstract class gameCharacter extends Stats {
         Name = toName;
     }
 
+    public String getName(){
+        return Name;
+    }
+
     public void setCounter(Counter counter){
         charCounter = counter;
     }
@@ -67,7 +71,8 @@ public abstract class gameCharacter extends Stats {
 
     //picks a target (via AI or input, depending on whether this is a monster, player or minion)
     //from two passed arrays of game characters representing appropriate targets--minions or game chars
-    public abstract int chooseTarget(gameCharacter[] CTargets, gameCharacter[] MTargets);
+    public abstract int chooseTarget(gameCharacter[] CTargets, gameCharacter[] MTargets,
+                                     boolean notUsableOnDead);
 
     //takes damage; returns remaining health
     public int takeDamage(int toTake, String property){

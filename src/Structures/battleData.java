@@ -52,7 +52,7 @@ public class battleData implements Data {
         if(primaryTarget == false) { //if we set this to false because this is a single target skill
             return 1; //return 1, an arbitrary value. we already set target index in initializeSkill.
         }
-        targetIndex = isAlly * Attacker.chooseTarget(CTargets, MTargets);
+        targetIndex = isAlly * Attacker.chooseTarget(CTargets, MTargets, toCast.notUsableOnDead());
         return targetIndex; //if this value is 0, a user cancelled the target decision and will
                             //need to select different skill in Battle class's interface.
     }
@@ -73,7 +73,7 @@ public class battleData implements Data {
                 Defender = Attacker; //change defender to attacker.
             }
             if(Defender != null) {
-                if (Defender.isAlive()) {
+                if (Defender.isAlive() == toCast.notUsableOnDead()) {
                     if (primaryTarget) { //only display this message once.
                         if (toCast.isOffensive()) {
                             Attacker.printName();
@@ -82,7 +82,7 @@ public class battleData implements Data {
                             System.out.print(" with ");
                             toCast.printName();
                             System.out.println("!!");
-                            if(Defender.isAlive())
+                            if(Defender.isAlive() && Attacker.isAlive())
                                 Defender.executeCounter(Attacker);
                         } else {
                             Attacker.printName();
@@ -142,6 +142,12 @@ public class battleData implements Data {
             System.out.print("      ");
         }
         Attacker.printName();
+    }
+
+    public boolean notUsableOnDead(){
+        if (toCast == null)
+            return true;
+        return toCast.notUsableOnDead();
     }
 
     @Override

@@ -25,6 +25,11 @@ public class Flee extends Skill {
     }
 
     @Override
+    public boolean notUsableOnDead(){
+        return true; //not usable on dead characters
+    }
+
+    @Override
     public int getAoE() {
         return -1;
     }

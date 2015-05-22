@@ -26,55 +26,52 @@ public class Battle extends Frame{
     gameCharacter [] enemyParty = new gameCharacter[4];
     gameCharacter [] enemyMinions = new gameCharacter[4];
     orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
+    battleUI Interface = new battleUI();
 
-    //INTERFACING DATA MEMBERS
-    int Selected = 0; //the user's current combat selection.
+    public  battleUI getInterface(){
+        return Interface;
+    }
 
-    //default constructor; do not use
-    Battle(){}
-
-    /*public Battle(Game current){
-        super(current);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent keyEvent) {
-                //only act on released keys
-            }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {
-                int which = keyEvent.getKeyCode();
-                //which key was typed
-                if(which == KeyEvent.VK_DOWN){
-                    handleInput(1);
-                }
-                if(which == KeyEvent.VK_UP){
-                    //case for moving a selection up
-                    handleInput(0);
-                }
-                if(which == KeyEvent.VK_ENTER){
-                    //case for executing a given selection
-                    handleInput(2);
-                }
-            }
-        });
-        setLayout(new GridBagLayout()); //set layout and get a constraints var
-        GridBagConstraints Constraints = new GridBagConstraints(); //for formatting
-        Constraints.gridwidth = 0; //set width to 0 for a horizontal layout.
-
-        Labels[0] = new JLabel("New Game");
-        Labels[1] = new JLabel("Continue");
-        Labels[2] = new JLabel("Options");
-        Labels[3] = new JLabel("Exit to Desktop");
-        Bold = new Font("Verdana", Font.BOLD, 30);
-        Plain = new Font("Verdana", Font.PLAIN, 30);
-        Labels[0].setFont(Bold);
-        Labels[1].setFont(Plain);
-        Labels[2].setFont(Plain);
-        Labels[3].setFont(Plain);
-        for(int i = 0; i < 4; ++i)
-            add(Labels[i], Constraints);
-    }*/
+    public void printDefaultStats() {
+        if(playerParty[1] == null){ //case for 3 missing party members
+            Interface.printRight("HP:" + playerParty[0].getHP() + "/" + playerParty[0].getHPCap() +
+                    " SP: " + playerParty[0].getSP() + "/" + playerParty[0].getSPCap()
+                    + " " + playerParty[0].getName());
+        }
+        else if(playerParty[2] == null){ //case for 2 missing party members
+            Interface.printRight("HP:" + playerParty[0].getHP() + "/" + playerParty[0].getHPCap() +
+                            " SP: " + playerParty[0].getSP() + "/" + playerParty[0].getSPCap()
+                            + " " + playerParty[0].getName(),
+                    "HP:" + playerParty[1].getHP() + "/" + playerParty[1].getHPCap() +
+                            " SP: " + playerParty[1].getSP() + "/" + playerParty[1].getSPCap()
+                            + " " + playerParty[1].getName());
+        }
+        else if(playerParty[3] == null){ //case for 1 missing party member
+            Interface.printRight("HP:" + playerParty[0].getHP() + "/" + playerParty[0].getHPCap() +
+                            " SP: " + playerParty[0].getSP() + "/" + playerParty[0].getSPCap()
+                            + " " + playerParty[0].getName(),
+                            "HP:" + playerParty[1].getHP() + "/" + playerParty[1].getHPCap() +
+                            " SP: " + playerParty[1].getSP() + "/" + playerParty[1].getSPCap()
+                            + " " + playerParty[1].getName(),
+                            "HP:" + playerParty[2].getHP() + "/" + playerParty[2].getHPCap() +
+                            " SP: " + playerParty[2].getSP() + "/" + playerParty[2].getSPCap()
+                            + " " + playerParty[2].getName());
+        }
+        else{ //case for a full party
+            Interface.printRight("HP:" + playerParty[0].getHP() + "/" + playerParty[0].getHPCap() +
+                                " SP: " + playerParty[0].getSP() + "/" + playerParty[0].getSPCap()
+                                + " " + playerParty[0].getName(),
+                            "HP:" + playerParty[1].getHP() + "/" + playerParty[1].getHPCap() +
+                            " SP: " + playerParty[1].getSP() + "/" + playerParty[1].getSPCap()
+                            + " " + playerParty[1].getName(),
+                            "HP:" + playerParty[2].getHP() + "/" + playerParty[2].getHPCap() +
+                            " SP: " + playerParty[2].getSP() + "/" + playerParty[2].getSPCap()
+                            + " " + playerParty[2].getName(),
+                            "HP:" + playerParty[3].getHP() + "/" + playerParty[3].getHPCap() +
+                            " SP: " + playerParty[3].getSP() + "/" + playerParty[3].getSPCap()
+                            + " " + playerParty[3].getName());
+        }
+    }
 
     //bool signifies whether or not the player won or escaped.
     public boolean commenceBattle(gameCharacter [] Allies, gameCharacter [] Enemies){
@@ -195,11 +192,11 @@ public class Battle extends Frame{
                     }
                 }
                 gameCharacter Target = Primary[toFind]; //establish a primary target.
-                if(!Target.isAlive()) { //if the target is dead, we find a new target.
+                if(!(Target.isAlive() == whoseTurn.notUsableOnDead())) { //if the target is dead, we find a new target.
                     for (int i = 1; i < 3; ++i) { //first we search every other character in the array
                         if ((toFind + i) < 4) { //if this index is part of the array
                             if (Primary[toFind + i] != null) {
-                                if (Primary[toFind + i].isAlive()) {
+                                if (Primary[toFind + i].isAlive() == whoseTurn.notUsableOnDead()) {
                                     toFind += i; //adjust toFind to compensate
                                     Target = Primary[toFind]; //set target to this unit
                                     break; //and break the for loop
@@ -208,7 +205,7 @@ public class Battle extends Frame{
                         }
                         if ((toFind - i) >= 0) { //if this index is part of the array
                             if (Primary[toFind - i] != null) {
-                                if (Primary[toFind - i].isAlive()) {
+                                if (Primary[toFind - i].isAlive() == whoseTurn.notUsableOnDead()) {
                                     toFind -= i; //adjust toFind to compensate
                                     Target = Primary[toFind]; //set target to this unit
                                     break; //and break the for loop.
@@ -216,11 +213,11 @@ public class Battle extends Frame{
                             }
                         }
                     }
-                    if(!Target.isAlive()){ //if we didn't find any replacements in the primary array...
+                    if(!(Target.isAlive() == whoseTurn.notUsableOnDead())){ //if we didn't find any replacements in the primary array...
                         for (int i = 1; i < 3; ++i) { //we check the secondary array.
                             if ((toFind + i) < 4) { //if this index is part of the array
                                 if (Secondary[toFind + i] != null) {
-                                    if (Secondary[toFind + i].isAlive()) {
+                                    if (Secondary[toFind + i].isAlive() == whoseTurn.notUsableOnDead()) {
                                         toFind += i;
                                         Target = Secondary[toFind]; //set target to this unit
                                         break; //and break the for loop
@@ -229,7 +226,7 @@ public class Battle extends Frame{
                             }
                             if ((toFind - i) >= 0) { //if this index is part of the array
                                 if (Secondary[toFind - i] != null) {
-                                    if (Secondary[toFind - i].isAlive()) {
+                                    if (Secondary[toFind - i].isAlive() == whoseTurn.notUsableOnDead()) {
                                         toFind -= i;
                                         Target = Secondary[toFind]; //set target to this unit
                                         break; //and break the for loop.

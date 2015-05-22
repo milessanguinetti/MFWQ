@@ -1,6 +1,7 @@
 package Characters.Classes;
 
 import Characters.Skills.Skill;
+import Characters.combatEffect;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Structures.Data;
@@ -31,6 +32,14 @@ public abstract class characterClass implements Data {
     public characterClass(String toName, int experiencecap){
         className = toName;
         jexpCap = experiencecap;
+    }
+
+    public String getClassName(){
+        return className;
+    }
+
+    public int getNumSkills(){
+        return Skills.getSize();
     }
 
     //add job experience to the character's class.
@@ -107,5 +116,9 @@ public abstract class characterClass implements Data {
     //same as above except that this takes a data reference as a parameter
     public int compareTo(Data toCompare) {
         return toCompare.compareTo(className);
+    }
+
+    public combatEffect [] getSkillArray(){
+        return Skills.toArray();
     }
 }

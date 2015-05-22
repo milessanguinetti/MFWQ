@@ -11,12 +11,17 @@ import Profile.Game;
 public class lichZombify extends Skill{
     public lichZombify(){
         super("Zombify",
-                "Transforms a weakened target into a mindless zombie, forcing them to fight for the caster.", 50);
+                "Transforms a dead foe into a mindless zombie, forcing them to fight for the caster.", 50);
     }
 
     @Override
     public void spLoss(gameCharacter Caster) {
         Caster.subtractSP(50);
+    }
+
+    @Override
+    public boolean notUsableOnDead(){
+        return false; //not usable on dead characters
     }
 
     @Override
@@ -36,14 +41,11 @@ public class lichZombify extends Skill{
 
     @Override //half the time, confuses the target into joining your side for a turn (plus the turn this was cast on)
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        if (Defender.getHPCap() > Caster.getHPCap()){
-            Defender.printName();
-            System.out.println(" resisted the spell.");
-            return; //can't switch the sides of targets with more HP than the caster.
-        }
         Defender.printName();
         System.out.println(" was zombified!");
         Defender.setTempProperty(new Undead());
+        Defender.takeAbsoluteDamage(Defender.getHPCap() / -2);
+        //heal to 50% health
         Game.Player.getCurrentBattle().nullCombatant(Defender); //remove defender from the battlefield
         Game.Player.getCurrentBattle().addMinion(true, Defender);
     }

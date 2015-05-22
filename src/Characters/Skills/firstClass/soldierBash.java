@@ -19,6 +19,11 @@ public class soldierBash extends Skill {
     }
 
     @Override
+    public boolean notUsableOnDead(){
+        return true; //not usable on dead characters
+    }
+
+    @Override
     public boolean isOffensive() {
         return true;
     }

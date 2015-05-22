@@ -1,5 +1,7 @@
 package Characters.Inventory;
 
+import Structures.LLLnode;
+import Structures.orderedLLL;
 import Structures.splayNode;
 import Structures.splayTree;
 
@@ -9,7 +11,7 @@ import java.util.Scanner;
  * Created by Miles Sanguinetti on 3/22/15.
  */
 public class Inventory {
-    private splayTree [] Items = new splayTree[5];
+    private orderedLLL [] Items = new orderedLLL[5];
     //0 = consumables
     //1 = weapons
     //2 = armor
@@ -18,7 +20,7 @@ public class Inventory {
 
     public Inventory(){
         for(int i = 0; i < 5; ++i){
-            Items[i] = new splayTree(); //allocate all splay trees.
+            Items[i] = new orderedLLL(); //allocate all ordered LLLs.
         }
     }
 
@@ -31,7 +33,7 @@ public class Inventory {
         scanner.nextLine();
         if(input < 1 || input > 5)
             return; //escape input
-        splayTree selected = Items[input - 1]; //select a tree
+        orderedLLL selected = Items[input - 1]; //select a tree
         selected.Display();
         if(input == 1)
             System.out.println("Would you like to use an item?");
@@ -113,7 +115,7 @@ public class Inventory {
     }
 
     public void Insert(Item toInsert){
-        splayTree itemType = null;
+        orderedLLL itemType = null;
         if(toInsert instanceof Consumable)
             itemType = Items[0];
         else if(toInsert instanceof Weapon)
@@ -126,6 +128,6 @@ public class Inventory {
             itemType = Items[4];
         if(itemType == null) //if this isn't actually an item, we can't insert it safely.
             return;
-        itemType.Insert(new splayNode(toInsert));
+        itemType.Insert(new LLLnode(toInsert));
     }
 }
