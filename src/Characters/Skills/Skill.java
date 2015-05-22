@@ -1,7 +1,6 @@
 package Characters.Skills;
 
 import Characters.combatEffect;
-import Characters.gameCharacter;
 import Structures.Data;
 
 import java.io.PrintWriter;
@@ -12,7 +11,7 @@ import java.io.PrintWriter;
 public abstract class Skill implements Data, combatEffect{
     protected String skillName;
     private String Description;
-    int mpCost;
+    int spCost;
 
     //default constructor
     public Skill(){}
@@ -21,14 +20,23 @@ public abstract class Skill implements Data, combatEffect{
     public Skill(String passedName, String passedDescription, int passedCost){
         skillName = passedName;
         Description = passedDescription;
-        mpCost = passedCost;
+        spCost = passedCost;
     }
 
     @Override
     public void Display() {
         System.out.println(skillName + ':');
         System.out.println(Description);
-        System.out.println("MP Cost: " + mpCost);
+        System.out.println("SP Cost: " + spCost);
+    }
+
+    @Override
+    public String getDescription(){
+        return Description;
+    }
+
+    public int getSPCost(){
+        return spCost;
     }
 
     @Override
@@ -44,7 +52,7 @@ public abstract class Skill implements Data, combatEffect{
         for(int i = 0; i < indent; ++i){
             System.out.print("      ");
         }
-        System.out.println("MP Cost: " + mpCost);
+        System.out.println("MP Cost: " + spCost);
     }
 
     @Override

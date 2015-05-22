@@ -1,5 +1,6 @@
 package Characters.Inventory;
 
+import Characters.combatEffect;
 import Structures.LLLnode;
 import Structures.orderedLLL;
 import Structures.splayNode;
@@ -84,34 +85,13 @@ public class Inventory {
             Interface();
     }
 
-    //selects an item during combat by skipping to the consumables splay tree
-    public Consumable combatInterface() {
-        Scanner scanner = new Scanner(System.in);
-        int input;
-        System.out.println("Enter the item's name to use it, '1' to display usable items or '0' to cancel.");
-        String strInput = scanner.nextLine();
-        if(strInput.equals("1")){
-            Items[0].Display();
-            return combatInterface();
-        }
-        if (!strInput.equals("0")) { //only do anything if the user didn't enter 0
-            Item Retrieved = ((Item) Items[0].Retrieve(strInput).returnData());
-            if (Retrieved.compareTo(strInput) == 0)
-                return ((Consumable)Retrieved);
-            else {
-                System.out.println("Item not found. Closest match is:");
-                Retrieved.Display();
-                System.out.println("Use this item? Enter '0' for no or '1' for yes.");
-                input = scanner.nextInt();
-                scanner.nextLine();
-                if (input == 1) {
-                    Item temp = Retrieved;
-                    Items[0].Remove(temp.returnKey()); //remove the item from the inventory
-                    return ((Consumable) Retrieved); //return the item.
-                }
-            }
-        }
-        return null; //if they didn't want to use an item after all, return null.
+    //returns an array of extant consumable items
+    public combatEffect [] getConsumableArray() {
+        return Items[0].toArray();
+    }
+
+    public int getConsumablesSize(){
+        return Items[0].getSize();
     }
 
     public void Insert(Item toInsert){

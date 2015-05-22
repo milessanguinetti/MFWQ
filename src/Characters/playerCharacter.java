@@ -3,6 +3,7 @@ package Characters;
 import Characters.Classes.characterClass;
 import Characters.Inventory.Accessory;
 import Characters.Inventory.Armor;
+import Characters.Inventory.Consumable;
 import Characters.Inventory.Weapon;
 import Characters.Properties.Neutral;
 import Characters.Skills.Flee;
@@ -222,30 +223,168 @@ public class playerCharacter extends gameCharacter {
                 if(primarySkills == null)
                     primarySkills = primaryClass.getSkillArray(); //ensure we have an array
                 while (Input != 3 && Input != 0) { //while input isn't enter or cancel
-                    //IMPLEMENT SKILL PRINTING HERE
-                    //IMPLEMENT SKILL PRINTING HERE
-                    //IMPLEMENT SKILL PRINTING HERE
-                    Interface.printLeft(primaryClass.getClassName() + " Skills",
-                            secondaryClass.getClassName() + " Skills");
-                    Interface.setTextFocus(Selection);
+                    //here we print the skills currently within view. there are actually a good
+                    //number of cases for this because a class can have between 1 and 8 skills.
+                    if(lowerBound == 0){ //case for a single skill
+                        Interface.printLeft(((Skill) primarySkills[Selection]).returnKey());
+                    }
+                    else if(lowerBound == 1){ //case for 2 skills
+                        Interface.printLeft(((Skill) primarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 1]).returnKey());
+                    }
+                    else if(lowerBound == 2){ //case for 3 skills
+                        Interface.printLeft(((Skill) primarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 1]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 2]).returnKey());
+                    }
+                    else{ //case for 4 or more skills to print.
+                        Interface.printLeft(((Skill) primarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 1]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 2]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[Selection + 3]).returnKey());
+                    }
+
+                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    //print some information about the skill in question.
+                    Interface.printRight(((Skill)primarySkills[Selection]).returnKey(),
+                            "Costs " + ((Skill)primarySkills[Selection]).getSPCost() +
+                            " SP. (" + SP + "remaining)",
+                            primarySkills[Selection].getDescription());
+
                     Input = Interface.getInput(); //get user input
                     if (Input == 1) { //up case
                         if (Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection
+                        if(Selection < uSelectionView){
+                            --lSelectionView;
+                            --uSelectionView;
+                        }
                     } else if (Input == 2) { //down case
                         if (Selection < lowerBound)
                             ++Selection;
-                    } else if (Input == 3) { //enter case
-                        if (Selection == 0) //Primary class case
-                            State = 2; //select primary class skill
-                        else if (Selection == 1) { //Secondary class case
-                            State = 3; //select secondary class skill
+                        if(Selection > lSelectionView){
+                            ++lSelectionView;
+                            ++uSelectionView;
                         }
+                    } else if (Input == 3) { //enter case
+                        return primarySkills[Selection]; //return the selected skill
+                    } else if (Input == 0) { //cancel case
+                        State = 1; //class selection case
                         uSelectionView = 0; //set views to 0 and 3 so we're at the
                         lSelectionView = 3; //bottom of the new submenu
                         Selection = 0; //reset selection as we change menus
+                    }
+                }
+            }
+            else if(State == 3) { //secondary class skill selection state
+                lowerBound = secondaryClass.getNumSkills();
+                if(secondarySkills == null)
+                    secondarySkills = secondaryClass.getSkillArray(); //ensure we have an array
+                while (Input != 3 && Input != 0) { //while input isn't enter or cancel
+                    //here we print the skills currently within view. there are actually a good
+                    //number of cases for this because a class can have between 1 and 8 skills.
+                    if(lowerBound == 0){ //case for a single skill
+                        Interface.printLeft(((Skill) secondarySkills[Selection]).returnKey());
+                    }
+                    else if(lowerBound == 1){ //case for 2 skills
+                        Interface.printLeft(((Skill) secondarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[Selection + 1]).returnKey());
+                    }
+                    else if(lowerBound == 2){ //case for 3 skills
+                        Interface.printLeft(((Skill) secondarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[Selection + 1]).returnKey());
+                        Interface.printLeft(((Skill) secondarySkills[Selection + 2]).returnKey());
+                    }
+                    else{ //case for 4 or more skills to print.
+                        Interface.printLeft(((Skill) secondarySkills[Selection]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[Selection + 1]).returnKey());
+                        Interface.printLeft(((Skill) secondarySkills[Selection + 2]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[Selection + 3]).returnKey());
+                    }
+
+                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    //print some information about the skill in question.
+                    Interface.printRight(((Skill) secondarySkills[Selection]).returnKey(),
+                            "Costs " + ((Skill) secondarySkills[Selection]).getSPCost() +
+                                    " SP. (" + SP + "remaining)",
+                            secondarySkills[Selection].getDescription());
+
+                    Input = Interface.getInput(); //get user input
+                    if (Input == 1) { //up case
+                        if (Selection > 0) //unless we're at the lowest selection value
+                            --Selection; //decrement selection
+                        if(Selection < uSelectionView){
+                            --lSelectionView;
+                            --uSelectionView;
+                        }
+                    } else if (Input == 2) { //down case
+                        if (Selection < lowerBound)
+                            ++Selection;
+                        if(Selection > lSelectionView){
+                            ++lSelectionView;
+                            ++uSelectionView;
+                        }
+                    } else if (Input == 3) { //enter case
+                        return secondarySkills[Selection]; //return the selected skill
                     } else if (Input == 0) { //cancel case
-                        State = 0; //base selection case
+                        State = 1; //class selection case
+                        uSelectionView = 0; //set views to 0 and 3 so we're at the
+                        lSelectionView = 3; //bottom of the new submenu
+                        Selection = 0; //reset selection as we change menus
+                    }
+                }
+            }
+            else if(State == 4) { //items state
+                lowerBound = Game.Player.getConsumablesSize();
+                if(Items == null)
+                    Items = Game.Player.getConsumableArray(); //ensure we have an array
+                while (Input != 3 && Input != 0) { //while input isn't enter or cancel
+                    //here we print the items currently within view. there are actually a good
+                    //number of cases for this because the number of consumables is quite variable.
+                    if(lowerBound == 0){ //case for a single item
+                        Interface.printLeft(((Consumable) Items[Selection]).returnKey());
+                    }
+                    else if(lowerBound == 1){ //case for 2 skills
+                        Interface.printLeft(((Consumable) Items[Selection]).returnKey());
+                        Interface.printLeft(((Consumable)Items[Selection + 1]).returnKey());
+                    }
+                    else if(lowerBound == 2){ //case for 3 skills
+                        Interface.printLeft(((Consumable) Items[Selection]).returnKey());
+                        Interface.printLeft(((Consumable)Items[Selection + 1]).returnKey());
+                        Interface.printLeft(((Consumable) Items[Selection + 2]).returnKey());
+                    }
+                    else{ //case for 4 or more skills to print.
+                        Interface.printLeft(((Consumable) Items[Selection]).returnKey());
+                        Interface.printLeft(((Consumable)Items[Selection + 1]).returnKey());
+                        Interface.printLeft(((Consumable) Items[Selection + 2]).returnKey());
+                        Interface.printLeft(((Consumable)Items[Selection + 3]).returnKey());
+                    }
+
+                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    //print some information about the skill in question.
+                    Interface.printRight(((Consumable) Items[Selection]).returnKey(),
+                            "Quantity: " + ((Consumable)Items[Selection]).getQuantity(),
+                            Items[Selection].getDescription());
+
+                    Input = Interface.getInput(); //get user input
+                    if (Input == 1) { //up case
+                        if (Selection > 0) //unless we're at the lowest selection value
+                            --Selection; //decrement selection
+                        if(Selection < uSelectionView){
+                            --lSelectionView;
+                            --uSelectionView;
+                        }
+                    } else if (Input == 2) { //down case
+                        if (Selection < lowerBound)
+                            ++Selection;
+                        if(Selection > lSelectionView){
+                            ++lSelectionView;
+                            ++uSelectionView;
+                        }
+                    } else if (Input == 3) { //enter case
+                        return Items[Selection]; //return the selected skill
+                    } else if (Input == 0) { //cancel case
+                        State = 0; //return to base selection case
                         uSelectionView = 0; //set views to 0 and 3 so we're at the
                         lSelectionView = 3; //bottom of the new submenu
                         Selection = 0; //reset selection as we change menus

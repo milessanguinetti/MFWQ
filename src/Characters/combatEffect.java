@@ -10,6 +10,7 @@ import Characters.Skills.fleeObject;
 public interface combatEffect {
     //prints the combat effect's name
     public void printName();
+    public String getDescription();
     public boolean canUse(gameCharacter toCheck);
     public void takeAction(gameCharacter Caster, gameCharacter Defender)throws fleeObject;
     public boolean isOffensive();

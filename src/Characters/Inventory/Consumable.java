@@ -14,8 +14,13 @@ public abstract class Consumable extends Item implements combatEffect {
     }
 
     @Override
+    public String getDescription(){
+        return Description;
+    }
+
+    @Override
     public void spLoss(gameCharacter Caster) {
-        return; //items unilaterally have no SP loss.
+         //items unilaterally have no SP loss.
     }
 
     @Override

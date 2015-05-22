@@ -16,6 +16,11 @@ public class Wait extends Skill{
     }
 
     @Override
+    public boolean notUsableOnDead() {
+        return true;
+    }
+
+    @Override
     public boolean isOffensive() {
         return false;
     }

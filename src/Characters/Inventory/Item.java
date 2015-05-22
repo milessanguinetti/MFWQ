@@ -10,7 +10,7 @@ import java.io.PrintWriter;
  */
 public abstract class Item implements incrementableData {
     protected String itemName;
-    private String Description;
+    protected String Description;
     private int Quantity;
 
     //default constructor
@@ -60,6 +60,8 @@ public abstract class Item implements incrementableData {
     public String returnKey() {
         return itemName;
     }
+
+    public int getQuantity(){return Quantity;}
 
     @Override
     public void Display() {

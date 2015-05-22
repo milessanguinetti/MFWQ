@@ -108,6 +108,11 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
     }
 
     @Override
+    public String getDescription(){
+        return Description;
+    }
+
+    @Override
     public boolean notUsableOnDead(){
         return true; //not usable on dead characters
     }
