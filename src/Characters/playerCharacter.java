@@ -51,60 +51,112 @@ public class playerCharacter extends gameCharacter {
     }
 
     //chooses a target from two passed arrays of targets
-    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins, boolean notUsableOnDead){
+    public int chooseTarget(gameCharacter [] chars, gameCharacter [] mins, boolean notUsableOnDead) {
+        battleUI Interface = Game.Player.getCurrentBattle().getInterface();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose a target from the following or enter 0 to cancel:");
-        int k = 1; //counter for the number of targets that have been displayed
-        for(int i = 0; i < 4; ++i){
-            if(chars[i] != null) {
-                if(chars[i].isAlive() == notUsableOnDead) {
-                //if the character exists and the skill can be used on them
-                    System.out.print(k + ": ");
-                    chars[i].printName();
-                    System.out.println();
-                    ++k; //increment k
+        gameCharacter[] targetArray = new gameCharacter[8];
+        //make an array of size 8 to fit the maximum possible sum of targetable characters
+        int Selection = 0; //Selection var for whatever the user currently has selected
+        int Input = 1; //user input storage variable
+        int lowerBound = 0; //lowest possible selection. is incremented via the following loops
+        int uSelectionView = 0; //the upper index that we can presently view
+        int lSelectionView = 3; //the lower index that we can presently view
+        for (int i = 0; i < 4; ++i) { //add all targetable units into the targeting array
+            if (chars[i] != null) {
+                if (chars[i].isAlive() == notUsableOnDead) {
+                    //if the character exists and the skill can be used on them
+                    targetArray[lowerBound] = chars[i]; //insert into targeting array
+                    ++lowerBound; //increment our lower bound
+                }
+            }
+            if (mins[i] != null) {
+                if (mins[i].isAlive() == notUsableOnDead) {
+                    //if the character exists and the skill can be used on them
+                    targetArray[lowerBound] = mins[i]; //insert minion into targeting array
+                    ++lowerBound; //increment our lower bound
                 }
             }
         }
-        for(int j = 0; j < 4; ++j) {
-            if (mins[j] != null) {
-                if (mins[j].isAlive() == notUsableOnDead) {
-                //if the character exists and the skill can be used on them
-                    System.out.print(k + ": ");
-                    mins[j].printName();
-                    System.out.println();
-                    ++k; //increment k
+        //here we actually have the user select a target.
+        while (Input != 3 && Input != 0) { //while input isn't enter or cancel
+            //here we print the targets currently within view. there are multiple cases
+            //because realistically, there can be anywhere between 1 and 8 possible targets
+            if (lowerBound == 0) { //case for a single target
+                Interface.printLeft(targetArray[Selection].getName());
+            }
+            else if (lowerBound == 1) { //case for 2 targets
+                Interface.printLeft(targetArray[Selection].getName());
+                Interface.printLeft(targetArray[Selection + 1].getName());
+            }
+            else if (lowerBound == 2) { //case for 3 targets
+                Interface.printLeft(targetArray[Selection].getName());
+                Interface.printLeft(targetArray[Selection + 2].getName());
+                Interface.printLeft(targetArray[Selection + 3].getName());
+            }
+            else { //case for 4 or more targets to print.
+                Interface.printLeft(targetArray[lSelectionView].getName());
+                Interface.printLeft(targetArray[lSelectionView + 1].getName());
+                Interface.printLeft(targetArray[lSelectionView + 2].getName());
+                Interface.printLeft(targetArray[lSelectionView + 3].getName());
+            }
+
+            Interface.setTextFocus(Selection); //make whatever is selected bold
+            if (Input != 4) { //this means we're presently printing an error message in the right pane
+                Interface.printRight(targetArray[Selection].getName(), //otherwise, print the selected
+                        "HP: " + targetArray[Selection].getHP() + "/" + //target's HP and HP cap
+                                targetArray[Selection].getHPCap());
+            }
+
+            Input = Interface.getInput(); //get user input
+            if (Input == 1) { //up case
+                if (Selection > 0) //unless we're at the lowest selection value
+                    --Selection; //decrement selection
+                if (Selection < uSelectionView) {
+                    --lSelectionView;
+                    --uSelectionView;
                 }
             }
-        }
-        int Input = scanner.nextInt(); //user input variable
-        scanner.nextLine(); //remove anything typed after the first int
-        if(Input == 0)
-            return 0; //return 0 if the user cancels
-        for(int l = 0; l < 4; ++l) {
-            if (chars[l] != null) {
-                if (chars[l].isAlive() == notUsableOnDead) {
-                //if the character exists and the skill can be used on them
-                    if (Input == 1)
-                        return l + 1; //return l+1 to essentially have a meaningful
-                    else              //reference to where the target is located.
-                        --Input; //otherwise decrement input by 1 so that we know that
-                }                //we have passed a character and are closer to the input value
+            else if (Input == 2) { //down case
+                if (Selection < lowerBound)
+                    ++Selection;
+                if (Selection > lSelectionView) {
+                    ++lSelectionView;
+                    ++uSelectionView;
+                }
+            }
+            else if (Input == 3) { //enter case
+                Input = Selection + 1; //temporarily repurpose input to a target indication variable
+                for (int l = 0; l < 4; ++l) {
+                    if (chars[l] != null) {
+                        if (chars[l].isAlive() == notUsableOnDead) {
+                            //if the character exists and the skill can be used on them
+                            if (Input == 1)
+                                return l + 1; //return l+1 to essentially have a meaningful
+                            else              //reference to where the target is located.
+                                --Input; //otherwise decrement input by 1 so that we know that
+                        }                //we have passed a character and are closer to the input value
+                    }
+                }
+                for (int m = 0; m < 4; ++m) {
+                    if (chars[m] != null) {
+                        if (chars[m].isAlive() == notUsableOnDead) {
+                            //if the character exists and the skill can be used on them
+                            if (Input == 1)
+                                return m + 5; //return l+5 to essentially have a meaningful
+                            else              //reference to where the target is located; +5 denotes a minion.
+                                --Input; //otherwise decrement input by m so that we know that
+                        }                //we have passed a character and are closer to the input value
+                    }
+                }   //if we get here, the user has not input a number denoting a valid target.
+                Interface.printRight("Input invalid. Please choose a valid target."); //error message.
+                Input = 4; //change input to 4 so we loop again.
+            }
+            else if (Input == 0) { //cancel case
+                return 0; //return 0, cancelling the function
             }
         }
-        for(int m = 0; m < 4; ++m) {
-            if (chars[m] != null) {
-                if (chars[m].isAlive() == notUsableOnDead) {
-                //if the character exists and the skill can be used on them
-                    if (Input == 1)
-                        return m + 5; //return l+5 to essentially have a meaningful
-                    else              //reference to where the target is located; +5 denotes a minion.
-                        --Input; //otherwise decrement input by m so that we know that
-                }                //we have passed a character and are closer to the input value
-            }
-        }   //if we get here, the user has not input a number denoting a valid target.
-            System.out.println("Input invalid. Please choose a valid target."); //error message.
-            return chooseTarget(chars, mins, notUsableOnDead); //recursive call
+        return 0; //return 0, so the game doesn't outright crash if there's a bug that lets
+                  //the user get to this point in the function.
     }
 
     //selects a skill to use/attacks with weapons/runs
@@ -238,10 +290,10 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Skill) primarySkills[Selection + 2]).returnKey());
                     }
                     else{ //case for 4 or more skills to print.
-                        Interface.printLeft(((Skill) primarySkills[Selection]).returnKey());
-                        Interface.printLeft(((Skill) primarySkills[Selection + 1]).returnKey());
-                        Interface.printLeft(((Skill) primarySkills[Selection + 2]).returnKey());
-                        Interface.printLeft(((Skill) primarySkills[Selection + 3]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[lSelectionView]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[lSelectionView + 1]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[lSelectionView + 2]).returnKey());
+                        Interface.printLeft(((Skill) primarySkills[lSelectionView + 3]).returnKey());
                     }
 
                     Interface.setTextFocus(Selection); //make whatever is selected bold
@@ -296,10 +348,10 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Skill) secondarySkills[Selection + 2]).returnKey());
                     }
                     else{ //case for 4 or more skills to print.
-                        Interface.printLeft(((Skill) secondarySkills[Selection]).returnKey());
-                        Interface.printLeft(((Skill)secondarySkills[Selection + 1]).returnKey());
-                        Interface.printLeft(((Skill) secondarySkills[Selection + 2]).returnKey());
-                        Interface.printLeft(((Skill)secondarySkills[Selection + 3]).returnKey());
+                        Interface.printLeft(((Skill) secondarySkills[lSelectionView]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[lSelectionView + 1]).returnKey());
+                        Interface.printLeft(((Skill) secondarySkills[lSelectionView + 2]).returnKey());
+                        Interface.printLeft(((Skill)secondarySkills[lSelectionView + 3]).returnKey());
                     }
 
                     Interface.setTextFocus(Selection); //make whatever is selected bold
@@ -354,10 +406,10 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Consumable) Items[Selection + 2]).returnKey());
                     }
                     else{ //case for 4 or more skills to print.
-                        Interface.printLeft(((Consumable) Items[Selection]).returnKey());
-                        Interface.printLeft(((Consumable)Items[Selection + 1]).returnKey());
-                        Interface.printLeft(((Consumable) Items[Selection + 2]).returnKey());
-                        Interface.printLeft(((Consumable)Items[Selection + 3]).returnKey());
+                        Interface.printLeft(((Consumable) Items[lSelectionView]).returnKey());
+                        Interface.printLeft(((Consumable)Items[lSelectionView + 1]).returnKey());
+                        Interface.printLeft(((Consumable) Items[lSelectionView + 2]).returnKey());
+                        Interface.printLeft(((Consumable)Items[lSelectionView + 3]).returnKey());
                     }
 
                     Interface.setTextFocus(Selection); //make whatever is selected bold

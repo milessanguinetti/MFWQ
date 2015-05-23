@@ -6,6 +6,7 @@ import Characters.Status.Counter;
 import Characters.Status.damageEffect;
 import Characters.Status.endOfTurn;
 import Characters.Status.statChange;
+import Profile.Game;
 import Structures.LLLnode;
 import Structures.statusEffectData;
 import Structures.statusStructure;
@@ -84,28 +85,40 @@ public abstract class gameCharacter extends Stats {
         toTake = calculateDamage(toTake, property); //take status into account
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
-            System.out.println("The attack had no effect.");
+            Game.Player.getCurrentBattle().getInterface().printLeft("The attack had no effect.", 1);
             return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
         if(toTake <= 0)
             toTake = 1; //damage is 1 minimum
         subtractHP(toTake); //take the damage
-        System.out.println(Name + " took " + toTake + " damage.");
         if(!isAlive())
-            System.out.println(Name + " was downed!");
+            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                    + toTake + " damage and was downed!", 1);
+        else
+            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                    +toTake + " damage.", 1);
         return HP; //some skills' effects hinge on whether or not the target died.
     }
 
     //takes absolute damage, ignoring defenses; returns remaining health
-    public boolean takeAbsoluteDamage(int toTake){
+    public int takeAbsoluteDamage(int toTake){
         if(!isAlive())
-            return false; //dead characters cannot be healed and cannot take damage.
-        if(toTake > 0)
-            System.out.println(Name + " took " + toTake + " damage.");
-        else
-            System.out.println(Name + " was healed for " + toTake*-1 + ".");
-        return(subtractHP(toTake));
+            return 0; //dead characters cannot be healed and cannot take damage.
+        takeAbsoluteDamage(toTake);
+        if(toTake > 0){
+            if(!isAlive())
+                Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                        + toTake + " damage and was downed!", 1);
+            else
+                Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                        +toTake + " damage.", 1);
+        }
+        else{
+            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " was healed for "
+                    + toTake + " health.", 1);
+        }
+        return HP;
     }
 
     //print name, but not stats

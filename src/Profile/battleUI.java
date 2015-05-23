@@ -83,6 +83,15 @@ public class battleUI extends JPanel{
         Left[i].setFont(Bold);
     }
 
+    //prints to the left at just one index specified as an argument.
+    public void printLeft(String S1, int Index){
+        if(Left[Index] != null){
+            if(!Left[Index].getText().equals(""))
+                return; //don't overwrite extant text.
+        }
+        Left[Index].setText(S1);
+    }
+
     //Print functions to left labels
     public void printLeft(String S1){
         Left[0].setText(S1);

@@ -87,6 +87,7 @@ public class Battle extends Frame{
         playerParty = Allies;
         enemyParty = Enemies;
         boolean nextTurn = false;
+        printDefaultStats(); //print default stats for starts.
         while(!nextTurn) { //loop repeatedly until one side is victorious.
             nextTurn = takeTurn(); //as will be reported by the taketurn function.
         }
@@ -130,6 +131,7 @@ public class Battle extends Frame{
                 if(playerParty[i].isAlive()) {  //and is alive
                     BTemp = new battleData(playerParty[i], true); //create a new turn data object
                     turnOrder.Insert(new LLLnode(initializeTurn(BTemp))); //insert the fully initialized object
+                    printDefaultStats(); //reset the right handle display to default stats.
                 }
             }
             if (playerMinions[i] != null) { //if a player minion exists at this index
@@ -292,6 +294,8 @@ public class Battle extends Frame{
                             }
                         }
                     }
+                    printDefaultStats(); //print default stats
+                    Interface.getInput(); //wait for user input before continuing.
                 }
             }
             whoseTurn.endCombat(); //in any case, take care of SP loss and such.

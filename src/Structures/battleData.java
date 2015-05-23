@@ -3,6 +3,7 @@ package Structures;
 import Characters.Skills.fleeObject;
 import Characters.combatEffect;
 import Characters.gameCharacter;
+import Profile.Game;
 
 import java.io.PrintWriter;
 
@@ -49,7 +50,7 @@ public class battleData implements Data {
     //negative integer that turns the returned int from chooseTarget into meaningful data because
     //negatives denote a non-player target whereas positive values denote a player target.
     public int initializeTarget(gameCharacter[] CTargets, gameCharacter[] MTargets, int isAlly){
-        if(primaryTarget == false) { //if we set this to false because this is a single target skill
+        if(!primaryTarget) { //if we set this to false because this is a single target skill
             return 1; //return 1, an arbitrary value. we already set target index in initializeSkill.
         }
         targetIndex = isAlly * Attacker.chooseTarget(CTargets, MTargets, toCast.notUsableOnDead());
@@ -67,30 +68,30 @@ public class battleData implements Data {
         if(Attacker.isAlive()){
             if(targetIndex == 0) { //if the character is targeting themselves
                 Attacker.printName(); //display a simple message
-                System.out.print(" used ");
-                toCast.printName();
-                System.out.println("!!");
+                Game.Player.getCurrentBattle().getInterface().printLeft(Attacker.getName() +
+                        " used " + ((Data) toCast).returnKey() + "!!");
                 Defender = Attacker; //change defender to attacker.
             }
             if(Defender != null) {
                 if (Defender.isAlive() == toCast.notUsableOnDead()) {
                     if (primaryTarget) { //only display this message once.
                         if (toCast.isOffensive()) {
-                            Attacker.printName();
-                            System.out.print(" attacked ");
-                            Defender.printName();
-                            System.out.print(" with ");
-                            toCast.printName();
-                            System.out.println("!!");
+                            Game.Player.getCurrentBattle().getInterface().printLeft(Attacker.getName() +
+                                    " attacked " + Defender.getName() + " with " +
+                                    ((Data)toCast).returnKey() + "!!");
+                            Defender = Attacker; //change defender to attacker.
+                            if(toCast.getAoE() > 0)
+                                Game.Player.getCurrentBattle().getInterface().printLeft(Attacker.getName() +
+                                        "Their teammates were struck as well!", 2);
                             if(Defender.isAlive() && Attacker.isAlive())
                                 Defender.executeCounter(Attacker);
                         } else {
-                            Attacker.printName();
-                            System.out.print(" used ");
-                            toCast.printName();
-                            System.out.print(" on ");
-                            Defender.printName();
-                            System.out.println("!!");
+                            Game.Player.getCurrentBattle().getInterface().printLeft(Attacker.getName() +
+                                    " cast " + Defender.getName() + " on " +
+                                    ((Data) toCast).returnKey() + "!!");
+                            if(toCast.getAoE() > 0)
+                                Game.Player.getCurrentBattle().getInterface().printLeft(Attacker.getName() +
+                                        "Their teammates were affected as well!", 2);
                         }
                         primaryTarget = false; //after the first cast, the defender is no
                     }                          //longer the primary target.
