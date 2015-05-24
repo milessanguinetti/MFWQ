@@ -19,6 +19,11 @@ public class genericMonsterAttack extends Skill {
     }
 
     @Override
+    public boolean notUsableOnDead() {
+        return false;
+    }
+
+    @Override
     public boolean isOffensive() {
         return true;
     }

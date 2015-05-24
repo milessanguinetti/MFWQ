@@ -11,14 +11,16 @@ public abstract class Frame extends JPanel {
 
     //default constructor
     public Frame(){
+        setVisible(true);
         setFocusable(true); //make the jpanel focusable
         requestFocusInWindow(); //set focus to the window
-        setBackground(Color.WHITE); //create a white background (PLACEHOLDER)
+        setBackground(Color.BLACK); //create a black background (PLACEHOLDER)
         setDoubleBuffered(true);
     }
 
     //constructor with a current game.
     public Frame(Game Current){
+        setVisible(true);
         currentGame = Current;
         setFocusable(true); //make the jpanel focusable
         requestFocusInWindow();

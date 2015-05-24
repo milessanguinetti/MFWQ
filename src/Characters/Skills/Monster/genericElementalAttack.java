@@ -9,6 +9,11 @@ import Characters.gameCharacter;
 public class genericElementalAttack extends Skill{
     String Element;
 
+    @Override
+    public boolean notUsableOnDead() {
+        return false;
+    }
+
     //default constructor
     public genericElementalAttack(){
         super("Elemental Attack", "", 15);

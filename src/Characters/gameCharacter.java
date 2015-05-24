@@ -28,7 +28,6 @@ public abstract class gameCharacter extends Stats {
     private statusStructure damageEffectList = new statusStructure(); //effects that impact damage taken
     private statusStructure endOfTurnList = new statusStructure(); //effects that take place at the end of a turn
 
-
     //default constructor
     public gameCharacter(){}
 
@@ -284,6 +283,4 @@ public abstract class gameCharacter extends Stats {
 
     //gets attack damage
     abstract public int getWeaponDamage(boolean isRight);
-
-
 }

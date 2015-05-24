@@ -8,17 +8,13 @@ import Structures.LLLnode;
 import Structures.battleData;
 import Structures.orderedLLL;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
 
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
 public class Battle extends Frame{
-    //COMBAT DATA MEMBERS
     //two parties of four characters each each party has an
     //empty pool of minions that they can add to with some skills.
     gameCharacter [] playerParty = new gameCharacter[4];
@@ -28,7 +24,14 @@ public class Battle extends Frame{
     orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
     battleUI Interface = new battleUI();
 
-    public  battleUI getInterface(){
+    public Battle(){
+        setLayout(new GridBagLayout());
+        GridBagConstraints g = new GridBagConstraints();
+        //g.anchor = GridBagConstraints.PAGE_END; //put at the bottom
+        add(Interface, g); //add our UI to the bottom of the page.
+    }
+
+    public battleUI getInterface(){
         return Interface;
     }
 
@@ -306,11 +309,8 @@ public class Battle extends Frame{
         }
 
         for(int i = 0; i < 4; ++i) { //end turn for all extant combatants
-            if (playerParty[i] != null) {
-                playerParty[i].printName();
-                System.out.println(" has " + playerParty[i].getHP() + " health remaining.");
+            if (playerParty[i] != null)
                 playerParty[i].endTurn();
-            }
             if(enemyParty[i] != null)
                 enemyParty[i].endTurn();
             if(playerMinions[i] != null)
@@ -367,7 +367,7 @@ public class Battle extends Frame{
             Minions = playerMinions;
             System.out.print("A ");
             toAdd.printName();
-            System.out.println(" joined you!");
+            System.out.println(" joined your party!");
         }
         else {
             Minions = enemyMinions; //set minions to the appropriate side.

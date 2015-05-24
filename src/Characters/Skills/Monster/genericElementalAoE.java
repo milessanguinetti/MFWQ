@@ -38,6 +38,11 @@ public class genericElementalAoE extends Skill{
     }
 
     @Override
+    public boolean notUsableOnDead() {
+        return false;
+    }
+
+    @Override
     public boolean isOffensive() {
         return true;
     }

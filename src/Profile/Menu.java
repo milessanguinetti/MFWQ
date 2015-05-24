@@ -52,6 +52,7 @@ public class Menu extends Frame{
         setLayout(new GridBagLayout()); //set layout and get a constraints var
         GridBagConstraints Constraints = new GridBagConstraints(); //for formatting
         Constraints.gridwidth = 0; //set width to 0 for a horizontal layout.
+        Constraints.insets = new Insets(30, 0, 0, 0); //top padding
 
         Labels[0] = new JLabel("New Game");
         Labels[1] = new JLabel("Continue");
@@ -82,7 +83,7 @@ public class Menu extends Frame{
         }
         if(Input == 2){ //enter case
             if(Selection == 0) //new game case.
-                return;
+                currentGame.Test();
             if(Selection == 1) //continue case.
                 return;
             if(Selection == 2) //Options case

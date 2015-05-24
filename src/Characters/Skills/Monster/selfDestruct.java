@@ -14,6 +14,11 @@ public class selfDestruct extends Skill{
     }
 
     @Override
+    public boolean notUsableOnDead() {
+        return false;
+    }
+
+    @Override
     public void spLoss(gameCharacter Caster) {
         //this skill does not take SP
     }

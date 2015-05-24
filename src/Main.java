@@ -16,13 +16,12 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
         Game newGame = new Game(); //initialize a new game
         newGame.setVisible(true); //make the game visible.
         playerCharacter bob = new playerCharacter("Sergeant Pepper", "Faithful",
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         newGame.Player.addCharacter(bob);
-        bob.setLeft(new genericGun(6));
+        /*bob.setLeft(new genericGun(6));
         bob.setRight(new generic1hEdged(6)); //equip the good sergeant with a randomly generated weapon
         bob.addClass(new Soldier());
         bob.addClass(new Rogue());
@@ -48,6 +47,6 @@ public class Main {
             }
             if(!Game.Player.getCurrentBattle().commenceBattle(Game.Player.getParty(), Foes))
                 break;
-        }
+        }*/
     }
 }

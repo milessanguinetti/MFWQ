@@ -100,7 +100,7 @@ public class playerCharacter extends gameCharacter {
                 Interface.printLeft(targetArray[lSelectionView + 3].getName());
             }
 
-            Interface.setTextFocus(Selection); //make whatever is selected bold
+            Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
             if (Input != 4) { //this means we're presently printing an error message in the right pane
                 Interface.printRight(targetArray[Selection].getName(), //otherwise, print the selected
                         "HP: " + targetArray[Selection].getHP() + "/" + //target's HP and HP cap
@@ -186,11 +186,11 @@ public class playerCharacter extends gameCharacter {
                 while(Input != 3){ //while input isn't enter
                     if(lSelectionView != 4) {
                         Interface.printLeft("Attack", "Skill", "Item", "Flee");
-                        Interface.setTextFocus(Selection);
+                        Interface.setTextFocus(Selection - uSelectionView);
                     }
                     else {
                         Interface.printLeft("Skill", "Item", "Flee", "Wait");
-                        Interface.setTextFocus(Selection - 1);
+                        Interface.setTextFocus(Selection - uSelectionView);
                     }
                     Input = Interface.getInput(); //get user input
                     if(Input == 1){ //up case
@@ -235,7 +235,7 @@ public class playerCharacter extends gameCharacter {
                 while(Input != 3 && Input != 0){ //while input isn't enter or cancel
                     Interface.printLeft(primaryClass.getClassName() + " Skills",
                             secondaryClass.getClassName() + " Skills");
-                    Interface.setTextFocus(Selection);
+                    Interface.setTextFocus(Selection - uSelectionView);
                     Input = Interface.getInput(); //get user input
                     if(Input == 1){ //up case
                         if(Selection > 0) //unless we're at the lowest selection value
@@ -296,7 +296,7 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Skill) primarySkills[lSelectionView + 3]).returnKey());
                     }
 
-                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
                     //print some information about the skill in question.
                     Interface.printRight(((Skill)primarySkills[Selection]).returnKey(),
                             "Costs " + ((Skill)primarySkills[Selection]).getSPCost() +
@@ -354,7 +354,7 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Skill)secondarySkills[lSelectionView + 3]).returnKey());
                     }
 
-                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
                     //print some information about the skill in question.
                     Interface.printRight(((Skill) secondarySkills[Selection]).returnKey(),
                             "Costs " + ((Skill) secondarySkills[Selection]).getSPCost() +
@@ -412,7 +412,7 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft(((Consumable)Items[lSelectionView + 3]).returnKey());
                     }
 
-                    Interface.setTextFocus(Selection); //make whatever is selected bold
+                    Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
                     //print some information about the skill in question.
                     Interface.printRight(((Consumable) Items[Selection]).returnKey(),
                             "Quantity: " + ((Consumable)Items[Selection]).getQuantity(),
