@@ -9,6 +9,7 @@ import Characters.gameCharacter;
 import Characters.playerCharacter;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.Random;
 
@@ -19,36 +20,37 @@ public class Game extends JFrame{
     //the player's user profile; public and static because only one will be used at a time;
     //it would be nonsensical to pass it around into virtually every function I call
     public static userProfile Player; //the game's player.
-    private Frame currentFrame; //the current frame that we're in.
+    private CardLayout Cards = new CardLayout();
+    private JPanel statePanels = new JPanel(Cards);
+    private Battle battle = new Battle();
+    private Menu menu = new Menu(this);
 
     public void Exit(){
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     public Game(){
-        Player = new userProfile();
         initializeInterface();
     }
 
     private void initializeInterface(){
-        //currentFrame = new Menu(this);
-        currentFrame = new Battle();
-        add(currentFrame); //add a menu object (a type of jpanel) to the jframe once it is opened.
+        Player = new userProfile();
         setSize(1000, 800); //size is 1000 by 800 pixels
         setTitle("Motherfucking Wizard Quest"); //title the application appropriately
         setDefaultCloseOperation(EXIT_ON_CLOSE); //close the application once it is commanded to close
         setLocationRelativeTo(null); //centers the window
+
+        getContentPane().add(statePanels);
+        statePanels.add(battle, "Battle");
+        statePanels.add(menu, "Menu");
+
+        Cards.show(statePanels, "Menu");
     }
 
-    public void swapFrame(Frame toSwap){
-        removeAll();
-        getContentPane().remove(currentFrame); //remove the current frame.
-        revalidate();
-        repaint();
-        currentFrame = toSwap;
-        add(currentFrame);
-        revalidate();
-        repaint();
+    public void swapFrame(String whichState){
+        Cards.show(statePanels, whichState);
+        //statePanels.revalidate();
+        //statePanels.repaint();
     }
 
     public void Test(){
@@ -68,9 +70,8 @@ public class Game extends JFrame{
         for(int i = 0; i < 10; ++i){
             for(int j = 0; j < 4; ++j)
                 Foes[j] = null; //clean out foes
-            Battle WEFIGHTNOW = new Battle();
-            swapFrame(WEFIGHTNOW);
-            Game.Player.setCurrentBattle(WEFIGHTNOW); //initialize a new battle
+            swapFrame("Battle");
+            Game.Player.setCurrentBattle(battle); //initialize a new battle
             if(Rand.nextInt(2) == 0){
                 Foes[0] = new Kobold();
                 Foes[1] = new babyKobold();
@@ -85,5 +86,4 @@ public class Game extends JFrame{
                 break;
         }
     }
-
 }

@@ -10,11 +10,10 @@ import Structures.orderedLLL;
 
 import java.awt.*;
 
-
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
-public class Battle extends Frame{
+public class Battle extends statePanel {
     //two parties of four characters each each party has an
     //empty pool of minions that they can add to with some skills.
     gameCharacter [] playerParty = new gameCharacter[4];
@@ -78,6 +77,7 @@ public class Battle extends Frame{
 
     //bool signifies whether or not the player won or escaped.
     public boolean commenceBattle(gameCharacter [] Allies, gameCharacter [] Enemies){
+        turnOrder.removeAll(); //nullifies any extant turn order data from previous battles
         for(int i = 0; i < 4; ++i){
             if(Allies[i] != null)
                 Allies[i].applyAutoBuffs(); //initialize stats
@@ -298,7 +298,7 @@ public class Battle extends Frame{
                         }
                     }
                     printDefaultStats(); //print default stats
-                    Interface.getInput(); //wait for user input before continuing.
+                    getInput(); //wait for user input before continuing.
                 }
             }
             whoseTurn.endCombat(); //in any case, take care of SP loss and such.

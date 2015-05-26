@@ -13,17 +13,6 @@ public class battleUI extends JPanel{
     JLabel [] Right = new JLabel[4]; //generally information-based, descriptive labels
     Font Bold; //a font for highlighting a given option
     Font Plain; //a font for non-highlighted options
-    private static int input;
-    /*
-    0 = back
-    1 = up
-    2 = down
-    3 = enter
-     */
-
-    public static void setInput(int toSet){
-        input = toSet;
-    }
 
     public battleUI(){
         setPreferredSize(new Dimension(1000, 200));
@@ -59,43 +48,6 @@ public class battleUI extends JPanel{
         add(Right[2], g);
         g.gridy = 3; //fourth row
         add(Right[3], g);
-    }
-
-    //gets a single key of input; based on code written by
-    //stackoverflow user Garrett Hall
-    public int getInput(){
-        int Which = 0;
-        final CountDownLatch latch = new CountDownLatch(1);
-        KeyEventDispatcher dispatcher = new KeyEventDispatcher() {
-            //new key event dispatcher
-            public boolean dispatchKeyEvent(KeyEvent whichKey) {
-                if (whichKey.getKeyCode() == KeyEvent.VK_UP){
-                    latch.countDown();
-                    battleUI.setInput(1);
-                }
-                else if (whichKey.getKeyCode() == KeyEvent.VK_DOWN){
-                    latch.countDown();
-                    battleUI.setInput(2);
-                }
-                else if (whichKey.getKeyCode() == KeyEvent.VK_LEFT
-                        || whichKey.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-                    latch.countDown();
-                    battleUI.setInput(0);
-                }
-                else if (whichKey.getKeyCode() == KeyEvent.VK_RIGHT
-                        || whichKey.getKeyCode() == KeyEvent.VK_ENTER){
-                    latch.countDown();
-                    battleUI.setInput(3);
-                }
-                return false;
-            }
-        };
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(dispatcher);
-        try {latch.await();}  // current thread waits here until countDown() is called
-        catch (InterruptedException Caught){}
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher);
-
-        return input;
     }
 
     public void setTextFocus(int i){
@@ -170,6 +122,4 @@ public class battleUI extends JPanel{
         Right[2].setText(S3);
         Right[3].setText(S4);
     }
-
-
 }

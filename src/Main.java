@@ -1,52 +1,16 @@
-import Characters.Classes.Alchemist;
-import Characters.Classes.Inquisitor;
-import Characters.Classes.Rogue;
-import Characters.Classes.Soldier;
-import Characters.Inventory.Weapons.generic1hEdged;
-import Characters.Inventory.Weapons.genericGun;
-import Characters.Monsters.Kobold;
-import Characters.Monsters.babyKobold;
-import Characters.gameCharacter;
-import Characters.playerCharacter;
-import Profile.Battle;
 import Profile.Game;
 
-import java.util.Random;
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Game newGame = new Game(); //initialize a new game
-        newGame.setVisible(true); //make the game visible.
-        playerCharacter bob = new playerCharacter("Sergeant Pepper", "Faithful",
-                350, 100, 10, 10, 10, 10, 10, 10, 0);
-        newGame.Player.addCharacter(bob);
-        /*bob.setLeft(new genericGun(6));
-        bob.setRight(new generic1hEdged(6)); //equip the good sergeant with a randomly generated weapon
-        bob.addClass(new Soldier());
-        bob.addClass(new Rogue());
-        bob.addClass(new Alchemist());
-        bob.addClass(new Inquisitor());
-        bob.chooseClass();
-
-        Random Rand = new Random();
-        gameCharacter [] Foes = new gameCharacter[4];
-        for(int i = 0; i < 10; ++i){
-            for(int j = 0; j < 4; ++j)
-                Foes[j] = null; //clean out foes
-            Game.Player.setCurrentBattle(new Battle()); //initialize a new battle
-            if(Rand.nextInt(2) == 0){
-                Foes[0] = new Kobold();
-                Foes[1] = new babyKobold();
-                Foes[2] = new Kobold();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Game newGame = new Game(); //initialize a new game
+                newGame.setVisible(true); //make the game visible.
             }
-            else{
-                Foes[0] = new babyKobold();
-                Foes[1] = new Kobold();
-                Foes[2] = new babyKobold();
-            }
-            if(!Game.Player.getCurrentBattle().commenceBattle(Game.Player.getParty(), Foes))
-                break;
-        }*/
+        });
     }
 }

@@ -1,7 +1,5 @@
 package Profile;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,7 +7,7 @@ import java.awt.event.*;
 /**
  * Created by Miles Sanguinetti on 5/15/15.
  */
-public class Menu extends Frame{
+public class Menu extends statePanel {
     private int Selection;//the user's selection in the menu.
     private JLabel [] Labels = new JLabel[4]; //an array of labels corresponding to selection
     /*
@@ -36,14 +34,14 @@ public class Menu extends Frame{
             public void keyReleased(KeyEvent keyEvent) {
                 int which = keyEvent.getKeyCode();
                 //which key was typed
-                if(which == KeyEvent.VK_DOWN){
+                if (which == KeyEvent.VK_DOWN) {
                     handleInput(1);
                 }
-                if(which == KeyEvent.VK_UP){
+                if (which == KeyEvent.VK_UP) {
                     //case for moving a selection up
                     handleInput(0);
                 }
-                if(which == KeyEvent.VK_ENTER){
+                if (which == KeyEvent.VK_ENTER) {
                     //case for executing a given selection
                     handleInput(2);
                 }
