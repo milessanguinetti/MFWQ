@@ -7,50 +7,36 @@ import Characters.Monsters.Kobold;
 import Characters.Monsters.babyKobold;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
  */
-public class Game extends JFrame{
+public class Game {
     //the player's user profile; public and static because only one will be used at a time;
     //it would be nonsensical to pass it around into virtually every function I call
     public static userProfile Player; //the game's player.
-    private CardLayout Cards = new CardLayout();
-    private JPanel statePanels = new JPanel(Cards);
-    private Battle battle = new Battle();
-    private Menu menu = new Menu(this);
+    private HashMap<KeyCode, Boolean> Input = new HashMap<KeyCode, Boolean>(); //map keys to usable key codes.
+    public static mainMenu mainmenu = new mainMenu();
+    Stage primaryStage;
+    Scene currentScene;
 
-    public void Exit(){
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    public Game(Stage primarystage){
+        primaryStage = primarystage;
+        currentScene = mainmenu.getScene();
+        primaryStage.setTitle("MFWQ");
+        primaryStage.setScene(currentScene);
+        primaryStage.show();
     }
 
-    public Game(){
-        initializeInterface();
-    }
-
-    private void initializeInterface(){
-        Player = new userProfile();
-        setSize(1000, 800); //size is 1000 by 800 pixels
-        setTitle("Motherfucking Wizard Quest"); //title the application appropriately
-        setDefaultCloseOperation(EXIT_ON_CLOSE); //close the application once it is commanded to close
-        setLocationRelativeTo(null); //centers the window
-
-        getContentPane().add(statePanels);
-        statePanels.add(battle, "Battle");
-        statePanels.add(menu, "Menu");
-
-        Cards.show(statePanels, "Menu");
-    }
-
-    public void swapFrame(String whichState){
-        Cards.show(statePanels, whichState);
-        //statePanels.revalidate();
-        //statePanels.repaint();
+    public mainMenu getMainmenu(){
+        return mainmenu;
     }
 
     public void Test(){
@@ -70,8 +56,6 @@ public class Game extends JFrame{
         for(int i = 0; i < 10; ++i){
             for(int j = 0; j < 4; ++j)
                 Foes[j] = null; //clean out foes
-            swapFrame("Battle");
-            Game.Player.setCurrentBattle(battle); //initialize a new battle
             if(Rand.nextInt(2) == 0){
                 Foes[0] = new Kobold();
                 Foes[1] = new babyKobold();

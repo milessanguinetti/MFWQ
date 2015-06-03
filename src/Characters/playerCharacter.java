@@ -107,7 +107,7 @@ public class playerCharacter extends gameCharacter {
                                 targetArray[Selection].getHPCap());
             }
 
-            Input = Game.Player.getCurrentBattle().getInput(); //get user input
+            Input = 0; //TEST
             if (Input == 1) { //up case
                 if (Selection > 0) //unless we're at the lowest selection value
                     --Selection; //decrement selection
@@ -192,7 +192,7 @@ public class playerCharacter extends gameCharacter {
                         Interface.printLeft("Skill", "Item", "Flee", "Wait");
                         Interface.setTextFocus(Selection - uSelectionView);
                     }
-                    Input = Game.Player.getCurrentBattle().getInput(); //get user input
+                    Input = 0; //get user input
                     if(Input == 1){ //up case
                         if(Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection
@@ -236,7 +236,7 @@ public class playerCharacter extends gameCharacter {
                     Interface.printLeft(primaryClass.getClassName() + " Skills",
                             secondaryClass.getClassName() + " Skills");
                     Interface.setTextFocus(Selection - uSelectionView);
-                    Input = Game.Player.getCurrentBattle().getInput();; //get user input
+                    Input = 0; //get user input
                     if(Input == 1){ //up case
                         if(Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection
@@ -303,7 +303,7 @@ public class playerCharacter extends gameCharacter {
                             " SP. (" + SP + "remaining)",
                             primarySkills[Selection].getDescription());
 
-                    Input = Game.Player.getCurrentBattle().getInput(); //get user input
+                    Input = 0; //get user input
                     if (Input == 1) { //up case
                         if (Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection
@@ -361,7 +361,7 @@ public class playerCharacter extends gameCharacter {
                                     " SP. (" + SP + "remaining)",
                             secondarySkills[Selection].getDescription());
 
-                    Input = Game.Player.getCurrentBattle().getInput(); //get user input
+                    Input = 0; //get user input
                     if (Input == 1) { //up case
                         if (Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection
@@ -418,7 +418,7 @@ public class playerCharacter extends gameCharacter {
                             "Quantity: " + ((Consumable)Items[Selection]).getQuantity(),
                             Items[Selection].getDescription());
 
-                    Input = Game.Player.getCurrentBattle().getInput(); //get user input
+                    Input = 0; //get user input
                     if (Input == 1) { //up case
                         if (Selection > 0) //unless we're at the lowest selection value
                             --Selection; //decrement selection

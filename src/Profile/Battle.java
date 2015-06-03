@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
-public class Battle extends statePanel {
+public class Battle {
     //two parties of four characters each each party has an
     //empty pool of minions that they can add to with some skills.
     gameCharacter [] playerParty = new gameCharacter[4];
@@ -24,10 +24,7 @@ public class Battle extends statePanel {
     battleUI Interface = new battleUI();
 
     public Battle(){
-        setLayout(new GridBagLayout());
-        GridBagConstraints g = new GridBagConstraints();
-        //g.anchor = GridBagConstraints.PAGE_END; //put at the bottom
-        add(Interface, g); //add our UI to the bottom of the page.
+
     }
 
     public battleUI getInterface(){
@@ -298,7 +295,6 @@ public class Battle extends statePanel {
                         }
                     }
                     printDefaultStats(); //print default stats
-                    getInput(); //wait for user input before continuing.
                 }
             }
             whoseTurn.endCombat(); //in any case, take care of SP loss and such.
