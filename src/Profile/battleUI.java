@@ -1,53 +1,27 @@
 package Profile;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.concurrent.CountDownLatch;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
 
 /**
  * Created by Miles Sanguinetti on 5/21/15.
  */
-public class battleUI extends JPanel{
-    JLabel [] Left = new JLabel[4]; //generally selection and user-input driven labels
-    JLabel [] Right = new JLabel[4]; //generally information-based, descriptive labels
+public class battleUI extends Pane{
+    Text [] Left = new Text[4]; //generally selection and user-input driven labels
+    Text [] Right = new Text[4]; //generally information-based, descriptive labels
     Font Bold; //a font for highlighting a given option
     Font Plain; //a font for non-highlighted options
 
-    public battleUI(){
-        setPreferredSize(new Dimension(1000, 200));
-        setBackground(Color.BLUE);
-        setFocusable(true); //make the jpanel focusable
-        requestFocusInWindow(); //set focus to the window
-        Bold = new Font("Verdana", Font.BOLD, 12); //set fonts
-        Plain = new Font("Verdana", Font.PLAIN, 12);
-        for(int i = 0; i < 4; ++i){
-            Left[i] = new JLabel();
-            Left[i].setFont(Plain);
-            Right[i] = new JLabel();
-            Right[i].setFont(Plain);
-        } //allocate memory for all labels
-        setLayout(new GridBagLayout());
-        GridBagConstraints g = new GridBagConstraints();
-        g.gridx = 0; //first column
-        g.gridy = 0; //first row
-        add(Left[0], g);
-        g.gridy = 1; //second row
-        add(Left[1], g);
-        g.gridy = 2; //third row
-        add(Left[2], g);
-        g.gridy = 3; //fourth row
-        add(Left[3], g);
-        g.gridx = 1; //second column
-        g.gridy = 0; //first row
-        g.ipadx = 100; //add internal padding to lengthen right labels
-        add(Right[0], g);
-        g.gridy = 1; //second row
-        add(Right[1], g);
-        g.gridy = 2; //third row
-        add(Right[2], g);
-        g.gridy = 3; //fourth row
-        add(Right[3], g);
+    public battleUI() {
+        setPrefSize(860, 150);
+        Rectangle Background = new Rectangle(860, 150); //establish a mostly-translucent shaded background
+        Background.setFill(Color.BLACK);
+        Background.setOpacity(.3);
+        getChildren().add(Background);
     }
 
     public void setTextFocus(int i){

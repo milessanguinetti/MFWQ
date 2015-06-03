@@ -109,8 +109,9 @@ public class orderedLLL extends Structure{
         while(current != null){
             if(current.isEqual(toRemove)) {
                 if (current.Decrement(1) <= 0) { //if we decrement to 0 or the data is non-decrementable
-                    if (current == head) //if current is head
-                        head = null; //remove head
+                    if (current == head) { //if current is head
+                        head = head.getNext(); //remove the old head
+                    }
                     else {
                         previous.setNext(current.getNext()); //previous points past current now
                     }
