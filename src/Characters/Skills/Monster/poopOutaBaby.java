@@ -42,6 +42,6 @@ public class poopOutaBaby extends Skill {
 
     @Override //poops out a baby
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Game.Player.getCurrentBattle().addMinion(false, new babyKobold());
+        Game.battle.addMinion(false, new babyKobold());
     }
 }

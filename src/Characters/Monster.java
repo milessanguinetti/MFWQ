@@ -3,6 +3,8 @@ package Characters;
 import Characters.Skills.Skill;
 import Characters.Stats;
 import Characters.gameCharacter;
+import Profile.Game;
+import javafx.scene.input.KeyEvent;
 
 import java.util.Random;
 
@@ -35,6 +37,38 @@ public abstract class Monster extends gameCharacter{
     public abstract int getExp(); //abstract functions to return variable amounts of exp and jexp.
     public abstract int getJexp();
 
+    //initializes combat data; filling it for non-player chars.
+    @Override
+    public void initializeCombatData(){
+        //set currently targeting based on the return value of an initializeSkill
+        //call to commands based on a skill that we have chosen.
+        currentlyTargeting = Commands.initializeSkill(chooseSkill());
+        int targetIndex = 0;
+        gameCharacter [] Minions = Game.battle.getMinions(currentlyTargeting > 0);
+        if(currentlyTargeting == 0){ //if we're currently targeting ourselves
+            for(int i = 1; i < 4; ++i){ //check which index we're in
+                if(Minions[i] == this) {
+                    targetIndex = i; //set targetindex to that
+                    break;
+                }
+            }
+            if(currentlyTargeting > 0)
+                Commands.setTarget(targetIndex); //if we're only the player's side, we want a positive value
+            else
+                Commands.setTarget(targetIndex * -1); //otherwise, we want a negative value.
+        }
+        else{
+            chooseTarget(Game.battle.getParty(currentlyTargeting > 0), Minions, Commands.notUsableOnDead());
+            //otherwise, we'll need the more detailed targeting algorithm written in chooseTarget.
+        }
+    }
+
+    //handles a piece of input. does nothing for non-player characters
+    @Override
+    public void handleInput(KeyEvent toHandle){
+        //literally do nothing with the input; this is a monster
+    }
+
     @Override
     public boolean hasTwoHandedWeapon() {
         return true;
@@ -54,7 +88,7 @@ public abstract class Monster extends gameCharacter{
         Random Rand = new Random();
         int roll = Rand.nextInt(12);
         if(roll < 8) { //it's more likely to target a character than a minion
-            roll = roll % 4;
+            roll %= 4;
             if (chars[roll] != null) {
                 if (chars[roll].isAlive() == notUsableOnDead) {
                     return roll + 1; //if the character exists and is alive, return roll + 1

@@ -42,7 +42,7 @@ public class lichCircleofRot extends Skill {
     @Override //deals damage; raises a zombie if the target dies.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         if(Defender.takeDamage(2 * Caster.getTempInt(), "Undead") == 0)
-            Game.Player.getCurrentBattle().addMinion(true,
+            Game.battle.addMinion(true,
                     new Zombie(Caster));
     }
 }

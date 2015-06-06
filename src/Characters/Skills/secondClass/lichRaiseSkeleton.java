@@ -48,13 +48,13 @@ public class lichRaiseSkeleton extends Skill{
         Random Rand = new Random();
         int Roll = Rand.nextInt(3);
         if (Roll == 0) { //skeletal archer case
-            Game.Player.getCurrentBattle().addMinion(true,
+            Game.battle.addMinion(true,
                     new skeletalArcher(Caster, Caster.getTempInt()));
         } else if (Roll == 1) { //skeletal soldier case
-            Game.Player.getCurrentBattle().addMinion(true,
+            Game.battle.addMinion(true,
                     new skeletalSoldier(Caster, Caster.getTempInt()));
         } else { //skeletal magus case
-            Game.Player.getCurrentBattle().addMinion(true,
+            Game.battle.addMinion(true,
                     new skeletalMagus(Caster, Caster.getTempInt()));
         }
     }

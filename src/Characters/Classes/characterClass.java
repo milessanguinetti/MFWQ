@@ -1,12 +1,9 @@
 package Characters.Classes;
 
-import Characters.Skills.Skill;
-import Characters.combatEffect;
-import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Structures.Data;
-import Structures.LLLnode;
-import Structures.orderedLLL;
+import Structures.orderedDLL;
+import Structures.orderedDLLNode;
 
 import java.io.PrintWriter;
 
@@ -18,7 +15,7 @@ public abstract class characterClass implements Data {
     protected int jlevel = 1;
     private int jexp = 0; //job experience and job experience need to reach next level.
     private int jexpCap = 1000;
-    protected orderedLLL Skills = new orderedLLL(); //skills for this class
+    protected orderedDLL Skills = new orderedDLL(); //skills for this class
 
     //default constructor
     public characterClass(){}
@@ -66,15 +63,8 @@ public abstract class characterClass implements Data {
     //to the end of adding passive skills to their passive skill list.
     public abstract void jobDing(playerCharacter toLevel);
 
-    public Skill getSkill(int toGet){
-        LLLnode Retrieved = Skills.retrieveInt(toGet);
-        if(Retrieved == null)
-            return null;
-        return ((Skill)Retrieved.returnData());
-    }
-
     public void displaySkills(){
-        Skills.displayNumbered();
+        Skills.Display();
     }
 
     public abstract boolean canUseHeavyArmor();
@@ -118,7 +108,7 @@ public abstract class characterClass implements Data {
         return toCompare.compareTo(className);
     }
 
-    public combatEffect [] getSkillArray(){
-        return Skills.toArray();
+    public orderedDLLNode getSkillHead(){
+        return Skills.getHead();
     }
 }

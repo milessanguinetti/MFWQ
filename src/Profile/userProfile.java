@@ -14,7 +14,6 @@ public class userProfile extends Inventory{
                                     //can be used to resurrect downed characters rather than having
                                     //them permanently die after a battle.
     private int difficultyModifier = 1; //difficulty modifier; typically used for new game+
-    private Battle currentBattle;
     private playerCharacter [] Party = new playerCharacter[4]; //party of 4
 
     public Map getMap(){
@@ -27,14 +26,6 @@ public class userProfile extends Inventory{
 
     public playerCharacter [] getParty(){
         return Party;
-    }
-
-    public void setCurrentBattle(Battle toSet){
-        currentBattle = toSet;
-    }
-
-    public Battle getCurrentBattle(){
-        return currentBattle;
     }
 
     //adds a new character into the party. returns 0 if the party is full.

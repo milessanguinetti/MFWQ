@@ -25,6 +25,7 @@ import java.nio.file.Paths;
  * Created by Miles on 6/2/2015.
  */
 public class mainMenu {
+    private Game currentGame;
     static private int Selection;
     private menuButton newGame = new menuButton("NEW GAME", 0);
     private menuButton loadGame = new menuButton("LOAD GAME", 1);
@@ -55,6 +56,8 @@ public class mainMenu {
         buttons.setTranslateY(300);
 
         contentRoot.getChildren().add(buttons);
+
+        newGame.setHighLit(); //set newgame to highlit for starts.
 
         //key pressed listening code
         scene.setOnKeyPressed(event -> {
@@ -88,6 +91,11 @@ public class mainMenu {
 
     public Scene getScene(){
         return scene;
+    }
+
+
+    public void setGame(Game currentgame){
+        currentGame = currentgame;
     }
 
     //class for housing buttons within the main menu.
@@ -189,8 +197,9 @@ public class mainMenu {
     //performs an action based on an integer value
     public void intToAction(int toConvert){
         intToButton(toConvert).setUnselected();
-        if(toConvert == 0)
-            return; //NEW GAME ACTION
+        if(toConvert == 0) {
+            currentGame.Test(); //NEW GAME ACTION
+        }
         if(toConvert == 1)
             return; //LOAD GAME ACTION
         if(toConvert == 2)

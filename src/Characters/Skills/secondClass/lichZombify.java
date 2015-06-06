@@ -46,7 +46,7 @@ public class lichZombify extends Skill{
         Defender.setTempProperty(new Undead());
         Defender.takeAbsoluteDamage(Defender.getHPCap() / -2);
         //heal to 50% health
-        Game.Player.getCurrentBattle().nullCombatant(Defender); //remove defender from the battlefield
-        Game.Player.getCurrentBattle().addMinion(true, Defender);
+        Game.battle.nullCombatant(Defender); //remove defender from the battlefield
+        Game.battle.addMinion(true, Defender);
     }
 }

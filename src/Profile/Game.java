@@ -21,22 +21,31 @@ import java.util.Random;
 public class Game {
     //the player's user profile; public and static because only one will be used at a time;
     //it would be nonsensical to pass it around into virtually every function I call
-    public static userProfile Player; //the game's player.
-    private HashMap<KeyCode, Boolean> Input = new HashMap<KeyCode, Boolean>(); //map keys to usable key codes.
+    public static userProfile Player = new userProfile(); //the game's player.
     public static mainMenu mainmenu = new mainMenu();
-    Stage primaryStage;
-    Scene currentScene;
+    public static Battle battle = new Battle();
+    private HashMap<KeyCode, Boolean> Input = new HashMap<KeyCode, Boolean>(); //map keys to usable key codes.
+    private Stage primaryStage;
+    private Scene currentScene;
 
     public Game(Stage primarystage){
+        battle.setGame(this);
+        mainmenu.setGame(this);
         primaryStage = primarystage;
-        currentScene = mainmenu.getScene();
         primaryStage.setTitle("MFWQ");
+        //currentScene = mainmenu.getScene();
+        currentScene = battle.getScene();
         primaryStage.setScene(currentScene);
         primaryStage.show();
+        Test();
     }
 
     public mainMenu getMainmenu(){
         return mainmenu;
+    }
+
+    public Battle getBattle(){
+        return battle;
     }
 
     public void Test(){
@@ -50,24 +59,21 @@ public class Game {
         bob.addClass(new Alchemist());
         bob.addClass(new Inquisitor());
         bob.setPrimaryClass(new Primalist());
+        bob.setSecondaryClass(new Archer());
 
         Random Rand = new Random();
         gameCharacter[] Foes = new gameCharacter[4];
-        for(int i = 0; i < 10; ++i){
-            for(int j = 0; j < 4; ++j)
-                Foes[j] = null; //clean out foes
-            if(Rand.nextInt(2) == 0){
-                Foes[0] = new Kobold();
-                Foes[1] = new babyKobold();
-                Foes[2] = new Kobold();
-            }
-            else{
-                Foes[0] = new babyKobold();
-                Foes[1] = new Kobold();
-                Foes[2] = new babyKobold();
-            }
-            if(!Game.Player.getCurrentBattle().commenceBattle(Game.Player.getParty(), Foes))
-                break;
+        if (Rand.nextInt(2) == 0) {
+            Foes[0] = new Kobold();
+            Foes[1] = new babyKobold();
+            Foes[2] = new Kobold();
+        } else {
+            Foes[0] = new babyKobold();
+            Foes[1] = new Kobold();
+            Foes[2] = new babyKobold();
         }
+        battle.commenceBattle(Game.Player.getParty(), Foes);
+        //currentScene = battle.getScene();
+        //primaryStage.setScene(currentScene);
     }
 }

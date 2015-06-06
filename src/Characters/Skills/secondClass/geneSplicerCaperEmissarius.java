@@ -41,7 +41,7 @@ public class geneSplicerCaperEmissarius extends Skill{
 
     @Override //adds a caper emissarius minion that defends whoever this spell was cast on.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Game.Player.getCurrentBattle().addMinion(true,
+        Game.battle.addMinion(true,
                 new caperEmissarius(Caster.getTempDex(), Defender));
     }
 }

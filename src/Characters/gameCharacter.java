@@ -8,8 +8,10 @@ import Characters.Status.endOfTurn;
 import Characters.Status.statChange;
 import Profile.Game;
 import Structures.LLLnode;
+import Structures.battleData;
 import Structures.statusEffectData;
 import Structures.statusStructure;
+import javafx.scene.input.KeyEvent;
 
 import java.util.Random;
 
@@ -27,6 +29,16 @@ public abstract class gameCharacter extends Stats {
     private statusStructure statChangeList = new statusStructure(); //LLL structure for effects that change stats
     private statusStructure damageEffectList = new statusStructure(); //effects that impact damage taken
     private statusStructure endOfTurnList = new statusStructure(); //effects that take place at the end of a turn
+    protected battleData Commands = new battleData(this); //a battledata object intrinsic to this character
+    protected int currentlyTargeting;
+    /*
+    the set of characters that this character is currently targeting.
+    0 = self
+    1 = living player side
+    2 = dead player side
+    -1 = living enemy side
+    -2 = dead enemy side
+     */
 
     //default constructor
     public gameCharacter(){}
@@ -48,6 +60,13 @@ public abstract class gameCharacter extends Stats {
         Name = toName;
     }
 
+    public battleData getAndWipeBattleData(boolean isPlayerSide){
+        Commands.Wipe();
+        Commands.setPlayerSide(isPlayerSide);
+        initializeCombatData(); //commence initialization of combat data (handled abstractly in child classes)
+        return Commands;
+    }
+
     public String getName(){
         return Name;
     }
@@ -66,13 +85,11 @@ public abstract class gameCharacter extends Stats {
         this.tempProperty = tempProperty;
     }
 
-    //retrieves a combat effect to use during the character's turn.
-    public abstract combatEffect chooseSkill();
+    //initializes combat data; basically resetting state for player characters and filling it for non-player chars.
+    public abstract void initializeCombatData();
 
-    //picks a target (via AI or input, depending on whether this is a monster, player or minion)
-    //from two passed arrays of game characters representing appropriate targets--minions or game chars
-    public abstract int chooseTarget(gameCharacter[] CTargets, gameCharacter[] MTargets,
-                                     boolean notUsableOnDead);
+    //handles a piece of input. does nothing for non-player characters but supplies player characters with UI info
+    public abstract void handleInput(KeyEvent toHandle);
 
     //takes damage; returns remaining health
     public int takeDamage(int toTake, String property){
@@ -84,7 +101,7 @@ public abstract class gameCharacter extends Stats {
         toTake = calculateDamage(toTake, property); //take status into account
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
-            Game.Player.getCurrentBattle().getInterface().printLeft("The attack had no effect.", 1);
+            Game.battle.getInterface().printLeft("The attack had no effect.", 1);
             return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
@@ -92,10 +109,10 @@ public abstract class gameCharacter extends Stats {
             toTake = 1; //damage is 1 minimum
         subtractHP(toTake); //take the damage
         if(!isAlive())
-            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+            Game.battle.getInterface().printLeft(Name + " took "
                     + toTake + " damage and was downed!", 1);
         else
-            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+            Game.battle.getInterface().printLeft(Name + " took "
                     +toTake + " damage.", 1);
         return HP; //some skills' effects hinge on whether or not the target died.
     }
@@ -107,14 +124,14 @@ public abstract class gameCharacter extends Stats {
         takeAbsoluteDamage(toTake);
         if(toTake > 0){
             if(!isAlive())
-                Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                Game.battle.getInterface().printLeft(Name + " took "
                         + toTake + " damage and was downed!", 1);
             else
-                Game.Player.getCurrentBattle().getInterface().printLeft(Name + " took "
+                Game.battle.getInterface().printLeft(Name + " took "
                         +toTake + " damage.", 1);
         }
         else{
-            Game.Player.getCurrentBattle().getInterface().printLeft(Name + " was healed for "
+            Game.battle.getInterface().printLeft(Name + " was healed for "
                     + toTake + " health.", 1);
         }
         return HP;

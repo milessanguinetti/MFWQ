@@ -1,10 +1,7 @@
 package Characters.Inventory;
 
 import Characters.combatEffect;
-import Structures.LLLnode;
-import Structures.orderedLLL;
-import Structures.splayNode;
-import Structures.splayTree;
+import Structures.*;
 
 import java.util.Scanner;
 
@@ -12,7 +9,7 @@ import java.util.Scanner;
  * Created by Miles Sanguinetti on 3/22/15.
  */
 public class Inventory {
-    private orderedLLL [] Items = new orderedLLL[5];
+    private orderedDLL [] Items = new orderedDLL[5];
     //0 = consumables
     //1 = weapons
     //2 = armor
@@ -21,7 +18,7 @@ public class Inventory {
 
     public Inventory(){
         for(int i = 0; i < 5; ++i){
-            Items[i] = new orderedLLL(); //allocate all ordered LLLs.
+            Items[i] = new orderedDLL(); //allocate all ordered DLLs.
         }
     }
 
@@ -34,7 +31,7 @@ public class Inventory {
         scanner.nextLine();
         if(input < 1 || input > 5)
             return; //escape input
-        orderedLLL selected = Items[input - 1]; //select a tree
+        orderedDLL selected = Items[input - 1]; //select a tree
         selected.Display();
         if(input == 1)
             System.out.println("Would you like to use an item?");
@@ -85,9 +82,9 @@ public class Inventory {
             Interface();
     }
 
-    //returns an array of extant consumable items
-    public combatEffect [] getConsumableArray() {
-        return Items[0].toArray();
+    //returns the head of the consumables DLL
+    public orderedDLLNode getConsumables() {
+        return Items[0].getHead();
     }
 
     public int getConsumablesSize(){
@@ -95,7 +92,7 @@ public class Inventory {
     }
 
     public void Insert(Item toInsert){
-        orderedLLL itemType = null;
+        orderedDLL itemType = null;
         if(toInsert instanceof Consumable)
             itemType = Items[0];
         else if(toInsert instanceof Weapon)

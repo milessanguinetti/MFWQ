@@ -41,7 +41,7 @@ public class geneSplicerSphaeraeEversioSui extends Skill{
 
     @Override //adds a self-destructing sphere minion that explodes upon the enemy.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        Game.Player.getCurrentBattle().addMinion(true,
-                new sphaeraeEversioSui(Caster.getTempDex()*2));
+        Game.battle.addMinion(true,
+                new sphaeraeEversioSui(Caster.getTempDex() * 2));
     }
 }

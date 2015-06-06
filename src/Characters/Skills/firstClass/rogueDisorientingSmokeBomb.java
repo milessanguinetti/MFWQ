@@ -53,9 +53,9 @@ public class rogueDisorientingSmokeBomb extends Skill{
         if(Rand.nextInt(2) == 0){ //the skill fails 50% of the time.
             Defender.printName();
             System.out.println(" was confused into attacking their allies!");
-            Game.Player.getCurrentBattle().nullCombatant(Defender); //remove defender from the battlefield
+            Game.battle.nullCombatant(Defender); //remove defender from the battlefield
             Defender.addStatus(new delayedSwitchSides(2, false)); //they rejoin their allies after the next turn
-            Game.Player.getCurrentBattle().addMinion(true, Defender);
+            Game.battle.addMinion(true, Defender);
         }
     }
 }
