@@ -58,7 +58,17 @@ public class Battle {
                 fillBattleData(); //and call the fillbattledata method to see what to do next.
             }
             else{ //otherwise, we're currently mid-turn
-                if(turnOrder.Peek() == null){ //we ensure that there are more turns to be executed
+                if(turnOrder.Peek() == null){ //if we've executed all commands for this given turn...
+                    for (int i = 0; i < 4; ++i) { //end turn for all extant combatants
+                        if (playerParty[i] != null)
+                            playerParty[i].endTurn();
+                        if (enemyParty[i] != null)
+                            enemyParty[i].endTurn();
+                        if (playerMinions[i] != null)
+                            playerMinions[i].endTurn();
+                        if (enemyMinions[i] != null)
+                            enemyMinions[i].endTurn();
+                    }
                     State = 0; //and if there aren't, we reset state to 0.
                     for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
                         if (playerParty[i] != null) {
@@ -154,21 +164,21 @@ public class Battle {
             if(BTemp.isFilled()){ //if recent user input filled up the current party member's battle data...
                 turnOrder.Insert(new LLLnode(BTemp)); //insert the fully initialized object
                 ++State; //increment state.
-                if(State < 4) { //if state is STILL less than 4...
+                while(State < 4) { //if state is STILL less than 4...
                     if(playerParty[State] != null) {
                         if(playerParty[State].isAlive()) {
                             BTemp = playerParty[State].getAndWipeBattleData(true); //get the next party member's data
                             playerParty[State].initializeCombatData(); //and initialize it.
                             toRoute = playerParty[State]; //route all user input to this player party member.
+                            break; //break the loop; we found a party member that needs to have commands entered.
                         }
                     }
-                }
-                else{
-                    printDefaultStats(); //otherwise we reset the right hand display to default stats.
+                    ++State; //if we get here, a party member was not found in the loop and we need to increment state.
                 }
             }
         }
         if (State == 4) {
+            printDefaultStats(); //now we reset the right hand display to default stats.
             for (int i = 0; i < 4; ++i) { //enter all non-player combatants into the turn LLL structure
                 if (playerMinions[i] != null) { //if a player minion exists at this index
                     if (playerMinions[i].isAlive()) {  //and is alive
@@ -203,6 +213,7 @@ public class Battle {
     public boolean executeTurn() {
         battleData whoseTurn = ((battleData) turnOrder.Pop()); //get a turn to execute
         int toFind = whoseTurn.getTargetIndex(); //store the target specified in the turn
+        System.out.println("TARGETED INDEX: " + toFind);
         if (toFind == 0) { //if this is a single target, user-only skill...
             try {
                 whoseTurn.executeCombat(null); //ignore the target selection process.
@@ -330,21 +341,10 @@ public class Battle {
                         }
                     }
                 }
-                printDefaultStats(); //update hp statistics following the combat.
             }
         }
         whoseTurn.endCombat(); //in any case, take care of SP loss and such.
-
-        for (int i = 0; i < 4; ++i) { //end turn for all extant combatants
-            if (playerParty[i] != null)
-                playerParty[i].endTurn();
-            if (enemyParty[i] != null)
-                enemyParty[i].endTurn();
-            if (playerMinions[i] != null)
-                playerMinions[i].endTurn();
-            if (enemyMinions[i] != null)
-                enemyMinions[i].endTurn();
-        }
+        printDefaultStats(); //update hp statistics following the combat.
 
         if (enemyVictory()) //return true if either side has won
             return true;

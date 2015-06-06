@@ -43,22 +43,11 @@ public abstract class Monster extends gameCharacter{
         //set currently targeting based on the return value of an initializeSkill
         //call to commands based on a skill that we have chosen.
         currentlyTargeting = Commands.initializeSkill(chooseSkill());
-        int targetIndex = 0;
-        gameCharacter [] Minions = Game.battle.getMinions(currentlyTargeting > 0);
-        if(currentlyTargeting == 0){ //if we're currently targeting ourselves
-            for(int i = 1; i < 4; ++i){ //check which index we're in
-                if(Minions[i] == this) {
-                    targetIndex = i; //set targetindex to that
-                    break;
-                }
-            }
-            if(currentlyTargeting > 0)
-                Commands.setTarget(targetIndex); //if we're only the player's side, we want a positive value
-            else
-                Commands.setTarget(targetIndex * -1); //otherwise, we want a negative value.
-        }
+        if(currentlyTargeting == 0) //if we're currently targeting ourselves
+            Commands.setTarget(0); //set target index to 0.
         else{
-            chooseTarget(Game.battle.getParty(currentlyTargeting > 0), Minions, Commands.notUsableOnDead());
+            Commands.setTarget(chooseTarget(Game.battle.getParty(currentlyTargeting > 0),
+                    Game.battle.getMinions(currentlyTargeting > 0), Commands.notUsableOnDead()));
             //otherwise, we'll need the more detailed targeting algorithm written in chooseTarget.
         }
     }

@@ -143,7 +143,7 @@ public class orderedLLL extends Structure{
         LLLnode toInsert = ((LLLnode)nodeToInsert);
         if(!toInsert.goesToRight(head)) { //if head is empty or toInsert is larger...
             if(head != null){ //prevents stacking of extant debuffs at head.
-                if(head.isEqual(toInsert)){
+                if(head.isEqual(toInsert) && head.returnData() instanceof incrementableData){
                     head.Increment(1); //increment by one if it's a repeat and return
                     return 1;
                 }
@@ -154,7 +154,7 @@ public class orderedLLL extends Structure{
         else { //otherwise...
             LLLnode current = head; //current ref for traversal
             while(current != null) {
-                if(current.isEqual(toInsert)){
+                if(current.isEqual(toInsert) && current.returnData() instanceof incrementableData){
                     current.Increment(1); //increment by one if it's a repeat and return
                     return 1;
                 }

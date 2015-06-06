@@ -114,7 +114,7 @@ public class Node {
     //returns true if this node's data is smaller than
     //the passed string.
     public Boolean goesToRight(String toCompare) {
-        if(Data.compareTo(toCompare) > 0)
+        if(Data.compareTo(toCompare) >= 0)
             return true;
         return false;
     }
@@ -124,7 +124,7 @@ public class Node {
     public Boolean goesToRight(Node toCompare){
         if(toCompare == null)
             return false; //null is obviously smaller
-        if(Data.compareTo(toCompare.Data) > 0)
+        if(Data.compareTo(toCompare.Data) >= 0)
             return true;
         return false;
     }

@@ -29,7 +29,7 @@ public abstract class gameCharacter extends Stats {
     private statusStructure statChangeList = new statusStructure(); //LLL structure for effects that change stats
     private statusStructure damageEffectList = new statusStructure(); //effects that impact damage taken
     private statusStructure endOfTurnList = new statusStructure(); //effects that take place at the end of a turn
-    protected battleData Commands = new battleData(this); //a battledata object intrinsic to this character
+    protected battleData Commands; //a battledata object intrinsic to this character
     protected int currentlyTargeting;
     /*
     the set of characters that this character is currently targeting.
@@ -52,12 +52,14 @@ public abstract class gameCharacter extends Stats {
     public gameCharacter(String toName, Stats toCopy){
         super(toCopy); //copy stats
         Name = toName;
+        Commands  = new battleData(this);
     }
 
     //constructor with name and stats
     public gameCharacter(String toName, int hp, int sp, int str, int dex, int spd, int vit, int inte, int fth, int arm){
         super(hp, sp, str, dex, spd, vit, inte, fth, arm);
         Name = toName;
+        Commands  = new battleData(this);
     }
 
     public battleData getAndWipeBattleData(boolean isPlayerSide){

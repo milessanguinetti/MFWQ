@@ -26,7 +26,6 @@ public class battleData implements Data {
 
     //constructor with attacker argument
     public battleData(gameCharacter whoseTurn) {
-        attackerSpeed = Integer.toString(whoseTurn.getTempSpd());
         Attacker = whoseTurn;
     }
 
@@ -51,6 +50,8 @@ public class battleData implements Data {
     //returns whether or not the skill will be targeting the player (true)
     //or an enemy (false).
     public int initializeSkill(combatEffect tocast) {
+        attackerSpeed = Integer.toString(Attacker.getTempSpd()); //get the attacker's speed.
+
         toCast = tocast;
         if (toCast.getAoE() == -1) { //if this is a single target user-only skill.
             targetIndex = 0; //set target index to 0.
@@ -99,7 +100,7 @@ public class battleData implements Data {
     public void executeCombat(gameCharacter Defender) throws fleeObject{
         if(Attacker.isAlive()){
             if(targetIndex == 0) { //if the character is targeting themselves
-                Attacker.printName(); //display a simple message
+                //display a simple message
                 Game.battle.getInterface().printLeft(Attacker.getName() +
                         " used " + ((Data) toCast).returnKey() + "!!");
                 Defender = Attacker; //change defender to attacker.
