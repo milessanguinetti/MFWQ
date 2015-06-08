@@ -103,7 +103,7 @@ public abstract class gameCharacter extends Stats {
         toTake = calculateDamage(toTake, property); //take status into account
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
-            Game.battle.getInterface().printLeft("The attack had no effect.", 1);
+            Game.battle.getInterface().printLeftAtNextAvailable("The attack had no effect.");
             return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
@@ -111,11 +111,11 @@ public abstract class gameCharacter extends Stats {
             toTake = 1; //damage is 1 minimum
         subtractHP(toTake); //take the damage
         if(!isAlive())
-            Game.battle.getInterface().printLeft(Name + " took "
-                    + toTake + " damage and was downed!", 1);
+            Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
+                    + toTake + " damage and was downed!");
         else
-            Game.battle.getInterface().printLeft(Name + " took "
-                    +toTake + " damage.", 1);
+            Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
+                    +toTake + " damage.");
         return HP; //some skills' effects hinge on whether or not the target died.
     }
 
@@ -123,18 +123,18 @@ public abstract class gameCharacter extends Stats {
     public int takeAbsoluteDamage(int toTake){
         if(!isAlive())
             return 0; //dead characters cannot be healed and cannot take damage.
-        takeAbsoluteDamage(toTake);
+        subtractHP(toTake);
         if(toTake > 0){
             if(!isAlive())
-                Game.battle.getInterface().printLeft(Name + " took "
-                        + toTake + " damage and was downed!", 1);
+                Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
+                        + toTake + " damage and was downed!");
             else
-                Game.battle.getInterface().printLeft(Name + " took "
-                        +toTake + " damage.", 1);
+                Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
+                        +toTake + " damage.");
         }
         else{
-            Game.battle.getInterface().printLeft(Name + " was healed for "
-                    + toTake + " health.", 1);
+            Game.battle.getInterface().printLeftAtNextAvailable(Name + " was healed for "
+                    + toTake + " health.");
         }
         return HP;
     }

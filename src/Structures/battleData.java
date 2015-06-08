@@ -33,6 +33,10 @@ public class battleData implements Data {
         playerSide = isPlayerSide;
     }
 
+    public boolean attackerIsDead(){
+        return (!Attacker.isAlive());
+    }
+
     //wipes the target index and skill selection data
     public void Wipe(){
         toCast = null; //set tocast to null
@@ -58,6 +62,7 @@ public class battleData implements Data {
             primaryTarget = false;
             return 0;
         }
+        primaryTarget = true; //otherwise, primary target needs to be reset to true.
         if (!playerSide) {
             if(toCast.isOffensive()){
                 if(toCast.notUsableOnDead())
@@ -96,8 +101,8 @@ public class battleData implements Data {
     }
 
     //executes the skill, used when this piece of data is popped from the
-    //LLL structure in the battle class. returns the defender.
-    public void executeCombat(gameCharacter Defender) throws fleeObject{
+    //LLL structure in the battle class. returns true if the attacker was dead.
+    public boolean executeCombat(gameCharacter Defender) throws fleeObject{
         if(Attacker.isAlive()){
             if(targetIndex == 0) { //if the character is targeting themselves
                 //display a simple message
@@ -112,10 +117,9 @@ public class battleData implements Data {
                             Game.battle.getInterface().printLeft(Attacker.getName() +
                                     " attacked " + Defender.getName() + " with " +
                                     ((Data)toCast).returnKey() + "!!");
-                            Defender = Attacker; //change defender to attacker.
                             if(toCast.getAoE() > 0)
-                                Game.battle.getInterface().printLeft(Attacker.getName() +
-                                        "Their teammates were struck as well!", 2);
+                                Game.battle.getInterface().printLeftAtNextAvailable(Attacker.getName() +
+                                        "Their teammates were struck as well!");
                             if(Defender.isAlive() && Attacker.isAlive())
                                 Defender.executeCounter(Attacker);
                         } else {
@@ -123,8 +127,8 @@ public class battleData implements Data {
                                     " cast " + Defender.getName() + " on " +
                                     ((Data) toCast).returnKey() + "!!");
                             if(toCast.getAoE() > 0)
-                                Game.battle.getInterface().printLeft(Attacker.getName() +
-                                        "Their teammates were affected as well!", 2);
+                                Game.battle.getInterface().printLeftAtNextAvailable(Attacker.getName() +
+                                        "Their teammates were affected as well!");
                         }
                         primaryTarget = false; //after the first cast, the defender is no
                     }                          //longer the primary target.
@@ -136,7 +140,9 @@ public class battleData implements Data {
                     }
                 }
             }
+            return false; //if we got here, the attacker is alive.
         }
+        return true; //if the attacker is dead, return false.
     }
 
     //returns the number of characters that the used skill's aoe will rebound through

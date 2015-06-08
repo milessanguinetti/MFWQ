@@ -3,6 +3,7 @@ package Characters.Inventory.Weapons;
 import Characters.Inventory.Weapon;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
+import Profile.Game;
 
 import java.util.Random;
 
@@ -110,7 +111,7 @@ public class generic2hEdged extends Weapon{
         Random Rand = new Random();
         int Roll = Rand.nextInt(5);
         if(Roll == 0){ //20% of the time, the attack does extra damage
-            System.out.println("A critical hit!");
+            Game.battle.getInterface().printLeftAtNextAvailable("A critical hit!");
             Defender.takeDamage(Math.round(1.25f*(Damage + Caster.getTempStr())), Property);
         }
         else{ //but most of the time it just does 75% of strength plus damage

@@ -85,6 +85,12 @@ public class Battle {
                 else{
                     if(executeTurn()) //so we continue executing the turn
                         endBattle(); //and end the battle if need be.
+                    while(turnOrder.Peek() != null){
+                        if(((battleData)turnOrder.Peek().returnData()).attackerIsDead())
+                            turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
+                        else
+                            break;
+                    }
                 }
             }
         });
@@ -212,11 +218,18 @@ public class Battle {
     //Executes a turn that has all of its commands decided upon by the combatants
     public boolean executeTurn() {
         battleData whoseTurn = ((battleData) turnOrder.Pop()); //get a turn to execute
+        if(whoseTurn == null) { //just a check to ensure that we don't execute a nonexistent turn.
+            if(enemyVictory() || playerVictory())
+                return true;
+            return false;
+        }
         int toFind = whoseTurn.getTargetIndex(); //store the target specified in the turn
         System.out.println("TARGETED INDEX: " + toFind);
         if (toFind == 0) { //if this is a single target, user-only skill...
             try {
-                whoseTurn.executeCombat(null); //ignore the target selection process.
+                if(whoseTurn.executeCombat(null)) { //ignore the target selection process; this if statement and recursive
+                    return executeTurn(); //call handle dead characters' turns to avoid confusing ui situations
+                }
             } catch (fleeObject Caught) {
                 return true;
             }
@@ -296,14 +309,16 @@ public class Battle {
                 }
             }//by the time the program gets here, we definitely have a live target.
             try {
-                whoseTurn.executeCombat(Target);
+                if(whoseTurn.executeCombat(Target))
+                    return executeTurn(); //execute another turn if the attacker is dead.
             } catch (fleeObject Caught) {
                 return true;
             }
             int AoE = whoseTurn.getRebound(); //get the aoe value of the attack used.
             if (AoE > 0) { //if this is an aoe spell
                 try {
-                    whoseTurn.executeCombat(Secondary[toFind]); //deal damage to target at same index as target.
+                    if(whoseTurn.executeCombat(Secondary[toFind])) //deal damage to target at same index as target.
+                        return executeTurn();//execute another turn if the attacker is dead.
                 } catch (fleeObject Caught) {
                     return true;
                 }
@@ -311,14 +326,16 @@ public class Battle {
                     if ((toFind + i) < 4) { //if this index is part of the array
                         if (Primary[toFind + i] != null && i <= AoE) { //if primary @ this index isn't null
                             try {
-                                whoseTurn.executeCombat(Primary[toFind + i]); //deal damage if they're in range
+                                if(whoseTurn.executeCombat(Primary[toFind + i])) //deal damage if they're in range
+                                    return executeTurn();//execute another turn if the attacker is dead.
                             } catch (fleeObject Caught) {
                                 return true;
                             }
                         }
                         if (Secondary[toFind + i] != null && i <= AoE - 1) { //secondary @ this index - 1
                             try {
-                                whoseTurn.executeCombat(Secondary[toFind + i]); //deal damage if they're in range
+                                if(whoseTurn.executeCombat(Secondary[toFind + i])) //deal damage if they're in range
+                                    return executeTurn();//execute another turn if the attacker is dead.
                             } catch (fleeObject Caught) {
                                 return true;
                             }
@@ -327,14 +344,16 @@ public class Battle {
                     if ((toFind - i) >= 0) { //if this index is part of the array
                         if (Primary[toFind - i] != null && i <= AoE) { //if primary @ this index isn't null
                             try {
-                                whoseTurn.executeCombat(Primary[toFind - i]); //deal damage if they're in range
+                                if(whoseTurn.executeCombat(Primary[toFind - i])) //deal damage if they're in range\
+                                    return executeTurn();//execute another turn if the attacker is dead.
                             } catch (fleeObject Caught) {
                                 return true;
                             }
                         }
                         if (Secondary[toFind - i] != null && i <= AoE - 1) { //secondary @ this index - 1
                             try {
-                                whoseTurn.executeCombat(Secondary[toFind - i]); //deal damage if they're in range
+                                if(whoseTurn.executeCombat(Secondary[toFind - i])) //deal damage if they're in range
+                                    return executeTurn();//execute another turn if the attacker is dead.
                             } catch (fleeObject Caught) {
                                 return true;
                             }

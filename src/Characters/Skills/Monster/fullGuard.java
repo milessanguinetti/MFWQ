@@ -3,6 +3,7 @@ package Characters.Skills.Monster;
 import Characters.Skills.Skill;
 import Characters.Status.Guard;
 import Characters.gameCharacter;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/11/15.
@@ -29,7 +30,7 @@ public class fullGuard extends Skill{
 
     @Override
     public boolean notUsableOnDead() {
-        return false;
+        return true;
     }
 
     @Override
@@ -51,13 +52,11 @@ public class fullGuard extends Skill{
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         if(toGuard == Caster) {
             Caster.printName();
-            System.out.println(" cannot guard themself!");
+            Game.battle.getInterface().printLeftAtNextAvailable(" cannot guard themself!");
         }
         else{ //case for when the caster is guarding an ally
-            Caster.printName();
-            System.out.print(" defends ");
-            toGuard.printName();
-            System.out.println(" with its life!");
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " defends " + toGuard.getName() +
+            " with its life!");
             toGuard.addStatus(new Guard(1, 21, Caster));
         }
     }

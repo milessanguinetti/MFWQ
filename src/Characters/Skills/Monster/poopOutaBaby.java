@@ -20,7 +20,7 @@ public class poopOutaBaby extends Skill {
 
     @Override
     public boolean notUsableOnDead() {
-        return false;
+        return true;
     }
 
     @Override

@@ -77,13 +77,16 @@ public abstract class Monster extends gameCharacter{
         Random Rand = new Random();
         int roll = Rand.nextInt(12);
         if(roll < 8) { //it's more likely to target a character than a minion
-            roll %= 4;
+            roll %= 4; //get a number between 0 and 3
             if (chars[roll] != null) {
                 if (chars[roll].isAlive() == notUsableOnDead) {
                     return roll + 1; //if the character exists and is alive, return roll + 1
                 }
             } //if we get here, the initial roll chose a nonexistent/dead character
-            for (int i = 1; i < 3; ++i) { //first we search every other character in the array
+            //we use a slightly less-than-optimal algorithm that privileges proximity rather than just
+            //a sequential search of the array for a valid target; we check 1 above and 1 below, then 2
+            //above and 2 below and so on until a valid target is found.
+            for (int i = 1; i < 4; ++i) { //first we search every other character in the array
                 if ((roll + i) < 4) { //if this index is part of the array
                     if (chars[roll + i] != null) {
                         if (chars[roll + i].isAlive() == notUsableOnDead)
@@ -101,7 +104,7 @@ public abstract class Monster extends gameCharacter{
                 if(mins[roll].isAlive() == notUsableOnDead)
                     return roll + 5; //if a minion at the index exists, target them.
             } //otherwise, search for another minion.
-            for (int j = 1; j < 3; ++j){
+            for (int j = 1; j < 4; ++j){
                 if ((roll + j) < 4) { //if this index is part of the array
                     if (mins[roll + j] != null) {
                         if (mins[roll + j].isAlive() == notUsableOnDead)
@@ -117,13 +120,13 @@ public abstract class Monster extends gameCharacter{
             }
         }
         else{ //if it's a minion that we're targeting; minions' positions are offset by 4.
-            roll = roll % 4;
+            roll = roll % 4; //again, get a number between 0 and 3
             if (mins[roll] != null) {
                 if (mins[roll].isAlive() == notUsableOnDead){
                     return roll + 5; //if the minion exists and is alive, return roll + 5
                 }
             } //if we get here, the initial roll chose a nonexistent/dead minion
-            for (int i = 1; i < 3; ++i) { //first we search every other character in the array
+            for (int i = 1; i < 4; ++i) { //first we search every other character in the array
                 if ((roll + i) < 4) { //if this index is part of the array
                     if (mins[roll + i] != null) {
                         if (mins[roll + i].isAlive() == notUsableOnDead)
@@ -141,7 +144,7 @@ public abstract class Monster extends gameCharacter{
                 if(chars[roll].isAlive() == notUsableOnDead)
                     return roll + 1; //if a character at the index exists, target them.
             } //otherwise, search for another character.
-            for (int j = 1; j < 3; ++j){
+            for (int j = 1; j < 4; ++j){
                 if ((roll + j) < 4) { //if this index is part of the array
                     if (chars[roll + j] != null) {
                         if (chars[roll + j].isAlive() == notUsableOnDead)

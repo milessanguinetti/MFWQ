@@ -11,7 +11,7 @@ public class genericElementalAttack extends Skill{
 
     @Override
     public boolean notUsableOnDead() {
-        return false;
+        return true;
     }
 
     //default constructor

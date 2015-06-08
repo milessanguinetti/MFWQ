@@ -124,12 +124,15 @@ public class battleUI extends Pane{
     }
 
     //prints to the left at just one index specified as an argument.
-    public void printLeft(String S1, int Index){
-        if(Left[Index] != null){
-            if(!Left[Index].getText().equals(""))
-                return; //don't overwrite extant text.
+    public void printLeftAtNextAvailable(String S1){
+        for(int i = 0; i < 4; ++i) {
+            if (Left[i] != null) {
+                if (Left[i].getText().equals("")) {
+                    Left[i].setText(S1);
+                    break;
+                }
+            }
         }
-        Left[Index].setText(S1);
     }
 
     //Print functions to left labels

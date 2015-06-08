@@ -126,7 +126,7 @@ public class playerCharacter extends gameCharacter {
             boolean whichSide = currentlyTargeting > 0;
             int targetIndex = chooseTarget(Game.battle.getParty(whichSide), Game.battle.getMinions(whichSide), Input);
             if(targetIndex != 0){ //if the user hit enter and selected a valid target...
-                if(currentlyTargeting > 0) //if we're targeting a player...
+                if(whichSide) //if we're targeting a player...
                     Commands.setTarget(targetIndex); //set the target index to whatever was chosen.
                 else
                     Commands.setTarget(targetIndex * -1); //otherwise, set the target index to a negative value
@@ -143,7 +143,7 @@ public class playerCharacter extends gameCharacter {
         gameCharacter [] targetArray = new gameCharacter[8];
         //make an array of size 8 to fit the maximum possible sum of targetable characters
 
-        for (int i = 0; i < 4; ++i) { //add all targetable units into the targeting array
+        for (int i = 0; i < 4; ++i) { //add all attackable main units into the targeting array
             if (chars[i] != null) {
                 if (chars[i].isAlive() == notUsableOnDead) {
                     //if the character exists and the skill can be used on them
@@ -151,7 +151,9 @@ public class playerCharacter extends gameCharacter {
                     ++lowerBound; //increment our lower bound
                 }
             }
-            if (mins[i] != null) {
+        }
+        for (int i = 0; i < 4; ++i) { //add all attackable minions into the targeting array
+            if (mins[i] != null) { //this could be done with 1 for loop, but it makes the layout inelegant
                 if (mins[i].isAlive() == notUsableOnDead) {
                     //if the character exists and the skill can be used on them
                     targetArray[lowerBound] = mins[i]; //insert minion into targeting array
@@ -192,8 +194,8 @@ public class playerCharacter extends gameCharacter {
                 }
             }
             for (int m = 0; m < 4; ++m) {
-                if (chars[m] != null) {
-                    if (chars[m].isAlive() == notUsableOnDead) {
+                if (mins[m] != null) {
+                    if (mins[m].isAlive() == notUsableOnDead) {
                         //if the character exists and the skill can be used on them
                         if (Input == 1)
                             return m + 5; //return l+5 to essentially have a meaningful

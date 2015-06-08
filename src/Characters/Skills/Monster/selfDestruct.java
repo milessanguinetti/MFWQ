@@ -15,7 +15,7 @@ public class selfDestruct extends Skill{
 
     @Override
     public boolean notUsableOnDead() {
-        return false;
+        return true;
     }
 
     @Override
