@@ -61,6 +61,7 @@ public class orderedDLL extends Structure{
         while(current != null){
             if(current.isEqual(toRemove)) {
                 if (current.Decrement(1) <= 0) { //if we decrement to 0 or the data is non-decrementable
+                    --size; //decrement size.
                     if (current == head) { //if current is head
                         head = head.getNext();
                         if(head != null)
@@ -71,8 +72,8 @@ public class orderedDLL extends Structure{
                             head.getNext().setPrev(head.getPrev());
                         head.getPrev().setNext(head.getNext());
                     }
-                    return 1; //if this is indeed the node we're looking for, remove & return 1.
                 }
+                return 1; //if this is indeed the node we're looking for, remove & return 1.
             }
             current = current.getNext(); //otherwise traverse
         }
@@ -96,32 +97,35 @@ public class orderedDLL extends Structure{
         if(nodeToInsert == null || !(nodeToInsert instanceof orderedDLLNode))
             return 0; //can't insert a null reference or a node object that isn't of type BSTnode
         orderedDLLNode toInsert = ((orderedDLLNode)nodeToInsert);
-        ++size; //increment the size of the structure.
         if(!toInsert.goesToRight(head)) { //if head is empty or toInsert is larger...
             if(head != null){ //prevents stacking of extant debuffs at head.
-                if(head.isEqual(toInsert)){
+                if(head.isEqual(toInsert) && head.returnData() instanceof incrementableData){
                     head.Increment(1); //increment by one if it's a repeat and return
                     return 1;
                 }
+                else{
+                    head.setPrev(toInsert);
+                }
             }
             toInsert.setNext(head);
-            head.setPrev(toInsert);
             head = toInsert; //we insert at head.
+            ++size; //increment the size of the structure.
         }
         else { //otherwise...
             orderedDLLNode current = head; //current ref for traversal
             while(current != null) {
-                if(current.isEqual(toInsert)){
+                if(current.isEqual(toInsert) && current.returnData() instanceof incrementableData){
                     current.Increment(1); //increment by one if it's a repeat and return
                     return 1;
                 }
-                if (toInsert.goesToRight(current)) {
+                if (!toInsert.goesToRight(current.getNext())) {
                     if(current.getNext() != null) {
                         current.getNext().setPrev(toInsert);
-                        toInsert.setNext(current.getNext()); //toinsert's next ref gets current's next
                     }
+                    toInsert.setNext(current.getNext()); //toinsert's next ref gets current's next
                     current.setNext(toInsert); //current's next ref gets toinsert
                     toInsert.setPrev(current);
+                    ++size;
                     return 1; //success
                 }
                 current = current.getNext(); //otherwise traverse
@@ -130,6 +134,4 @@ public class orderedDLL extends Structure{
         return 1;
         //return 1 because the method cannot be expected to fail at this point
     }
-
-
 }

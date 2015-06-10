@@ -3,6 +3,7 @@ package Characters.Classes;
 import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/5/15.
@@ -10,7 +11,7 @@ import Structures.LLLnode;
 public class Archer extends characterClass{
     public Archer(){
         super("Archer");
-        Skills.Insert(new LLLnode(new archerLaceratingArrow()));
+        Skills.Insert(new orderedDLLNode(new archerLaceratingArrow()));
     }
 
     @Override
@@ -24,22 +25,22 @@ public class Archer extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
-            Skills.Insert(new LLLnode(new archerArmorPiercingArrow()));
+            Skills.Insert(new orderedDLLNode(new archerArmorPiercingArrow()));
             toLevel.printName();
             System.out.println(" learned Armor Piercing Arrow!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new archerArrowStorm()));
+            Skills.Insert(new orderedDLLNode(new archerArrowStorm()));
             toLevel.printName();
             System.out.println(" learned Arrow Storm!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new archerArcingArrow()));
+            Skills.Insert(new orderedDLLNode(new archerArcingArrow()));
             toLevel.printName();
             System.out.println(" learned Arcing Arrow!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new archerExposingArrow()));
+            Skills.Insert(new orderedDLLNode(new archerExposingArrow()));
             toLevel.printName();
             System.out.println(" learned Exposing Arrow!");
         }
@@ -49,17 +50,17 @@ public class Archer extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new archerCripplingShot()));
+            Skills.Insert(new orderedDLLNode(new archerCripplingShot()));
             toLevel.printName();
             System.out.println(" learned Crippling Shot!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new archerOverdraw()));
+            Skills.Insert(new orderedDLLNode(new archerOverdraw()));
             toLevel.printName();
             System.out.println(" learned Overdraw!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new archerFinishingShot()));
+            Skills.Insert(new orderedDLLNode(new archerFinishingShot()));
             toLevel.printName();
             System.out.println(" learned Finishing Shot!");
         }

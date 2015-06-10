@@ -179,15 +179,12 @@ public class Stats {
     }
 
     //subtract passed int from SP; returns true if they have the MP to begin with, false if not
-    public boolean subtractSP(int toSubtract){
-        if(!(SP - toSubtract < 0))
-            return false; //return false if we don't have the SP to cast or whatever
+    public void subtractSP(int toSubtract){
         SP -= toSubtract; //subtract
         if(SP > MSP)
             SP = MSP; //no SP pools above max after gaining SP
         if(SP < 0)
             SP = 0;
-        return true;
         }
 
     //multiply SP by passed integer; returns number of sp lost; rounds

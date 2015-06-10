@@ -47,7 +47,7 @@ public class mainMenu {
         }
 
         catch (IOException e){
-            System.out.println("WOW U TITLE SCREEN BROKE LOL GJ.");
+            System.out.println("Error loading title screen.");
         }
 
         menuContainer buttons = new menuContainer(newGame, loadGame, Options, Exit);
@@ -158,7 +158,7 @@ public class mainMenu {
 
             setOnMouseReleased(event ->{
                 setUnselected();
-                Game.mainmenu.intToAction(Selection);
+                Game.mainmenu.intToAction(buttonVal);
             });
         }
 
@@ -199,10 +199,11 @@ public class mainMenu {
         intToButton(toConvert).setUnselected();
         if(toConvert == 0) {
             currentGame.Test(); //NEW GAME ACTION
+            currentGame.swapToBattle();
         }
-        if(toConvert == 1)
+        else if(toConvert == 1)
             return; //LOAD GAME ACTION
-        if(toConvert == 2)
+        else if(toConvert == 2)
             return; //options are not yet implemented
         else
             System.exit(0);

@@ -3,6 +3,7 @@ package Characters.Classes;
 import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 
 /**
@@ -12,7 +13,7 @@ import Structures.LLLnode;
 public class Soldier extends characterClass {
     public Soldier(){
         super("Soldier");
-        Skills.Insert(new LLLnode(new soldierBash()));
+        Skills.Insert(new orderedDLLNode(new soldierBash()));
     }
 
     @Override
@@ -26,22 +27,22 @@ public class Soldier extends characterClass {
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new soldierGloriousExecution()));
+            Skills.Insert(new orderedDLLNode(new soldierGloriousExecution()));
             toLevel.printName();
             System.out.println(" learned Glorious Execution!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new soldierWideSlash()));
+            Skills.Insert(new orderedDLLNode(new soldierWideSlash()));
             toLevel.printName();
             System.out.println(" learned Wide Slash!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new soldierRend()));
+            Skills.Insert(new orderedDLLNode(new soldierRend()));
             toLevel.printName();
             System.out.println(" learned Rend!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new soldierDefend()));
+            Skills.Insert(new orderedDLLNode(new soldierDefend()));
             toLevel.printName();
             System.out.println(" learned Defend!");
         }
@@ -70,17 +71,17 @@ public class Soldier extends characterClass {
             }
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new soldierMaintainWeapon()));
+            Skills.Insert(new orderedDLLNode(new soldierMaintainWeapon()));
             toLevel.printName();
             System.out.println(" learned Maintain Weapon!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new soldierMaintainArmor()));
+            Skills.Insert(new orderedDLLNode(new soldierMaintainArmor()));
             toLevel.printName();
             System.out.println(" learned Maintain Armor!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new soldierSeverHamstring()));
+            Skills.Insert(new orderedDLLNode(new soldierSeverHamstring()));
             toLevel.printName();
             System.out.println(" learned Sever Hamstring!");
         }

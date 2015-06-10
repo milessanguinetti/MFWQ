@@ -92,6 +92,7 @@ public class Inventory {
     }
 
     public void Insert(Item toInsert){
+        System.out.println(toInsert.returnKey() + " inserted.");
         orderedDLL itemType = null;
         if(toInsert instanceof Consumable)
             itemType = Items[0];
@@ -105,6 +106,6 @@ public class Inventory {
             itemType = Items[4];
         if(itemType == null) //if this isn't actually an item, we can't insert it safely.
             return;
-        itemType.Insert(new LLLnode(toInsert));
+        itemType.Insert(new orderedDLLNode(toInsert));
     }
 }

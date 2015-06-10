@@ -158,7 +158,7 @@ public class orderedLLL extends Structure{
                     current.Increment(1); //increment by one if it's a repeat and return
                     return 1;
                 }
-                if (toInsert.goesToRight(current)) {
+                if (!toInsert.goesToRight(current.getNext())) {
                     toInsert.setNext(current.getNext()); //toinsert's next ref gets current's next
                     current.setNext(toInsert); //current's next ref gets toinsert
                     return 1; //success

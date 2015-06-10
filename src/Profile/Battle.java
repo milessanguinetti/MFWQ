@@ -9,12 +9,8 @@ import Structures.battleData;
 import Structures.orderedLLL;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 
-import java.awt.*;
-import java.awt.Rectangle;
 
 /**
  * Created by Miles Sanguinetti on 4/9/15.
@@ -68,6 +64,9 @@ public class Battle {
                             playerMinions[i].endTurn();
                         if (enemyMinions[i] != null)
                             enemyMinions[i].endTurn();
+                        if(playerVictory() || enemyVictory())
+                            if(endBattle())
+                                currentGame.swapToMainMenu();
                     }
                     State = 0; //and if there aren't, we reset state to 0.
                     for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
@@ -84,7 +83,8 @@ public class Battle {
                 }
                 else{
                     if(executeTurn()) //so we continue executing the turn
-                        endBattle(); //and end the battle if need be.
+                        if(endBattle()) //and end the battle if need be.
+                            currentGame.swapToMainMenu();
                     while(turnOrder.Peek() != null){
                         if(((battleData)turnOrder.Peek().returnData()).attackerIsDead())
                             turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
@@ -152,7 +152,12 @@ public class Battle {
                     totaljexp += ((Monster) enemyParty[i]).getJexp();
                 }
             }
+            playerMinions[i] = null; //clear minions
+            enemyMinions[i] = null;
         }
+
+        Interface.printLeftAtNextAvailable("Your party gained " + totalexp + " experience and " + totaljexp +
+        " job experience.");
 
         for (int i = 0; i < 4; ++i) {
             if (playerParty[i] != null) {
@@ -210,7 +215,8 @@ public class Battle {
             }
             toRoute = null;
             if(executeTurn()){
-                endBattle();
+                if(endBattle())
+                    currentGame.swapToMainMenu();
             }
         }
     }
@@ -224,7 +230,6 @@ public class Battle {
             return false;
         }
         int toFind = whoseTurn.getTargetIndex(); //store the target specified in the turn
-        System.out.println("TARGETED INDEX: " + toFind);
         if (toFind == 0) { //if this is a single target, user-only skill...
             try {
                 if(whoseTurn.executeCombat(null)) { //ignore the target selection process; this if statement and recursive

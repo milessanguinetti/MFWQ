@@ -5,6 +5,7 @@ import Characters.Skills.secondClass.titanGigasModus;
 import Characters.Skills.secondClass.titanRampage;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/8/15.
@@ -12,7 +13,7 @@ import Structures.LLLnode;
 public class Titan extends characterClass{
     public Titan(){
         super("Titan", 10000);
-        Skills.Insert(new LLLnode(new titanGigasModus())); //initial skill
+        Skills.Insert(new orderedDLLNode(new titanGigasModus())); //initial skill
     }
 
     @Override
@@ -28,22 +29,22 @@ public class Titan extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new titanRampage()));
+            Skills.Insert(new orderedDLLNode(new titanRampage()));
             toLevel.printName();
             System.out.println(" learned Rampage!");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new titanAmplifyMetabolism()));
+            Skills.Insert(new orderedDLLNode(new titanAmplifyMetabolism()));
             toLevel.printName();
             System.out.println(" learned Amplify Metabolism!");
         }
 /*        if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 8) { //level 8 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }

@@ -105,7 +105,7 @@ public abstract class characterClass implements Data {
 
     //same as above except that this takes a data reference as a parameter
     public int compareTo(Data toCompare) {
-        return toCompare.compareTo(className);
+        return className.compareTo(toCompare.returnKey());
     }
 
     public orderedDLLNode getSkillHead(){

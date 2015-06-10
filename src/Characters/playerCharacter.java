@@ -77,10 +77,12 @@ public class playerCharacter extends gameCharacter {
         Selection = 0; //reset variables linked to UI selection.
         uSelectionView = 0;
         lSelectionView = 3;
+        selectedNode = null;
         State = 0;
         //since most printing occurs via event-driven mechanisms, we take this opportunity to print
         //something before the user enters any input to give them some reference on what to do next
         Game.battle.getInterface().printLeft("Attack", "Skill", "Item", "Flee");
+        Game.battle.printDefaultStats();
         Game.battle.getInterface().setTextFocus(0);
     }
 
@@ -153,7 +155,7 @@ public class playerCharacter extends gameCharacter {
             }
         }
         for (int i = 0; i < 4; ++i) { //add all attackable minions into the targeting array
-            if (mins[i] != null) { //this could be done with 1 for loop, but it makes the layout inelegant
+            if (mins[i] != null) { //this could be done with 1 for loop, but that makes the layout inelegant
                 if (mins[i].isAlive() == notUsableOnDead) {
                     //if the character exists and the skill can be used on them
                     targetArray[lowerBound] = mins[i]; //insert minion into targeting array
@@ -162,8 +164,8 @@ public class playerCharacter extends gameCharacter {
             }
         }
 
-        --lowerBound; //decrement lower bound by 1 to account for the fact that it is where we
-                      //were inserting rather than the actual lower bound in the above for-loop.
+        --lowerBound; //decrement lower bound by 1 to account for the fact that it is currently where we
+                      //were just inserting rather than the actual lower bound in the above for-loop.
 
         //here we actually have the user select a target.
         if (Input == 1) { //up case
@@ -208,7 +210,11 @@ public class playerCharacter extends gameCharacter {
         if(Input != 3 && Input != 0){
             //we print the targets currently within view. there are multiple cases
             //because realistically, there can be anywhere between 1 and 8 possible targets
-            if (lowerBound == 0) { //case for a single target
+            if(lowerBound == -1){
+                Interface.printLeft("This ability has no viable targets!");
+                Interface.setTextFocus(0);
+            }
+            else if (lowerBound == 0) { //case for a single target
                 Interface.printLeft(targetArray[uSelectionView].getName());
             } else if (lowerBound == 1) { //case for 2 targets
                 Interface.printLeft(targetArray[uSelectionView].getName(),
@@ -224,12 +230,13 @@ public class playerCharacter extends gameCharacter {
                         targetArray[uSelectionView + 3].getName());
             }
 
-            //print some info about the target.
-            Interface.printRight(targetArray[Selection].getName(), //print the selected
-                    "HP: " + targetArray[Selection].getHP() + "/" + //target's HP and HP cap
-                            targetArray[Selection].getHPCap());
-
-            Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+            //print some info about the target, assuming that there is one.
+            if(lowerBound != -1) {
+                Interface.printRight(targetArray[Selection].getName(), //print the selected
+                        "HP: " + targetArray[Selection].getHP() + "/" + //target's HP and HP cap
+                                targetArray[Selection].getHPCap());
+                Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+            }
         }
         return 0; //return 0, signifying that we have not retrieved a valid target yet.
     }
@@ -237,6 +244,7 @@ public class playerCharacter extends gameCharacter {
     //selects a skill to use/attacks with weapons/runs
     private combatEffect chooseSkill(int Input) {
         battleUI Interface = Game.battle.getInterface();
+        Game.battle.printDefaultStats();
         if(State == 0){ //attack/skill/item/flee/wait state
             lowerBound = 4; //this state only has 5 possible selections.
             if (Input == 1) { //up case
@@ -258,8 +266,12 @@ public class playerCharacter extends gameCharacter {
                     return Right; //return right hand weapon
                 else if (Selection == 1) { //skill case
                     State = 1; //select primary or secondary class
+                    Selection = 0; //reset selection
+                    chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
                 } else if (Selection == 2) { //item case
                     State = 4;
+                    Selection = 0; //reset selection
+                    chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
                 } else if (Selection == 3) { //flee case
                     return new Flee();
                 } else if (Selection == 4) { //wait case
@@ -278,9 +290,29 @@ public class playerCharacter extends gameCharacter {
         }
         else if(State == 1){ //primary or secondary class state state
             lowerBound = 1; //this state only has 2 possible selections.
-            Interface.printLeft(primaryClass.getClassName() + " Skills",
-                    secondaryClass.getClassName() + " Skills");
-            Interface.setTextFocus(Selection - uSelectionView);
+            if(primaryClass != null && secondaryClass != null) {
+                Interface.printLeft(primaryClass.getClassName() + " Skills",
+                        secondaryClass.getClassName() + " Skills");
+            }
+            else if(primaryClass == null && secondaryClass == null){
+                Interface.printLeft("No classes selected.");
+                Selection = 0;
+                if(Input == 3){
+                    Input = 1;
+                }
+            }
+            else if(primaryClass == null){
+                Interface.printLeft("No primary class selected.",
+                        secondaryClass.getClassName() + " Skills");
+                Selection = 1;
+                lowerBound = 1;
+            }
+            else {
+                Interface.printLeft(primaryClass.getClassName() + " Skills",
+                        "No secondary class selected.");
+                Selection = 0;
+                lowerBound = 0;
+            }
             if (Input == 1) { //up case
                 if (Selection > 0) //unless we're at the lowest selection value
                     --Selection; //decrement selection
@@ -289,19 +321,27 @@ public class playerCharacter extends gameCharacter {
                     ++Selection;
             } else if (Input == 3) { //enter case
                 if (Selection == 0) { //Primary class case
-                    if (primaryClass != null)
+                    if (primaryClass != null) {
                         State = 2; //select primary class skill
+                        Selection = 0; //reset selection
+                        chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
+                    }
                     else
                         Interface.printRight("No primary class selected.");
                 } else if (Selection == 1) { //Secondary class case
-                    if (secondaryClass != null)
+                    if (secondaryClass != null) {
                         State = 3; //select secondary class skill
+                        Selection = 0; //reset selection
+                        chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
+                    }
                     else
                         Interface.printRight("No secondary class selected.");
                 }
             } else if (Input == 0) { //cancel case
                 State = 0; //base selection case
+                chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
             }
+            Interface.setTextFocus(Selection);
         }
         else if(State == 2) { //primary class skill selection state
             if(selectedNode == null)
@@ -309,41 +349,21 @@ public class playerCharacter extends gameCharacter {
             lowerBound = primaryClass.getNumSkills() - 1;
             //here we print the skills currently within view. there are actually a good
             //number of cases for this because a class can have between 1 and 8 skills.
-            if (lowerBound == 0) { //case for a single skill
-                Interface.printLeft(selectedNode.returnData().returnKey());
-            } else if (lowerBound == 1) { //case for 2 skills
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey());
-            } else if (lowerBound == 2) { //case for 3 skills
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey());
-            } else { //case for 4 or more skills to print.
-                orderedDLLNode botViewNode = selectedNode;
-                for(int i = Selection; i < lSelectionView; --i)
-                    botViewNode = botViewNode.getNext();
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().getNext().returnData().returnKey());
-            }
-            Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
-            //print some information about the skill in question.
-            Interface.printRight(selectedNode.returnData().returnKey(),
-                    "Costs " + ((Skill)selectedNode.returnData()).getSPCost() +
-                            " SP. (" + SP + "/" + MSP + "remaining)",
-                    ((Skill)selectedNode.returnData()).getDescription());
 
             if (Input == 1) { //up case
-                if (Selection > 0) //unless we're at the lowest selection value
+                if (Selection > 0) { //unless we're at the lowest selection value
                     --Selection; //decrement selection
+                    selectedNode = selectedNode.getPrev();
+                }
                 if (Selection < uSelectionView) {
                     --lSelectionView;
                     --uSelectionView;
                 }
             } else if (Input == 2) { //down case
-                if (Selection < lowerBound)
+                if (Selection < lowerBound) {
                     ++Selection;
+                    selectedNode = selectedNode.getNext();
+                }
                 if (Selection > lSelectionView) {
                     ++lSelectionView;
                     ++uSelectionView;
@@ -358,6 +378,32 @@ public class playerCharacter extends gameCharacter {
                 selectedNode = null;
                 chooseSkill(1); //call chooseskill with input value 1 to reprint whatever we've cancelled back to.
             }
+            if(Input != 0){
+                if (lowerBound == 0) { //case for a single skill
+                    Interface.printLeft(selectedNode.returnData().returnKey());
+                } else if (lowerBound == 1) { //case for 2 skills
+                    Interface.printLeft(primaryClass.getSkillHead().returnData().returnKey(),
+                            primaryClass.getSkillHead().getNext().returnData().returnKey());
+                } else if (lowerBound == 2) { //case for 3 skills
+                    Interface.printLeft(primaryClass.getSkillHead().returnData().returnKey(),
+                            primaryClass.getSkillHead().getNext().returnData().returnKey(),
+                            primaryClass.getSkillHead().getNext().getNext().returnData().returnKey());
+                } else { //case for 4 or more skills to print.
+                    orderedDLLNode topViewNode = selectedNode;
+                    for (int i = Selection; i > uSelectionView; --i)
+                        topViewNode = topViewNode.getPrev();
+                    Interface.printLeft(topViewNode.returnData().returnKey(),
+                            topViewNode.getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().getNext().returnData().returnKey());
+                }
+                Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+                //print some information about the skill in question.
+                Interface.printRight(selectedNode.returnData().returnKey(),
+                        "Costs " + ((Skill)selectedNode.returnData()).getSPCost() +
+                                " SP. (" + SP + "/" + MSP + " SP remaining)",
+                        ((Skill)selectedNode.returnData()).getDescription());
+            }
         }
         else if(State == 3) { //secondary class skill selection state
             if (selectedNode == null)
@@ -365,41 +411,20 @@ public class playerCharacter extends gameCharacter {
             lowerBound = secondaryClass.getNumSkills() - 1;
             //here we print the skills currently within view. there are actually a good
             //number of cases for this because a class can have between 1 and 8 skills.
-            if (lowerBound == 0) { //case for a single skill
-                Interface.printLeft(selectedNode.returnData().returnKey());
-            } else if (lowerBound == 1) { //case for 2 skills
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey());
-            } else if (lowerBound == 2) { //case for 3 skills
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey());
-            } else { //case for 4 or more skills to print.
-                orderedDLLNode botViewNode = selectedNode;
-                for (int i = Selection; i < lSelectionView; --i)
-                    botViewNode = botViewNode.getNext();
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().getNext().returnData().returnKey());
-            }
-            Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
-            //print some information about the skill in question.
-            Interface.printRight(selectedNode.returnData().returnKey(),
-                    "Costs " + ((Skill) selectedNode.returnData()).getSPCost() +
-                            " SP. (" + SP + "/" + MSP + "remaining)",
-                    ((Skill) selectedNode.returnData()).getDescription());
-
             if (Input == 1) { //up case
-                if (Selection > 0) //unless we're at the lowest selection value
+                if (Selection > 0) { //unless we're at the lowest selection value
                     --Selection; //decrement selection
+                    selectedNode = selectedNode.getPrev();
+                }
                 if (Selection < uSelectionView) {
                     --lSelectionView;
                     --uSelectionView;
                 }
             } else if (Input == 2) { //down case
-                if (Selection < lowerBound)
+                if (Selection < lowerBound) {
                     ++Selection;
+                    selectedNode = selectedNode.getNext();
+                }
                 if (Selection > lSelectionView) {
                     ++lSelectionView;
                     ++uSelectionView;
@@ -414,44 +439,57 @@ public class playerCharacter extends gameCharacter {
                 selectedNode = null;
                 chooseSkill(1); //call chooseskill with input value 1 to reprint whatever we've cancelled back to.
             }
+            if(Input != 0){
+                if (lowerBound == 0) { //case for a single skill
+                    Interface.printLeft(selectedNode.returnData().returnKey());
+                } else if (lowerBound == 1) { //case for 2 skills
+                    Interface.printLeft(secondaryClass.getSkillHead().returnData().returnKey(),
+                            secondaryClass.getSkillHead().getNext().returnData().returnKey());
+                } else if (lowerBound == 2) { //case for 3 skills
+                    Interface.printLeft(secondaryClass.getSkillHead().returnData().returnKey(),
+                            secondaryClass.getSkillHead().getNext().returnData().returnKey(),
+                            secondaryClass.getSkillHead().getNext().getNext().returnData().returnKey());
+                } else { //case for 4 or more skills to print.
+                    orderedDLLNode topViewNode = selectedNode;
+                    for (int i = Selection; i > uSelectionView; --i)
+                        topViewNode = topViewNode.getPrev();
+                    Interface.printLeft(topViewNode.returnData().returnKey(),
+                            topViewNode.getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().getNext().returnData().returnKey());
+                }
+                Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+                //print some information about the skill in question.
+                Interface.printRight(selectedNode.returnData().returnKey(),
+                        "Costs " + ((Skill) selectedNode.returnData()).getSPCost() +
+                                " SP. (" + SP + "/" + MSP + " SP remaining)",
+                        ((Skill) selectedNode.returnData()).getDescription());
+            }
         }
         else if(State == 4) { //items state
             lowerBound = Game.Player.getConsumablesSize() - 1;
             if (selectedNode == null)
                 selectedNode = Game.Player.getConsumables(); //ensure that we have an item selected.
-            if (lowerBound == 0) { //case for a single item
-                Interface.printLeft(selectedNode.returnData().returnKey());
-            } else if (lowerBound == 1) { //case for 2 items
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey());
-            } else if (lowerBound == 2) { //case for 3 items
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey());
-            } else { //case for 4 or more items to print.
-                orderedDLLNode botViewNode = selectedNode;
-                for (int i = Selection; i < lSelectionView; --i)
-                    botViewNode = botViewNode.getNext();
-                Interface.printLeft(selectedNode.returnData().returnKey(),
-                        selectedNode.getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().returnData().returnKey(),
-                        selectedNode.getNext().getNext().getNext().returnData().returnKey());
+            if(lowerBound == -1) {
+                Interface.printLeft("You have no consumable items to use!");
+                Interface.setTextFocus(0);
+                if(Input != 0) //do nothing but return in this case.
+                    return null;
             }
-            Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
-            //print some information about the item in question.
-            Interface.printRight(selectedNode.returnData().returnKey(),
-                    "Quantity: " + ((Consumable) selectedNode.returnData()).getQuantity(),
-                    ((Consumable) selectedNode.returnData()).getDescription());
             if (Input == 1) { //up case
-                if (Selection > 0) //unless we're at the lowest selection value
+                if (Selection > 0) { //unless we're at the lowest selection value
                     --Selection; //decrement selection
+                    selectedNode = selectedNode.getPrev();
+                }
                 if (Selection < uSelectionView) {
                     --lSelectionView;
                     --uSelectionView;
                 }
             } else if (Input == 2) { //down case
-                if (Selection < lowerBound)
+                if (Selection < lowerBound) {
                     ++Selection;
+                    selectedNode = selectedNode.getNext();
+                }
                 if (Selection > lSelectionView) {
                     ++lSelectionView;
                     ++uSelectionView;
@@ -463,6 +501,34 @@ public class playerCharacter extends gameCharacter {
                 uSelectionView = 0; //set views to 0 and 3 so we're at the
                 lSelectionView = 3; //bottom of the new submenu
                 Selection = 0; //reset selection as we change menus
+                chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
+            }
+            if(Input != 0 && Input != 3){
+                if (lowerBound == 0) { //case for a single item
+                    Interface.printLeft(selectedNode.returnData().returnKey());
+                } else if (lowerBound == 1) { //case for 2 items
+                    Interface.printLeft(Game.Player.getConsumables().returnData().returnKey(),
+                            Game.Player.getConsumables().getNext().returnData().returnKey());
+                } else if (lowerBound == 2) { //case for 3 items
+                    Interface.printLeft(Game.Player.getConsumables().returnData().returnKey(),
+                            Game.Player.getConsumables().getNext().returnData().returnKey(),
+                            Game.Player.getConsumables().getNext().getNext().returnData().returnKey());
+                } else { //case for 4 or more items to print.
+                    orderedDLLNode topViewNode = selectedNode;
+                    for (int i = Selection; i > uSelectionView; --i)
+                        topViewNode = topViewNode.getPrev();
+                    Interface.printLeft(topViewNode.returnData().returnKey(),
+                            topViewNode.getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().returnData().returnKey(),
+                            topViewNode.getNext().getNext().getNext().returnData().returnKey());
+                }
+                if(lowerBound != -1) { //in any cases where we actually print anything...
+                    Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+                    //print some information about the item in question.
+                    Interface.printRight(selectedNode.returnData().returnKey(),
+                            "Quantity: " + ((Consumable) selectedNode.returnData()).getQuantity(),
+                            ((Consumable) selectedNode.returnData()).getDescription());
+                }
             }
         }
         return null;
@@ -678,12 +744,12 @@ public class playerCharacter extends gameCharacter {
             currentPassive.passiveEffect(this);
     }
 
-    public void setPrimaryClass(characterClass primaryClass) {
-        primaryClass = primaryClass;
+    public void setPrimaryClass(characterClass primaryclass) {
+        primaryClass = primaryclass;
     }
 
-    public void setSecondaryClass(characterClass secondaryClass) {
-        secondaryClass = secondaryClass;
+    public void setSecondaryClass(characterClass secondaryclass) {
+        secondaryClass = secondaryclass;
     }
 
     public boolean canUseHeavyArmor(){

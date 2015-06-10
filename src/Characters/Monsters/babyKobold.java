@@ -22,9 +22,10 @@ public class babyKobold extends Monster{
     @Override
     public void Loot() {
         Random Rand = new Random();
-        if(Rand.nextInt(5) == 0)
+        if(Rand.nextInt(5) == 0) {
             System.out.println("Baby Kobold dropped a potion!");
             Game.Player.Insert(new Potion());
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package Characters.Classes;
 import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/5/15.
@@ -10,7 +11,7 @@ import Structures.LLLnode;
 public class Primalist extends characterClass{
     public Primalist(){
         super("Primalist");
-        Skills.Insert(new LLLnode(new primalistBogMiasma()));
+        Skills.Insert(new orderedDLLNode(new primalistBogMiasma()));
     }
 
     @Override
@@ -24,22 +25,22 @@ public class Primalist extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
-            Skills.Insert(new LLLnode(new primalistCallStorm()));
+            Skills.Insert(new orderedDLLNode(new primalistCallStorm()));
             toLevel.printName();
             System.out.println(" learned Call Storm!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new primalistEarthenWard()));
+            Skills.Insert(new orderedDLLNode(new primalistEarthenWard()));
             toLevel.printName();
             System.out.println(" learned Earthern Ward!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new primalistAnimalisticStrike()));
+            Skills.Insert(new orderedDLLNode(new primalistAnimalisticStrike()));
             toLevel.printName();
             System.out.println(" learned Animalistic Strike!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new primalistRejuvenatingBreeze()));
+            Skills.Insert(new orderedDLLNode(new primalistRejuvenatingBreeze()));
             toLevel.printName();
             System.out.println(" learned Rejuvenating Breeze!");
         }
@@ -49,17 +50,17 @@ public class Primalist extends characterClass{
             System.out.println(" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new primalistSeedOfHealing()));
+            Skills.Insert(new orderedDLLNode(new primalistSeedOfHealing()));
             toLevel.printName();
             System.out.println(" learned Seed Of Healing!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new primalistDevouringGrowth()));
+            Skills.Insert(new orderedDLLNode(new primalistDevouringGrowth()));
             toLevel.printName();
             System.out.println(" learned Devouring Growth!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new primalistDevouringBloom()));
+            Skills.Insert(new orderedDLLNode(new primalistDevouringBloom()));
             toLevel.printName();
             System.out.println(" learned Devouring Bloom!");
         }

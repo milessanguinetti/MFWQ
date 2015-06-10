@@ -7,13 +7,11 @@ import Characters.Monsters.Kobold;
 import Characters.Monsters.babyKobold;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -24,20 +22,17 @@ public class Game {
     public static userProfile Player = new userProfile(); //the game's player.
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
-    private HashMap<KeyCode, Boolean> Input = new HashMap<KeyCode, Boolean>(); //map keys to usable key codes.
     private Stage primaryStage;
-    private Scene currentScene;
 
     public Game(Stage primarystage){
         battle.setGame(this);
         mainmenu.setGame(this);
         primaryStage = primarystage;
         primaryStage.setTitle("MFWQ");
-        //currentScene = mainmenu.getScene();
-        currentScene = battle.getScene();
-        primaryStage.setScene(currentScene);
-        primaryStage.show();
+        //swapToMainMenu();
         Test();
+        swapToBattle();
+        primaryStage.show();
     }
 
     public mainMenu getMainmenu(){
@@ -59,7 +54,7 @@ public class Game {
         bob.addClass(new Alchemist());
         bob.addClass(new Inquisitor());
         bob.setPrimaryClass(new Primalist());
-        bob.setSecondaryClass(new Archer());
+        bob.setSecondaryClass(new geneSplicer());
 
         Random Rand = new Random();
         gameCharacter[] Foes = new gameCharacter[4];
@@ -73,7 +68,13 @@ public class Game {
             Foes[2] = new babyKobold();
         }
         battle.commenceBattle(Game.Player.getParty(), Foes);
-        //currentScene = battle.getScene();
-        //primaryStage.setScene(currentScene);
+    }
+
+    public void swapToBattle(){
+        primaryStage.setScene(battle.getScene());
+    }
+
+    public void swapToMainMenu(){
+        primaryStage.setScene(mainmenu.getScene());
     }
 }

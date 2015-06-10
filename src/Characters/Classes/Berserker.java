@@ -5,6 +5,7 @@ import Characters.Skills.secondClass.berserkerIronHurricane;
 import Characters.Skills.secondClass.berserkerRagingSmash;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/8/15.
@@ -12,7 +13,7 @@ import Structures.LLLnode;
 public class Berserker extends characterClass{
     public Berserker(){
         super("Berserker", 10000);
-        Skills.Insert(new LLLnode(new berserkerRagingSmash())); //initial skill
+        Skills.Insert(new orderedDLLNode(new berserkerRagingSmash())); //initial skill
     }
 
     @Override
@@ -28,22 +29,22 @@ public class Berserker extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new berserkerGoBerserk()));
+            Skills.Insert(new orderedDLLNode(new berserkerGoBerserk()));
             toLevel.printName();
             System.out.println(" learned Go Berserk!");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new berserkerIronHurricane()));
+            Skills.Insert(new orderedDLLNode(new berserkerIronHurricane()));
             toLevel.printName();
             System.out.println(" learned Iron Hurricane!");
         }
         /*if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 8) { //level 8 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }

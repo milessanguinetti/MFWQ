@@ -4,6 +4,7 @@ import Characters.Skills.Passive.Alertness;
 import Characters.Skills.firstClass.*;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 4/28/2015.
@@ -12,7 +13,7 @@ import Structures.LLLnode;
 public class Rogue extends characterClass{
     public Rogue(){
         super("Rogue");
-        Skills.Insert(new LLLnode(new rogueEnvenomedBlade())); //initial skill
+        Skills.Insert(new orderedDLLNode(new rogueEnvenomedBlade())); //initial skill
     }
 
     @Override
@@ -26,22 +27,22 @@ public class Rogue extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
-            Skills.Insert(new LLLnode(new rogueSteal()));
+            Skills.Insert(new orderedDLLNode(new rogueSteal()));
             toLevel.printName();
             System.out.println(" learned Steal!");
         }
         if(jlevel == 4){ //level 4 active skill
-            Skills.Insert(new LLLnode(new rogueKnifeBarrage()));
+            Skills.Insert(new orderedDLLNode(new rogueKnifeBarrage()));
             toLevel.printName();
             System.out.println(" learned Knife Barrage!");
         }
         if(jlevel == 6){ //level 6 active skill
-            Skills.Insert(new LLLnode(new rogueAmplifyPoison()));
+            Skills.Insert(new orderedDLLNode(new rogueAmplifyPoison()));
             toLevel.printName();
             System.out.println(" learned Amplify Poison!");
         }
         if(jlevel == 8){ //level 8 active skill
-            Skills.Insert(new LLLnode(new roguePilferDefenses()));
+            Skills.Insert(new orderedDLLNode(new roguePilferDefenses()));
             toLevel.printName();
             System.out.println(" learned Pilfer Defenses!");
         }
@@ -51,17 +52,17 @@ public class Rogue extends characterClass{
             System.out.println(" learned the passive skill Alertness!");
         }
         if(jlevel == 12){ //level 12 active skill
-            Skills.Insert(new LLLnode(new rogueQuickenReflexes()));
+            Skills.Insert(new orderedDLLNode(new rogueQuickenReflexes()));
             toLevel.printName();
             System.out.println(" learned Quicken Reflexes!");
         }
         if(jlevel == 14){ //level 14 active skill
-            Skills.Insert(new LLLnode(new rogueRapidStriking()));
+            Skills.Insert(new orderedDLLNode(new rogueRapidStriking()));
             toLevel.printName();
             System.out.println(" learned Rapid Striking!");
         }
         if(jlevel == 16){ //level 16 active skill
-            Skills.Insert(new LLLnode(new rogueDisorientingSmokeBomb()));
+            Skills.Insert(new orderedDLLNode(new rogueDisorientingSmokeBomb()));
             toLevel.printName();
             System.out.println(" learned Disorienting Smoke Bomb!");
         }

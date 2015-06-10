@@ -13,7 +13,7 @@ import java.io.PrintWriter;
  */
 //a class that represents an individual unit's turn in the midst of a battle.
 public class battleData implements Data {
-    private String attackerSpeed; //the attacker's speed; used for sorted insertion
+    private int attackerSpeed; //the attacker's speed; used for sorted insertion
     private gameCharacter Attacker; //the character whose turn this datum represents
     private int targetIndex; //index of the character being attacked (or healed, etc)
     private combatEffect toCast; //the combat effect that the character is using this turn
@@ -54,7 +54,7 @@ public class battleData implements Data {
     //returns whether or not the skill will be targeting the player (true)
     //or an enemy (false).
     public int initializeSkill(combatEffect tocast) {
-        attackerSpeed = Integer.toString(Attacker.getTempSpd()); //get the attacker's speed.
+        attackerSpeed = Attacker.getTempSpd(); //get the attacker's speed.
 
         toCast = tocast;
         if (toCast.getAoE() == -1) { //if this is a single target user-only skill.
@@ -118,8 +118,7 @@ public class battleData implements Data {
                                     " attacked " + Defender.getName() + " with " +
                                     ((Data)toCast).returnKey() + "!!");
                             if(toCast.getAoE() > 0)
-                                Game.battle.getInterface().printLeftAtNextAvailable(Attacker.getName() +
-                                        "Their teammates were struck as well!");
+                                Game.battle.getInterface().printLeftAtNextAvailable("Their teammates were struck as well!");
                             if(Defender.isAlive() && Attacker.isAlive())
                                 Defender.executeCounter(Attacker);
                         } else {
@@ -127,8 +126,7 @@ public class battleData implements Data {
                                     " cast " + Defender.getName() + " on " +
                                     ((Data) toCast).returnKey() + "!!");
                             if(toCast.getAoE() > 0)
-                                Game.battle.getInterface().printLeftAtNextAvailable(Attacker.getName() +
-                                        "Their teammates were affected as well!");
+                                Game.battle.getInterface().printLeftAtNextAvailable("Their teammates were affected as well!");
                         }
                         primaryTarget = false; //after the first cast, the defender is no
                     }                          //longer the primary target.
@@ -167,7 +165,7 @@ public class battleData implements Data {
 
     @Override
     public String returnKey() {
-        return attackerSpeed;
+        return Integer.toString(attackerSpeed);
     }
 
     @Override
@@ -192,16 +190,16 @@ public class battleData implements Data {
 
     @Override
     public void setKey(String name) {
-        attackerSpeed = name;
+        attackerSpeed = Integer.parseInt(name);
     }
 
     @Override
     public int compareTo(String toCompare) {
-        return attackerSpeed.compareTo(toCompare);
+        return Integer.parseInt(toCompare) - attackerSpeed;
     }
 
     @Override
     public int compareTo(Data toCompare) {
-        return attackerSpeed.compareTo(toCompare.returnKey());
+        return Integer.parseInt(toCompare.returnKey()) - attackerSpeed;
     }
 }

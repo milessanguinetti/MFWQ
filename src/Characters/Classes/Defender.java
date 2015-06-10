@@ -6,6 +6,7 @@ import Characters.Skills.secondClass.defenderShieldSmash;
 import Characters.Skills.secondClass.defenderUnbreakableShield;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/8/15.
@@ -13,7 +14,7 @@ import Structures.LLLnode;
 public class Defender extends characterClass{
     public Defender(){
         super("Defender", 10000);
-        Skills.Insert(new LLLnode(new defenderBulwark())); //initial skill
+        Skills.Insert(new orderedDLLNode(new defenderBulwark())); //initial skill
     }
 
     @Override
@@ -29,22 +30,22 @@ public class Defender extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new defenderShieldSmash()));
+            Skills.Insert(new orderedDLLNode(new defenderShieldSmash()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new defenderUnbreakableShield()));
+            Skills.Insert(new orderedDLLNode(new defenderUnbreakableShield()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new defenderAnticipate()));
+            Skills.Insert(new orderedDLLNode(new defenderAnticipate()));
             toLevel.printName();
             System.out.println(" learned !");
         }
         /*if (jlevel == 8) { //level 8 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }

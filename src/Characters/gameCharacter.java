@@ -103,7 +103,7 @@ public abstract class gameCharacter extends Stats {
         toTake = calculateDamage(toTake, property); //take status into account
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
-            Game.battle.getInterface().printLeftAtNextAvailable("The attack had no effect.");
+            Game.battle.getInterface().printLeftAtNextAvailable("The attack had no effect on " + Name +".");
             return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
@@ -214,7 +214,7 @@ public abstract class gameCharacter extends Stats {
     //called at the end of each turn to decrement durations and handle end of turn effects.
     public void endTurn(){
         if(isAlive()) { //if the character is still alive...
-            subtractSP(Math.round((SP / 20) * -19)); //every turn, regenerate 5% SP.
+            subtractSP(Math.round(MSP * -.05f)); //every turn, regenerate 5% SP.
             endOfTurnList.endTurn(this); //apply end of turn effects
             statChangeList.decrementAll(); //decrement duration of
             endOfTurnList.decrementAll();  //all effects by one

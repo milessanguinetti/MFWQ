@@ -6,6 +6,7 @@ import Characters.Skills.secondClass.idolatorProfaneBlade;
 import Characters.Skills.secondClass.idolatorThunderHammer;
 import Characters.playerCharacter;
 import Structures.LLLnode;
+import Structures.orderedDLLNode;
 
 /**
  * Created by Miles Sanguinetti on 5/8/15.
@@ -13,7 +14,7 @@ import Structures.LLLnode;
 public class Idolator extends characterClass{
     public Idolator(){
         super("Idolator", 10000);
-        Skills.Insert(new LLLnode(new idolatorProfaneBlade())); //initial skill
+        Skills.Insert(new orderedDLLNode(new idolatorProfaneBlade())); //initial skill
     }
 
     @Override
@@ -29,22 +30,22 @@ public class Idolator extends characterClass{
     @Override
     public void jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
-            Skills.Insert(new LLLnode(new idolatorGruesomeTransformation()));
+            Skills.Insert(new orderedDLLNode(new idolatorGruesomeTransformation()));
             toLevel.printName();
             System.out.println(" learned Gruesome Transformation!");
         }
         if (jlevel == 4) { //level 4 active skill
-            Skills.Insert(new LLLnode(new idolatorThunderHammer()));
+            Skills.Insert(new orderedDLLNode(new idolatorThunderHammer()));
             toLevel.printName();
             System.out.println(" learned Thunder Hammer!");
         }
         /*if (jlevel == 6) { //level 6 active skill
-            Skills.Insert(new LLLnode(new ()));
+            Skills.Insert(new orderedDLLNode(new ()));
             toLevel.printName();
             System.out.println(" learned !");
         }*/
         if (jlevel == 8) { //level 8 active skill
-            Skills.Insert(new LLLnode(new idolatorConvert()));
+            Skills.Insert(new orderedDLLNode(new idolatorConvert()));
             toLevel.printName();
             System.out.println(" learned Convert!");
         }
