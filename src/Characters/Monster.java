@@ -51,7 +51,7 @@ public abstract class Monster extends gameCharacter{
             //otherwise, we'll need the more detailed targeting algorithm written in chooseTarget.
         }
     }
-
+    
     //handles a piece of input. does nothing for non-player characters
     @Override
     public void handleInput(KeyEvent toHandle){
