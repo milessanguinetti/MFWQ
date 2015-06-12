@@ -5,21 +5,32 @@ package Maps;
  */
 public abstract class Map {
     private int xBound, yBound; //the x and y bounds of the map in question
-    private Room [][] Rooms; //a multidimensional array of rooms.
+    private Room [] Rooms; //array of rooms contained within the map
+    private Map [] Connections; //connections
+    private Tileset Tiles; //tiles corresponding to this map.
+    private int currentRoom;
 
-    //returns whether or not the user can move to a selected coordinate
-    public boolean Move(int xcoord, int ycoord){
-        if(xcoord > xBound || ycoord > yBound || xcoord < 0 || ycoord < 0)
-            return false;
-        if(Rooms == null)
-            return false;
-        if(Rooms[xcoord] == null)
-            return false;
-        if(Rooms[xcoord][ycoord] == null)
-            return false;
-        return true;
+    public Map(){}
+
+    public Map(int xbound, int ybound, Tileset tiles, Map... All){
+        xBound = xbound;
+        yBound = ybound;
+        Tiles = tiles;
+        Rooms = new Room[xBound * yBound]; //allocate rooms
+        Connections = new Map[All.length];
+        for(int i = 0; i < All.length; ++i){
+            Connections[i] = All[i];
+        }
+
+        Build(); //call the abstract build method to begin constructing the map.
+        Fill(); //call fill to fill in any blanks left by the build method
     }
 
-    //method that procedurally generates the map in question
+    //method that procedurally generates the quintessential parts of the map in question
     public abstract void Build();
+
+    //method that procedurally fills holes left by the build method.
+    public void Fill(){
+
+    }
 }
