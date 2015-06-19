@@ -3,19 +3,18 @@ package Maps;
 /**
  * Created by Miles Sanguinetti on 5/20/2015.
  */
-public abstract class Map {
+public abstract class Map extends Tileset{
     private int xBound, yBound; //the x and y bounds of the map in question
     private Room [] Rooms; //array of rooms contained within the map
     private Map [] Connections; //connections
-    private Tileset Tiles; //tiles corresponding to this map.
     private int currentRoom;
 
     public Map(){}
 
-    public Map(int xbound, int ybound, Tileset tiles, Map... All){
+    public Map(String name, int xbound, int ybound, Map... All){
+        Name = name;
         xBound = xbound;
         yBound = ybound;
-        Tiles = tiles;
         Rooms = new Room[xBound * yBound]; //allocate rooms
         Connections = new Map[All.length];
         for(int i = 0; i < All.length; ++i){

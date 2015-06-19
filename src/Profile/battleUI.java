@@ -1,6 +1,5 @@
 package Profile;
 
-import Characters.gameCharacter;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
