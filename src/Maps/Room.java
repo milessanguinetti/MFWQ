@@ -4,7 +4,7 @@ package Maps;
  * Created by Miles Sanguinetti on 5/20/2015.
  */
 public class Room {
-    private static String mapName; //the name of the current map; having a static variable
+    private static Map currentMap; //the name of the current map; having a static variable
     private int [] Tiles = new int[81];
     /*
     Each normal room contains 9 * 9 tiles; this is not a multidimensional array, but to the end of saving memory,
@@ -18,8 +18,8 @@ public class Room {
 
     }
 
-    public void setMapName(String toName){
-        mapName = toName;
+    public void setMapName(Map toSet){
+        currentMap = toSet;
     }
 
     public void Draw(){
