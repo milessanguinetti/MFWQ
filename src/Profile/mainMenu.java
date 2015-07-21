@@ -37,12 +37,12 @@ public class mainMenu {
     public mainMenu(){
         Selection = 0;
         Pane contentRoot = new Pane();
-        contentRoot.setPrefSize(860, 600);
+        contentRoot.setPrefSize(1280, 800);
         scene = new Scene(contentRoot);
         try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/title.jpg"))){
             ImageView titlescrn = new ImageView(new Image(imginput));
-            titlescrn.setFitWidth(860);
-            titlescrn.setFitHeight(600); //preserve aspect ratio
+            titlescrn.setFitWidth(1280);
+            titlescrn.setFitHeight(800); //preserve aspect ratio
             contentRoot.getChildren().add(titlescrn);
         }
 

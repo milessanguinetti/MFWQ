@@ -38,11 +38,11 @@ public class Battle {
 
     public Battle() {
         Pane contentRoot = new Pane();
-        contentRoot.setPrefSize(860, 600);
+        contentRoot.setPrefSize(1280, 800);
         scene = new Scene(contentRoot);
 
         //TEST TEST TEST TEST
-        javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(860, 600);
+        javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(1280, 800);
         Background.setFill(Color.ALICEBLUE);
         contentRoot.getChildren().add(Background);
 

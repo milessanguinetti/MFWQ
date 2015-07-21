@@ -29,7 +29,9 @@ public class Game {
         mainmenu.setGame(this);
         primaryStage = primarystage;
         primaryStage.setTitle("MFWQ");
-        //swapToMainMenu();
+        primaryStage.minWidthProperty().bind(battle.getScene().heightProperty().multiply(1.6));
+        primarystage.minHeightProperty().bind(battle.getScene().widthProperty().divide(1.6));
+        //maintain aspect ratio of graphics if window is resized.
         Test();
         swapToBattle();
         primaryStage.show();

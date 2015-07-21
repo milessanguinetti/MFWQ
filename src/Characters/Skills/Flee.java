@@ -46,7 +46,7 @@ public class Flee extends Skill {
             throw new fleeObject();
         else {
             Caster.printName();
-            System.out.println(" could not escape!");
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " could not escape!");
         }
     }
 }

@@ -30,6 +30,7 @@ public class Tileset {
             ImageView toReturn = new ImageView(new Image(imginput));
             toReturn.setFitWidth(96);
             toReturn.setFitHeight(96); //preserve aspect ratio
+            toReturn.setRotate(Direction * 90);
             return toReturn;
         }
 
@@ -45,6 +46,7 @@ public class Tileset {
             ImageView toReturn = new ImageView(new Image(imginput));
             toReturn.setFitWidth(96);
             toReturn.setFitHeight(96); //preserve aspect ratio
+            toReturn.setRotate(Direction * 90);
             return toReturn;
         }
 
@@ -59,6 +61,7 @@ public class Tileset {
             ImageView toReturn = new ImageView(new Image(imginput));
             toReturn.setFitWidth(96);
             toReturn.setFitHeight(96); //preserve aspect ratio
+            toReturn.setRotate(Direction * 90);
             return toReturn;
         }
 
@@ -71,6 +74,20 @@ public class Tileset {
     ImageView getGround(){
         int which = Rand.nextInt(6) + 1;
         try(InputStream imginput = Files.newInputStream(Paths.get(Name + "ground" + which + ".png"))){
+            ImageView toReturn = new ImageView(new Image(imginput));
+            toReturn.setFitWidth(96);
+            toReturn.setFitHeight(96); //preserve aspect ratio
+            return toReturn;
+        }
+
+        catch (IOException e){
+            System.out.println("Error loading image.");
+            return null;
+        }
+    }
+
+    ImageView getBlankGround(){
+        try(InputStream imginput = Files.newInputStream(Paths.get(Name + "ground1.png"))){
             ImageView toReturn = new ImageView(new Image(imginput));
             toReturn.setFitWidth(96);
             toReturn.setFitHeight(96); //preserve aspect ratio
