@@ -16,8 +16,7 @@ import javafx.scene.paint.Color;
  * Created by Miles Sanguinetti on 4/9/15.
  */
 public class Battle {
-    Game currentGame;
-    //two parties of four characters each each party has an
+    //two parties of four characters each; each party has an
     //empty pool of minions that they can add to with some skills.
     private gameCharacter[] playerParty = new gameCharacter[4];
     private gameCharacter[] playerMinions = new gameCharacter[4];
@@ -48,13 +47,12 @@ public class Battle {
 
         contentRoot.getChildren().add(Interface);
 
-        scene.setOnKeyPressed(event -> {
+        scene.setOnKeyReleased(event -> {
             if (toRoute != null) { //if we're currently storing user commands from input
                 toRoute.handleInput(event); //let the character handle the input
                 fillBattleData(); //and call the fillbattledata method to see what to do next.
-            }
-            else{ //otherwise, we're currently mid-turn
-                if(turnOrder.Peek() == null){ //if we've executed all commands for this given turn...
+            } else { //otherwise, we're currently mid-turn
+                if (turnOrder.Peek() == null) { //if we've executed all commands for this given turn...
                     for (int i = 0; i < 4; ++i) { //end turn for all extant combatants
                         if (playerParty[i] != null)
                             playerParty[i].endTurn();
@@ -64,9 +62,9 @@ public class Battle {
                             playerMinions[i].endTurn();
                         if (enemyMinions[i] != null)
                             enemyMinions[i].endTurn();
-                        if(playerVictory() || enemyVictory())
-                            if(endBattle())
-                                currentGame.swapToMainMenu();
+                        if (playerVictory() || enemyVictory())
+                            if (endBattle())
+                                Game.mainmenu.getCurrentGame().swapToMainMenu();
                     }
                     State = 0; //and if there aren't, we reset state to 0.
                     for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
@@ -80,13 +78,12 @@ public class Battle {
                         }
                         ++State; //incrementing the state as we go to ensure that we know what char we're on.
                     }
-                }
-                else{
-                    if(executeTurn()) //so we continue executing the turn
-                        if(endBattle()) //and end the battle if need be.
-                            currentGame.swapToMainMenu();
-                    while(turnOrder.Peek() != null){
-                        if(((battleData)turnOrder.Peek().returnData()).attackerIsDead())
+                } else {
+                    if (executeTurn()) //so we continue executing the turn
+                        if (endBattle()) //and end the battle if need be.
+                            Game.mainmenu.getCurrentGame().swapToMainMenu();
+                    while (turnOrder.Peek() != null) {
+                        if (((battleData) turnOrder.Peek().returnData()).attackerIsDead())
                             turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
                         else
                             break;
@@ -94,10 +91,6 @@ public class Battle {
                 }
             }
         });
-    }
-
-    public void setGame(Game currentgame){
-        currentGame = currentgame;
     }
 
     public Scene getScene() {
@@ -216,7 +209,7 @@ public class Battle {
             toRoute = null;
             if(executeTurn()){
                 if(endBattle())
-                    currentGame.swapToMainMenu();
+                    Game.mainmenu.getCurrentGame().swapToMainMenu();
             }
         }
     }

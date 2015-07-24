@@ -7,11 +7,10 @@ import Characters.Monsters.Kobold;
 import Characters.Monsters.babyKobold;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
-import javafx.scene.Scene;
+import Maps.Map;
 import javafx.stage.Stage;
 
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -22,10 +21,10 @@ public class Game {
     public static userProfile Player = new userProfile(); //the game's player.
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
+    public static Map currentMap;
     private Stage primaryStage;
 
     public Game(Stage primarystage){
-        battle.setGame(this);
         mainmenu.setGame(this);
         primaryStage = primarystage;
         primaryStage.setTitle("MFWQ");
@@ -35,14 +34,6 @@ public class Game {
         Test();
         swapToBattle();
         primaryStage.show();
-    }
-
-    public mainMenu getMainmenu(){
-        return mainmenu;
-    }
-
-    public Battle getBattle(){
-        return battle;
     }
 
     public void Test(){
@@ -79,4 +70,17 @@ public class Game {
     public void swapToMainMenu(){
         primaryStage.setScene(mainmenu.getScene());
     }
+
+    public void swapToMap(){
+        if(currentMap != null){
+            primaryStage.setScene(currentMap.getScene());
+        }
+    }
+
+    public void swapToOverworld(){
+        //NOT YET IMPLEMENTED
+        System.out.println("Bruh you just swapped to the overworld that's not even implemented lol!");
+    }
+
+
 }

@@ -70,13 +70,13 @@ public class mainMenu {
         //key released listening code
         scene.setOnKeyReleased(event -> {
             //DOWN CASE
-            if (event.getCode() == KeyCode.DOWN && Selection < 3) {
+            if (event.getCode() == KeyCode.DOWN && Selection < 3 || event.getCode() == KeyCode.S && Selection < 3) {
                 intToButton(Selection).setPlain();
                 ++Selection;
                 intToButton(Selection).setHighLit();
             }
             //UP CASE
-            else if (event.getCode() == KeyCode.UP && Selection > 0) {
+            else if (event.getCode() == KeyCode.UP && Selection > 0 || event.getCode() == KeyCode.W && Selection < 3) {
                 intToButton(Selection).setPlain();
                 --Selection;
                 intToButton(Selection).setHighLit();
@@ -207,5 +207,9 @@ public class mainMenu {
             return; //options are not yet implemented
         else
             System.exit(0);
+    }
+
+    public Game getCurrentGame(){
+        return currentGame;
     }
 }
