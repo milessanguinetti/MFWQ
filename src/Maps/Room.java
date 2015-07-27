@@ -338,6 +338,9 @@ public class Room extends Pane {
         14 ^ > /\ all but left
         15 = < ^ > \/ all directions
          */
+        if(roomType != 0){ //just return if this room was already built.
+            return;
+        }
         roomType = roomtype;
         Random Rand = new Random();
         int roll = Rand.nextInt(2);
@@ -744,6 +747,9 @@ public class Room extends Pane {
                 }
                 break;
 
+        }
+        if(Loot != null){
+            Tiles[40] = 20;
         }
 
         //fill the pane with images according to the specified tiles

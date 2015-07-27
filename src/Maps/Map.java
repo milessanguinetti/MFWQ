@@ -192,7 +192,7 @@ public abstract class Map extends Tileset{
         int firstRoom = -1; //integers to store first and last rooms encountered in a row
         int lastRoom = -1;
         if(i == 0) { //fill the map in terms of horizontal rows
-            for(int k = 0; k < yBound*xBound; k+=xBound){ //ensure reach row has at least one room and
+            for(int k = 0; k < yBound*xBound; k+=xBound){ //ensure each row has at least one room and
                                                          //even rows have all rooms connected in a line
                 for(int l = 0; l < xBound; ++l){ //code for checking each row has at least one room
                     if(Rooms[k + l] != null){ //if this room isn't empty
@@ -211,24 +211,191 @@ public abstract class Map extends Tileset{
                 }
                 firstRoom = lastRoom = -1; //reset first and last room to -1 before we move to the next row.
             }
-            for(int n = 0; n < yBound*xBound; n+=xBound){ //now ensure that odd rows connect to both sides.
-                if(n/xBound == 1){ //for all odd rows...
-                    //ensure that it's connected to the previous row (row 0 isn't an issue b/c of odd numbering)
-
-                    if(n != xBound * (yBound - 1)){ //and the next row, assuming that it exists.
-
+            for(int n = xBound; n < yBound*xBound; n+=xBound*2) { //now ensure that odd rows connect to both sides.
+                for (int l = 0; l < xBound; ++l) { //for the entire row...
+                    if(Rooms[n -xBound + l] != null)//if a room in the previous row exists...
+                        lastRoom = l; //set lastroom to l as a reference to its position
+                    if(n != xBound * (yBound - 1)) { //if the next row exists...
+                        if(Rooms[n +xBound + l] != null)//if a room in the next row exists...
+                            firstRoom = l; //set firstroom to l as a reference to its position
+                    }
+                    if(Rooms[n + l] != null){ //if a room at l in the current row exists...
+                        if(lastRoom == -1 || firstRoom == -1) { //if there's a gap...
+                            if (Rooms[n + l + 1] == null)
+                                Rooms[n + l + 1] = new Room(); //add a room after this if it doesn't yet exist
+                        }
+                        else if(lastRoom < l || firstRoom < l){
+                            for(int o = Math.min(lastRoom, firstRoom); o < l; ++o ){
+                             //fill in rooms so that this room has a connection to both sides.
+                                if(Rooms[n+o] == null){ //obviously don't waste memory recreating pre-existing rooms
+                                    Rooms[n+o] = new Room();
+                                }
+                            }
+                        }
                     }
                 }
-
+                lastRoom = firstRoom = -1; //reset room references
             }
         }
         else{ //fill the map in terms of vertical columns
-            for(int k = 0; k < xBound; ++k){ //ensure each row has at least one room + odd columns have rooms connected
-
+            for(int k = 0; k < xBound; ++k){ //ensure each column has at least one room and
+                //odd column have all rooms connected in a line
+                for(int l = 0; l < xBound * yBound; l +=xBound){ //code for checking each column has at least one room
+                    if(Rooms[k + l] != null){ //if this room isn't empty
+                        lastRoom = k+l; //set lastroom to this room
+                        if(firstRoom == -1)
+                            firstRoom = k+l; //if firstroom has yet to be set, handle that as well.
+                    }
+                }
+                if(firstRoom == -1){ //if we didn't encounter a single room...
+                    Rooms[k + Rand.nextInt(yBound)*xBound] = new Room(); //randomly add one.
+                }
+                //if the first and last rooms in this column are different and the column is odd numbered...
+                if(firstRoom != lastRoom && k%2 == 1){
+                    for(int n = firstRoom + xBound; n < lastRoom; n+=xBound) //fill the space in between them
+                        Rooms[n] = new Room();
+                }
+                firstRoom = lastRoom = -1; //reset first and last room to -1 before we move to the next column.
             }
-            for(int n = 0; n < xBound; ++n){
-
+            for(int n = 0; n < xBound; n+=2) { //now ensure that even columns connect to both sides.
+                for (int l = 0; l < xBound*xBound; l+=xBound) { //for the entire column...
+                    if(n != 0) { //if the previous column exists...
+                        if(Rooms[n - 1 + l] != null)//if a room in the previous column exists...
+                            lastRoom = l; //set lastroom to l as a reference to its position
+                    }
+                    if(Rooms[n + 1 + l] != null)//if a room in the next column exists...
+                        firstRoom = l; //set firstroom to l as a reference to its position
+                    if(Rooms[n + l] != null){ //if a room at l in the current column exists...
+                        if(lastRoom == -1 || firstRoom == -1) { //if there's a gap...
+                            if (Rooms[n + l + xBound] == null)
+                                Rooms[n + l + xBound] = new Room(); //add a room after this if it doesn't yet exist
+                        }
+                        else if(lastRoom < l || firstRoom < l){
+                            for(int o = Math.min(lastRoom, firstRoom); o < l; o+=xBound ){
+                                //fill in rooms so that this room has a connection to both sides.
+                                if(Rooms[n+o] == null){ //obviously don't waste memory recreating pre-existing rooms
+                                    Rooms[n+o] = new Room();
+                                }
+                            }
+                        }
+                    }
+                }
+                lastRoom = firstRoom = -1; //reset room references
             }
+        }
+        //by this point, we've ensured that all rooms can potentially be traversible.
+        boolean north = false, east = false, south = false, west = false;
+        //we start by adding connection rooms, since they have exits leading beyond the map.
+        for(int j = 0; j < 4; ++j){
+            if(Connections[j] != null){
+                if(j == 0)
+                    north = true;
+                else if(j == 1)
+                    east = true;
+                else if(j == 2)
+                    south = true;
+                else if(j == 3)
+                    west = true;
+                if(connectionRooms[j] >= xBound){ //case for checking north connection
+                    if(Rooms[connectionRooms[j] - xBound] != null)
+                        north = true;
+                }
+                if(connectionRooms[j]%xBound != xBound - 1){ //case for checking east connection
+                    if(Rooms[connectionRooms[j] + 1] != null)
+                        east = true;
+                }
+                if(connectionRooms[j] + xBound < xBound * yBound){ //case for checking south connection
+                    if(Rooms[connectionRooms[j] + xBound] != null)
+                        south = true;
+                }
+                if(connectionRooms[j]%xBound != 0){ //case for checking west connection
+                    if(Rooms[connectionRooms[j] - 1] != null)
+                        west = true;
+                }
+                if(north && !east && !south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(1);
+                else if(!north && east && !south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(2);
+                else if(!north && !east && south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(3);
+                else if(!north && !east && !south && west)
+                    Rooms[connectionRooms[j]].generateTiles(4);
+                else if(north && !east && south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(5);
+                else if(!north && east && !south && west)
+                    Rooms[connectionRooms[j]].generateTiles(6);
+                else if(north && !east && !south && west)
+                    Rooms[connectionRooms[j]].generateTiles(7);
+                else if(north && east && !south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(8);
+                else if(!north && east && south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(9);
+                else if(!north && !east && south && west)
+                    Rooms[connectionRooms[j]].generateTiles(10);
+                else if(!north && east && south && west)
+                    Rooms[connectionRooms[j]].generateTiles(11);
+                else if(north && !east && south && west)
+                    Rooms[connectionRooms[j]].generateTiles(12);
+                else if(north && east && !south && west)
+                    Rooms[connectionRooms[j]].generateTiles(13);
+                else if(north && east && south && !west)
+                    Rooms[connectionRooms[j]].generateTiles(14);
+                else if(north && east && south && west)
+                    Rooms[connectionRooms[j]].generateTiles(15);
+            }
+            north = east = south = west = false; //reset booleans
+        }
+        //with those handled, we tackle the rest of the map.
+        for(int j = 0; j < xBound * yBound; ++j){
+            if(Rooms[j] != null){
+                if(j >= xBound){ //case for checking north connection
+                    if(Rooms[j - xBound] != null)
+                        north = true;
+                }
+                if(j%xBound != xBound - 1){ //case for checking east connection
+                    if(Rooms[j + 1] != null)
+                        east = true;
+                }
+                if(j + xBound < xBound * yBound){ //case for checking south connection
+                    if(Rooms[j + xBound] != null)
+                        south = true;
+                }
+                if(j%xBound != 0){ //case for checking west connection
+                    if(Rooms[j - 1] != null)
+                        west = true;
+                }
+                if(north && !east && !south && !west)
+                    Rooms[j].generateTiles(1);
+                else if(!north && east && !south && !west)
+                    Rooms[j].generateTiles(2);
+                else if(!north && !east && south && !west)
+                    Rooms[j].generateTiles(3);
+                else if(!north && !east && !south && west)
+                    Rooms[j].generateTiles(4);
+                else if(north && !east && south && !west)
+                    Rooms[j].generateTiles(5);
+                else if(!north && east && !south && west)
+                    Rooms[j].generateTiles(6);
+                else if(north && !east && !south && west)
+                    Rooms[j].generateTiles(7);
+                else if(north && east && !south && !west)
+                    Rooms[j].generateTiles(8);
+                else if(!north && east && south && !west)
+                    Rooms[j].generateTiles(9);
+                else if(!north && !east && south && west)
+                    Rooms[j].generateTiles(10);
+                else if(!north && east && south && west)
+                    Rooms[j].generateTiles(11);
+                else if(north && !east && south && west)
+                    Rooms[j].generateTiles(12);
+                else if(north && east && !south && west)
+                    Rooms[j].generateTiles(13);
+                else if(north && east && south && !west)
+                    Rooms[j].generateTiles(14);
+                else if(north && east && south && west)
+                    Rooms[j].generateTiles(15);
+            }
+            north = east = south = west = false; //reset booleans
         }
 
     }
