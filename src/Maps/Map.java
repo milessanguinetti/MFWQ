@@ -1,5 +1,7 @@
 package Maps;
 
+import Characters.Inventory.Item;
+import Characters.Inventory.Weapons.*;
 import Characters.Monster;
 import Profile.Game;
 import javafx.scene.Scene;
@@ -11,12 +13,13 @@ import javafx.scene.layout.Pane;
  */
 public abstract class Map extends Tileset{
     Pane contentRoot = new Pane();
-    private int xBound, yBound; //the x and y bounds of the map in question
-    private Room [] Rooms; //array of rooms contained within the map
+    protected int xBound, yBound; //the x and y bounds of the map in question
+    protected Room [] Rooms; //array of rooms contained within the map
     private Map [] Connections = new Map[4]; //connections
-    private int [] connectionRooms = new int[4]; //rooms that lead in from connections
+    protected int [] connectionRooms = new int[]{-1, -1, -1, -1}; //rooms that lead in from connections
     private int currentRoom;
     private int encounterRate; //rate at which enemies are encountered; expressed as a percentage integer
+    protected static int Difficulty; //
     private Scene scene;
 
     public Map(){}
@@ -25,7 +28,7 @@ public abstract class Map extends Tileset{
         encounterRate = encounterrate;
         contentRoot.setPrefSize(1280, 800);
         scene = new Scene(contentRoot);
-        Name = name;
+        Name += name;
         xBound = xbound;
         yBound = ybound;
         Rooms = new Room[xBound * yBound]; //allocate rooms
@@ -35,7 +38,9 @@ public abstract class Map extends Tileset{
         Connections[2] = South;
         Connections[3] = West;
 
+
         Build(); //call the abstract build method to begin constructing the map.
+        Room.currentMap = this;
         Fill(); //call fill to fill in any blanks left by the build method
 
         //key released listening code
@@ -220,13 +225,15 @@ public abstract class Map extends Tileset{
                             firstRoom = l; //set firstroom to l as a reference to its position
                     }
                     if(Rooms[n + l] != null){ //if a room at l in the current row exists...
-                        if(lastRoom == -1 || firstRoom == -1) { //if there's a gap...
+                        if(lastRoom == -1 || (firstRoom == -1 && n != xBound * (yBound - 1))) { //if there's a gap...
                             if (Rooms[n + l + 1] == null)
                                 Rooms[n + l + 1] = new Room(); //add a room after this if it doesn't yet exist
                         }
-                        else if(lastRoom < l || firstRoom < l){
+                        else if((lastRoom < l && lastRoom != -1) || (firstRoom < l && firstRoom != -1)){
                             for(int o = Math.min(lastRoom, firstRoom); o < l; ++o ){
                              //fill in rooms so that this room has a connection to both sides.
+                                if(o == -1)
+                                    o = Math.max(lastRoom, firstRoom);
                                 if(Rooms[n+o] == null){ //obviously don't waste memory recreating pre-existing rooms
                                     Rooms[n+o] = new Room();
                                 }
@@ -258,21 +265,25 @@ public abstract class Map extends Tileset{
                 firstRoom = lastRoom = -1; //reset first and last room to -1 before we move to the next column.
             }
             for(int n = 0; n < xBound; n+=2) { //now ensure that even columns connect to both sides.
-                for (int l = 0; l < xBound*xBound; l+=xBound) { //for the entire column...
+                for (int l = 0; l < xBound*yBound; l+=xBound) { //for the entire column...
                     if(n != 0) { //if the previous column exists...
                         if(Rooms[n - 1 + l] != null)//if a room in the previous column exists...
                             lastRoom = l; //set lastroom to l as a reference to its position
                     }
-                    if(Rooms[n + 1 + l] != null)//if a room in the next column exists...
-                        firstRoom = l; //set firstroom to l as a reference to its position
+                    if(n != xBound - 1) { //if the next column exists...
+                        if (Rooms[n + 1 + l] != null)//if a room in the next column exists...
+                            firstRoom = l; //set firstroom to l as a reference to its position
+                    }
                     if(Rooms[n + l] != null){ //if a room at l in the current column exists...
-                        if(lastRoom == -1 || firstRoom == -1) { //if there's a gap...
+                        if((lastRoom == -1 && n != 0) || (firstRoom == -1 && n != xBound - 1)) { //if there's a gap...
                             if (Rooms[n + l + xBound] == null)
                                 Rooms[n + l + xBound] = new Room(); //add a room after this if it doesn't yet exist
                         }
-                        else if(lastRoom < l || firstRoom < l){
+                        else if((lastRoom < l && lastRoom != -1) || (firstRoom < l && firstRoom != -1)){
                             for(int o = Math.min(lastRoom, firstRoom); o < l; o+=xBound ){
                                 //fill in rooms so that this room has a connection to both sides.
+                                if(o == -1)
+                                    o = Math.max(lastRoom, firstRoom);
                                 if(Rooms[n+o] == null){ //obviously don't waste memory recreating pre-existing rooms
                                     Rooms[n+o] = new Room();
                                 }
@@ -287,7 +298,7 @@ public abstract class Map extends Tileset{
         boolean north = false, east = false, south = false, west = false;
         //we start by adding connection rooms, since they have exits leading beyond the map.
         for(int j = 0; j < 4; ++j){
-            if(Connections[j] != null){
+            if(connectionRooms[j] != -1){
                 if(j == 0)
                     north = true;
                 else if(j == 1)
@@ -397,7 +408,6 @@ public abstract class Map extends Tileset{
             }
             north = east = south = west = false; //reset booleans
         }
-
     }
 
     //method that generates enemies based on the dungeon in question.
@@ -407,10 +417,40 @@ public abstract class Map extends Tileset{
         //1 = n; 2 = e; 3 = s; 4 = w
         Room.currentMap = this;
         currentRoom = connectionRooms[direction-1]; //set current room to a room according to the passed direction.
+        Rooms[currentRoom].Enter(direction);
         contentRoot.getChildren().add(Rooms[currentRoom]); //add current room's graphics.
     }
 
     public Scene getScene(){
         return scene;
     }
+
+    public Item generateLoot(){
+        switch(Rand.nextInt(6)){
+            case 0:{
+                return new generic1hBlunt(Difficulty);
+            }
+            case 1:{
+                return new generic1hEdged(Difficulty);
+            }
+            case 2:{
+                return new generic2hBlunt(Difficulty);
+            }
+            case 3:{
+                return new generic2hEdged(Difficulty);
+            }
+            case 4:{
+                return new genericGun(Difficulty);
+            }
+            default:{
+                return generateMapSpecificLoot();
+            }
+        }
+    }
+
+    //generate loot specific to the map
+    public abstract Item generateMapSpecificLoot();
+
+    //lets us neatly enter a map from the overworld in a location that makes sense without storing data
+    public abstract void enterFromOverworld();
 }

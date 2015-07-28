@@ -8,6 +8,7 @@ import Characters.Monsters.babyKobold;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Maps.Map;
+import Maps.Valley01;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -32,7 +33,7 @@ public class Game {
         primarystage.minHeightProperty().bind(battle.getScene().widthProperty().divide(1.6));
         //maintain aspect ratio of graphics if window is resized.
         Test();
-        swapToBattle();
+        swapToMap();
         primaryStage.show();
     }
 
@@ -49,18 +50,8 @@ public class Game {
         bob.setPrimaryClass(new Primalist());
         bob.setSecondaryClass(new geneSplicer());
 
-        Random Rand = new Random();
-        gameCharacter[] Foes = new gameCharacter[4];
-        if (Rand.nextInt(2) == 0) {
-            Foes[0] = new Kobold();
-            Foes[1] = new babyKobold();
-            Foes[2] = new Kobold();
-        } else {
-            Foes[0] = new babyKobold();
-            Foes[1] = new Kobold();
-            Foes[2] = new babyKobold();
-        }
-        battle.commenceBattle(Game.Player.getParty(), Foes);
+        currentMap = new Valley01();
+        currentMap.enterFromOverworld();
     }
 
     public void swapToBattle(){
@@ -79,6 +70,7 @@ public class Game {
 
     public void swapToOverworld(){
         //NOT YET IMPLEMENTED
+        swapToMainMenu();
         System.out.println("Bruh you just swapped to the overworld that's not even implemented lol!");
     }
 

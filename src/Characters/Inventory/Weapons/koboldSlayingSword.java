@@ -14,7 +14,13 @@ public class koboldSlayingSword extends Weapon{
     public koboldSlayingSword(){
         super("Kobold Slaying Sword",
                 "A battle-worn sword that has slain countless kobolds throughout its years.",
-                6, "1h Melee", "Neutral");
+                6, "1h Melee", "Fire");
+    }
+
+    public koboldSlayingSword(int Damage){
+        super("Kobold Slaying Sword",
+                "A battle-worn sword that has slain countless kobolds throughout its years.",
+                Damage, "1h Melee", "Fire");
     }
 
     //combat effect methods

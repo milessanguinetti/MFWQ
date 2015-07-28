@@ -13,7 +13,7 @@ import java.util.Random;
  * Created by Miles on 6/11/2015.
  */
 public class Tileset {
-    String Name; //the name of the tileset in question
+    String Name = "resources/images/"; //the name of the tileset in question
     Random Rand = new Random(); //RNG for construction of fairly random
 
     /*
@@ -35,7 +35,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "exit.png' image.");
             return null;
         }
     }
@@ -51,7 +51,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "wall" + which + ".png' image.");
             return null;
         }
     }
@@ -66,7 +66,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "corner.png' image.");
             return null;
         }
     }
@@ -81,7 +81,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "ground" + which + ".png' image.");
             return null;
         }
     }
@@ -95,7 +95,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "ground1.png' image.");
             return null;
         }
     }
@@ -109,7 +109,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + "treasure.png' image.");
             return null;
         }
     }
@@ -147,7 +147,7 @@ public class Tileset {
         }
 
         catch (IOException e){
-            System.out.println("Error loading image.");
+            System.out.println("Error loading '" + Name + addendum + "' image.");
             return null;
         }
 

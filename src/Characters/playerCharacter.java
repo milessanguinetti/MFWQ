@@ -789,4 +789,8 @@ public class playerCharacter extends gameCharacter {
             return true;
         return false;
     }
+
+    public int getLevel(){
+        return Level;
+    }
 }

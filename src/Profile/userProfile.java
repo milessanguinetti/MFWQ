@@ -13,7 +13,6 @@ public class userProfile extends Inventory{
     private int philosophersStones; //quantity of philosopher's stones, a non-inventory "item" that
                                     //can be used to resurrect downed characters rather than having
                                     //them permanently die after a battle.
-    private int difficultyModifier = 1; //difficulty modifier; typically used for new game+
     private playerCharacter [] Party = new playerCharacter[4]; //party of 4
 
     public Map getMap(){
@@ -80,12 +79,15 @@ public class userProfile extends Inventory{
         return Coins;
     }
 
-    public int getDifficulty(){
-        return difficultyModifier;
-    }
-
-    public int incrementDifficulty(int toIncrement){
-        difficultyModifier += toIncrement;
-        return difficultyModifier;
+    public int getAverageLevel(){
+        int toReturn = 0;
+        int toDivide = 0;
+        for(int i = 0; i < 4; ++i){
+            if(Party[i] != null){
+                ++toDivide; //increment todivide to account for the average of more values
+                toReturn += Party[i].getLevel();
+            }
+        }
+        return (toReturn/toDivide);
     }
 }

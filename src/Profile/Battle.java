@@ -63,8 +63,7 @@ public class Battle {
                         if (enemyMinions[i] != null)
                             enemyMinions[i].endTurn();
                         if (playerVictory() || enemyVictory())
-                            if (endBattle())
-                                Game.mainmenu.getCurrentGame().swapToMainMenu();
+                            endBattle();
                     }
                     State = 0; //and if there aren't, we reset state to 0.
                     for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
@@ -80,8 +79,7 @@ public class Battle {
                     }
                 } else {
                     if (executeTurn()) //so we continue executing the turn
-                        if (endBattle()) //and end the battle if need be.
-                            Game.mainmenu.getCurrentGame().swapToMainMenu();
+                        endBattle();
                     while (turnOrder.Peek() != null) {
                         if (((battleData) turnOrder.Peek().returnData()).attackerIsDead())
                             turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
@@ -127,7 +125,7 @@ public class Battle {
         }
     }
 
-    public boolean endBattle(){
+    public void endBattle(){
         int totalexp = 0;
         int totaljexp = 0; //total values for exp and jexp.
         for (int i = 0; i < 4; ++i) { //for the entirety of the user's party
@@ -150,7 +148,7 @@ public class Battle {
         }
 
         Interface.printLeftAtNextAvailable("Your party gained " + totalexp + " experience and " + totaljexp +
-        " job experience.");
+                " job experience.");
 
         for (int i = 0; i < 4; ++i) {
             if (playerParty[i] != null) {
@@ -159,7 +157,11 @@ public class Battle {
                 }
             }
         }
-        return !enemyVictory(); //since this state can also be reached via a flee command, we print !enemyvictory
+        if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
+            Game.mainmenu.getCurrentGame().swapToMainMenu();
+        }
+        else
+            Game.mainmenu.getCurrentGame().swapToMap();
     }
 
     //Executes a turn that has all of its commands decided upon by the combatants
@@ -208,8 +210,7 @@ public class Battle {
             }
             toRoute = null;
             if(executeTurn()){
-                if(endBattle())
-                    Game.mainmenu.getCurrentGame().swapToMainMenu();
+                endBattle();
             }
         }
     }
