@@ -2,11 +2,19 @@ package Maps;
 
 import Characters.Inventory.Item;
 import Characters.Monster;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +49,11 @@ public class Room extends Pane {
     }
 
     Room(Monster [] boss){
+        setPrefSize(1280, 800);
+        //setTranslateY(600); TBD IF WE NEED THIS
+        Rectangle Background = new Rectangle(1280, 800); //establish a mostly-translucent shaded background
+        Background.setFill(Color.BLACK);
+        getChildren().add(Background);
         Boss = new Monster[4];
         for(int i = 0; i < 4; ++i){
             Boss[i] = boss[i];
@@ -48,6 +61,11 @@ public class Room extends Pane {
     }
 
     Room(Item loot){
+        setPrefSize(1280, 800);
+        //setTranslateY(600); TBD IF WE NEED THIS
+        Rectangle Background = new Rectangle(1280, 800); //establish a mostly-translucent shaded background
+        Background.setFill(Color.BLACK);
+        getChildren().add(Background);
         Loot = loot;
     }
 
@@ -75,8 +93,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for northern entrance
                 if(Tiles[i] == 5){
                     m = i;
-                    playerIcon.setTranslateY(-48 + 96 * (m / 9)); //add player icon @ this position
-                    playerIcon.setTranslateX(208 + 96 * (m % 9));
+                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(240 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -87,8 +105,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for eastern entrance
                 if(Tiles[i] == 6){
                     m = i;
-                    playerIcon.setTranslateY(-48 + 96 * (m / 9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(208 + 96 * (m%9));
+                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(240 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -99,8 +117,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for southern entrance
                 if(Tiles[i] == 7){
                     m = i;
-                    playerIcon.setTranslateY(-48 + 96 * (m/9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(208 + 96 * (m%9));
+                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(240 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -122,8 +140,8 @@ public class Room extends Pane {
     }
 
     public int Interact(){
-        if(Tiles[m] > 4 && Tiles[m] < 9){ //possible exit case
-            if(s == 5 && f == Tiles[m] - 12) { //if we're in the middle of the tile and facing the right way...
+        if(Tiles[m] > 4 && Tiles[m] < 10){ //possible exit case
+            if(s == 5 && f == Tiles[m] - 4) { //if we're in the middle of the tile and facing the right way...
                 getChildren().remove(playerIcon); //exit, removing the player icon from the pane
                 return f; //return the direction that the player is facing. (1-4)
             }
@@ -133,8 +151,10 @@ public class Room extends Pane {
                 Tiles[m] = 0;
                 ImageView toPlace = currentMap.getBlankGround(); //replace treasure with blank ground
                 toPlace.setTranslateY(-48 + 96 * (m/9)); //on the player's current tile.
-                toPlace.setTranslateX(208 + 96 * (m%9));
+                toPlace.setTranslateX(208 + 96 * (m % 9));
                 getChildren().add(toPlace);
+                getChildren().remove(playerIcon);
+                getChildren().add(playerIcon);
                 return 5; //return 5 if the player is facing towards space 5 in their tile.
             }
         }
@@ -159,6 +179,7 @@ public class Room extends Pane {
         f = Direction; //set facing to chosen direction.
         int targetedTile = m; //set our targets to the player's current location for starts.
         int targetedSpace = s;
+        boolean Valid = false; //boolean value to store valid moves.
         if(Direction == 1){ //north case
             targetedSpace -= 3;
             if(targetedSpace < 1){
@@ -190,7 +211,7 @@ public class Room extends Pane {
         switch(Tiles[targetedTile]){ //a switch hingent on what tile we're attempting to move through/into
             case 0: { //ground
                 //empty ground is always valid for movement
-                targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                Valid = true; //note that the proposed movement is valid.
                 break; //break the switch
             }
             case 1: { //walls (north)
@@ -212,28 +233,28 @@ public class Room extends Pane {
             case 5: { //exits (north)
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 5 || targetedSpace == 8){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 6:{ //east
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 5 || targetedSpace == 4){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 7:{ //south
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 5 || targetedSpace == 2){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 8:{ //west
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 5 || targetedSpace == 6){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
@@ -256,71 +277,80 @@ public class Room extends Pane {
             case 13: { //exits with bosses (north)
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 8){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 14:{ //east
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 4){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 15:{ //south
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 2){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 16:{ //west
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace == 6){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 17: { //1 * 2 obstacle
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace != 3 && targetedSpace != 6){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 18: { //2 * 2 obstacle
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace != 2 && targetedSpace != 3 && targetedSpace != 5 && targetedSpace != 6){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 19: { //3 * 2 obstacle
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace > 6){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
             case 20: { //treasure
                 //if the space that we're targeting is valid in the context of its tile...
                 if(targetedSpace != 5){
-                    targetedTile += 24; //add 24 (arbitrary), signifying that the move was valid
+                    Valid = true; //note that the proposed movement is valid.
                 }
                 break; //break the switch
             }
 
         }
-        System.out.println("Attempting to move from " + m +", "+s+" to " + (targetedTile-24) + ", " + targetedSpace+"...");
-        if(targetedTile > 23){ //if we added 24 to this variable, signifying a successful move...
+        if(Valid){ //if the move was valid.
             s = targetedSpace; //set s to targeted space.
-            m = targetedTile - 24; //set m to the original targeted tile.
-            playerIcon.setTranslateX(playerIcon.getTranslateX()+ -32*(f-3)*((f+1)%2)); //update player icon's location
-            playerIcon.setTranslateY(playerIcon.getTranslateY() + 32 * (f - 2) * ((f) % 2));
-            System.out.println("Move successful");
+            m = targetedTile; //set m to the original targeted tile.
+            //playerIcon.setTranslateX(playerIcon.getTranslateX() + -32 * (f - 3) * ((f + 1) % 2)); //update player icon's location
+            //playerIcon.setTranslateY(playerIcon.getTranslateY() + 32 * (f - 2) * ((f) % 2));
+            //TEST
+            Path playerpath = new Path();
+            playerpath.getElements().add(new MoveTo(playerIcon.getTranslateX() + 16, playerIcon.getTranslateY() + 16));
+            playerpath.getElements().add(new LineTo(playerIcon.getTranslateX() + 16 - 32 * (f - 3) * ((f + 1) % 2),
+                    playerIcon.getTranslateY() + 16 + 32 * (f - 2) * ((f) % 2)));
+
+            PathTransition playermotion = new PathTransition();
+            playermotion.setNode(playerIcon);
+            playermotion.setPath(playerpath);
+            playermotion.setDuration(Duration.millis(100));
+            playermotion.play(); //play the transition
+            //TEST
             return true;
         }
-        System.out.println("Move unsuccessful");
         return false; //return false if the player could not move.
     }
 

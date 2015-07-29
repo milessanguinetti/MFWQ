@@ -12,7 +12,7 @@ import Profile.Game;
  */
 public class Valley01 extends Map{
     public Valley01(){
-        super("valley", 10, 10, 15, null, null, null, null);
+        super("valley", 10, 10, 0, null, null, null, null);
         //map name, xbound, ybound, encounter rate, north connection, east connection, south connection, west connection
         Difficulty = Game.Player.getAverageLevel(); //set difficulty modifier to the player's average level.
     }
@@ -39,7 +39,7 @@ public class Valley01 extends Map{
         Rooms[connectionRooms[3]] = new Room();
         connectionRooms[1] = (Rand.nextInt(yBound) + 1)*xBound - 1; //add east entrance
         Rooms[connectionRooms[1]] = new Room();
-        for(int i = 0; i < 3; ++i) { //add rooms containing randomized loot.
+        for(int i = 0; i < (xBound + yBound) / 4; ++i) { //add rooms containing randomized loot.
             Rooms[Rand.nextInt(xBound * yBound)] = new Room(generateLoot());
         }
     }

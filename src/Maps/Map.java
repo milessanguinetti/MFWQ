@@ -44,135 +44,140 @@ public abstract class Map extends Tileset{
         Fill(); //call fill to fill in any blanks left by the build method
 
         //key released listening code
-        scene.setOnKeyReleased(event -> {
-            //UP CASE
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
-                if(Rooms[currentRoom].Move(1)){
-                    if(Rand.nextInt(100) < encounterRate){
-                        Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                        Game.mainmenu.getCurrentGame().swapToBattle();
-                    }
-                }
-            }
-            //RIGHT CASE
-            else if(event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D){
-                if(Rooms[currentRoom].Move(2)){
-                    if(Rand.nextInt(100) < encounterRate){
-                        Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                        Game.mainmenu.getCurrentGame().swapToBattle();
-                    }
-                }            }
-            //DOWN CASE
-            else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
-                if(Rooms[currentRoom].Move(3)){
-                    if(Rand.nextInt(100) < encounterRate){
-                        Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                        Game.mainmenu.getCurrentGame().swapToBattle();
-                    }
-                }            }
-            //LEFT CASE
-            else if(event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A){
-                if(Rooms[currentRoom].Move(4)){
-                    if(Rand.nextInt(100) < encounterRate){
-                        Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                        Game.mainmenu.getCurrentGame().swapToBattle();
-                    }
-                }
-            }
+        scene.setOnKeyReleased(event1 -> {
             //ENTER CASE
-            else if (event.getCode() == KeyCode.ENTER) {
-                switch (Rooms[currentRoom].Interact()){
-                    case 0:{ //just break; nothing happened
+            if (event1.getCode() == KeyCode.ENTER) {
+                switch (Rooms[currentRoom].Interact()) {
+                    case 0: { //just break; nothing happened
+                        System.out.println("lol bro u cant even interact w/ that XD");
                         break;
                     }
-                    case 1:{ //exit to north
+                    case 1: { //exit to north
                         contentRoot.getChildren().remove(Rooms[currentRoom]); //remove this room's graphics
-                        if(currentRoom - yBound < 0){ //exited beyond the scope of the map
-                            if(Connections[0] != null){
+                        if (currentRoom - yBound < 0) { //exited beyond the scope of the map
+                            if (Connections[0] != null) {
                                 Game.currentMap = Connections[0];
                                 Connections[0].Enter(3);
                                 Game.mainmenu.getCurrentGame().swapToMap();
-                            }
-                            else
+                            } else
                                 Game.mainmenu.getCurrentGame().swapToOverworld();
-                        }
-                        else{ //a simple change of rooms within the map
+                        } else { //a simple change of rooms within the map
                             currentRoom -= yBound; //decrement current room by y bound
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
                             Rooms[currentRoom].Enter(3); //enter the new room from the south
                         }
                         break;
                     }
-                    case 2:{ //exit to east
+                    case 2: { //exit to east
                         contentRoot.getChildren().remove(Rooms[currentRoom]); //remove this room's graphics
-                        if((currentRoom + 1)%xBound == 0){ //exited beyond the scope of the map
-                            if(Connections[1] != null){
+                        if ((currentRoom + 1) % xBound == 0) { //exited beyond the scope of the map
+                            if (Connections[1] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[1].Enter(4); //enter from the west
                                 Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
-                            }
-                            else
+                            } else
                                 Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
-                                                                                  //entire series of maps
-                        }
-                        else{ //a simple change of rooms within the map
+                            //entire series of maps
+                        } else { //a simple change of rooms within the map
                             ++currentRoom; //increment current room by 1
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
                             Rooms[currentRoom].Enter(4); //enter the new room from the west
                         }
                         break;
                     }
-                    case 3:{ //exit to south
+                    case 3: { //exit to south
                         contentRoot.getChildren().remove(Rooms[currentRoom]); //remove this room's graphics
-                        if(currentRoom + yBound >= xBound * yBound){ //exited beyond the scope of the map
-                            if(Connections[2] != null){
+                        if (currentRoom + yBound >= xBound * yBound) { //exited beyond the scope of the map
+                            if (Connections[2] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[2].Enter(1); //enter from the north
                                 Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
-                            }
-                            else
+                            } else
                                 Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
                             //entire series of maps
-                        }
-                        else{ //a simple change of rooms within the map
+                        } else { //a simple change of rooms within the map
                             currentRoom += yBound; //increment currentroom by yBound
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
                             Rooms[currentRoom].Enter(1); //enter the new room from the north
                         }
                         break;
                     }
-                    case 4:{//exit to west
+                    case 4: {//exit to west
                         contentRoot.getChildren().remove(Rooms[currentRoom]); //remove this room's graphics
-                        if(currentRoom%xBound == 0){ //exited beyond the scope of the map
-                            if(Connections[3] != null){
+                        if (currentRoom % xBound == 0) { //exited beyond the scope of the map
+                            if (Connections[3] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[3].Enter(2); //enter from the east
                                 Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
-                            }
-                            else
+                            } else
                                 Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
                             //entire series of maps
-                        }
-                        else{ //a simple change of rooms within the map
+                        } else { //a simple change of rooms within the map
                             --currentRoom; //decrement currentroom by 1
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
                             Rooms[currentRoom].Enter(2); //enter the new room from the east
                         }
                         break;
                     }
-                    case 5:{ //treasure case
-                        if(Rooms[currentRoom].getLoot() != null){
+                    case 5: { //treasure case
+                        if (Rooms[currentRoom].getLoot() != null) {
                             Game.Player.Insert(Rooms[currentRoom].getLoot()); //add in the item
                             //IMPLEMENT NOTIFICATION LATER
                         }
                         break;
                     }
-                    case 6:{ //boss case
-                        if(Rooms[currentRoom].getBoss() != null){
+                    case 6: { //boss case
+                        if (Rooms[currentRoom].getBoss() != null) {
                             Game.battle.commenceBattle(Game.Player.getParty(), Rooms[currentRoom].getBoss());
                             Game.mainmenu.getCurrentGame().swapToBattle();
                         }
                         break;
+                    }
+                }
+            }
+        });
+
+        //key pressed listening code
+        scene.setOnKeyPressed(event -> {
+            if(Game.mainmenu.getCurrentGame().isDelayOver()) {
+                //UP CASE
+                if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
+                    if (Rooms[currentRoom].Move(1)) {
+                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        if (Rand.nextInt(100) < encounterRate) {
+                            Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
+                            Game.mainmenu.getCurrentGame().swapToBattle();
+                        }
+                    }
+                }
+                //RIGHT CASE
+                else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
+                    if (Rooms[currentRoom].Move(2)) {
+                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        if (Rand.nextInt(100) < encounterRate) {
+                            Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
+                            Game.mainmenu.getCurrentGame().swapToBattle();
+                        }
+                    }
+                }
+                //DOWN CASE
+                else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
+                    if (Rooms[currentRoom].Move(3)) {
+                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        if (Rand.nextInt(100) < encounterRate) {
+                            Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
+                            Game.mainmenu.getCurrentGame().swapToBattle();
+                        }
+                    }
+                }
+                //LEFT CASE
+                else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
+                    if (Rooms[currentRoom].Move(4)) {
+                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        if (Rand.nextInt(100) < encounterRate) {
+                            Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
+                            Game.mainmenu.getCurrentGame().swapToBattle();
+                        }
                     }
                 }
             }

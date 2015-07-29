@@ -1,17 +1,12 @@
 package Profile;
 
 import Characters.Classes.*;
-import Characters.Inventory.Weapons.generic1hEdged;
+import Characters.Inventory.Weapons.Nodachi;
 import Characters.Inventory.Weapons.genericGun;
-import Characters.Monsters.Kobold;
-import Characters.Monsters.babyKobold;
-import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
 import javafx.stage.Stage;
-
-import java.util.Random;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -24,6 +19,8 @@ public class Game {
     public static Battle battle = new Battle();
     public static Map currentMap;
     private Stage primaryStage;
+    private long delayStartTime; //variable to track time at which a delay was requested.
+    private int delayDuration; //variable to track requested delay
 
     public Game(Stage primarystage){
         mainmenu.setGame(this);
@@ -33,7 +30,7 @@ public class Game {
         primarystage.minHeightProperty().bind(battle.getScene().widthProperty().divide(1.6));
         //maintain aspect ratio of graphics if window is resized.
         Test();
-        swapToMap();
+        swapToMainMenu();
         primaryStage.show();
     }
 
@@ -42,7 +39,7 @@ public class Game {
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(bob);
         bob.setLeft(new genericGun(6));
-        bob.setRight(new generic1hEdged(6)); //equip the good sergeant with a randomly generated weapon
+        bob.setRight(new Nodachi()); //equip the good sergeant with a motherfucking nodachi
         bob.addClass(new Soldier());
         bob.addClass(new Rogue());
         bob.addClass(new Alchemist());
@@ -51,7 +48,6 @@ public class Game {
         bob.setSecondaryClass(new geneSplicer());
 
         currentMap = new Valley01();
-        currentMap.enterFromOverworld();
     }
 
     public void swapToBattle(){
@@ -71,8 +67,16 @@ public class Game {
     public void swapToOverworld(){
         //NOT YET IMPLEMENTED
         swapToMainMenu();
-        System.out.println("Bruh you just swapped to the overworld that's not even implemented lol!");
     }
 
+    public void setDelay(int Delay){
+        delayStartTime = System.currentTimeMillis();
+        delayDuration = Delay;
+    }
 
+    public boolean isDelayOver(){
+        if(System.currentTimeMillis() - delayDuration > delayStartTime)
+            return true;
+        return false;
+    }
 }

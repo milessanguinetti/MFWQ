@@ -198,8 +198,8 @@ public class mainMenu {
     public void intToAction(int toConvert){
         intToButton(toConvert).setUnselected();
         if(toConvert == 0) {
-            currentGame.Test(); //NEW GAME ACTION
-            currentGame.swapToBattle();
+            currentGame.currentMap.enterFromOverworld();
+            currentGame.swapToMap(); //NEW GAME ACTION
         }
         else if(toConvert == 1)
             return; //LOAD GAME ACTION
