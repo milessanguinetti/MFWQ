@@ -66,6 +66,7 @@ public class Notification extends StackPane {
     //loot notification for a single items
     public void lootNotification(Item toAdd){
         lootcontainer = new lootContainer();
+        getChildren().add(lootcontainer);
         lootcontainer.addItem(toAdd);
         Game.Player.Insert(toAdd);
         Game.mainmenu.getCurrentGame().setDelay(500); //set a delay on any processed user input

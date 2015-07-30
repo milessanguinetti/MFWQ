@@ -1,11 +1,12 @@
 package Structures;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/18/15.
  */
-public class statusEffectData implements Data, incrementableData{
+public class statusEffectData implements Data, incrementableData, Serializable{
     protected String Name; //name of status effect
     protected int Turns; //turns remaining
 

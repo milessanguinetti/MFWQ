@@ -4,24 +4,17 @@ import Characters.Inventory.Inventory;
 import Characters.playerCharacter;
 import Maps.Map;
 
+import java.io.Serializable;
+
 /**
  * Created by Miles Sanguinetti on 3/29/15.
  */
 public class userProfile extends Inventory{
-    private Map currentMap; //the map that the user is presently on
     private int Coins; //how much money the player has.
     private int philosophersStones; //quantity of philosopher's stones, a non-inventory "item" that
                                     //can be used to resurrect downed characters rather than having
                                     //them permanently die after a battle.
     private playerCharacter [] Party = new playerCharacter[4]; //party of 4
-
-    public Map getMap(){
-        return currentMap;
-    }
-
-    public void setMap(Map toSet){
-        currentMap = toSet;
-    }
 
     public playerCharacter [] getParty(){
         return Party;

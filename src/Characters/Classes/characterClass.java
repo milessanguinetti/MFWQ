@@ -6,11 +6,12 @@ import Structures.orderedDLL;
 import Structures.orderedDLLNode;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/21/15.
  */
-public abstract class characterClass implements Data {
+public abstract class characterClass implements Data, Serializable {
     private String className; //the name of the class
     protected int jlevel = 1;
     private int jexp = 0; //job experience and job experience need to reach next level.

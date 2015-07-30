@@ -1,11 +1,13 @@
 package Characters.Properties;
 
+import java.io.Serializable;
+
 /**
  * Created by Miles "Come on and" Slamguinetti on 3/20/15.
  */
 //a property is essentially an element, like 'fire' or 'holy.'
 //some properties take more or less damage from others.
-public abstract class Property {
+public abstract class Property implements Serializable{
     private String name;
 
     //default constructor

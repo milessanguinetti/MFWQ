@@ -1,6 +1,7 @@
 package Structures;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/2/15.
@@ -11,7 +12,7 @@ import java.io.PrintWriter;
  * be better implemented with public data members, but this approach would not
  * be object oriented.
  */
-public class Node {
+public class Node implements Serializable{
     protected Data Data; //reference to a piece of data;
     //data is an interface.
     protected Structure subStructure; //reference to the node's possible substructure;

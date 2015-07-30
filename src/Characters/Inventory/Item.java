@@ -6,11 +6,12 @@ import Structures.incrementableData;
 import javafx.scene.image.ImageView;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/22/15.
  */
-public abstract class Item implements incrementableData {
+public abstract class Item implements incrementableData, Serializable {
     protected String itemName;
     protected String Description;
     private int Quantity;

@@ -4,11 +4,12 @@ import Characters.combatEffect;
 import Structures.Data;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/22/15.
  */
-public abstract class Skill implements Data, combatEffect{
+public abstract class Skill implements Data, combatEffect, Serializable {
     protected String skillName;
     private String Description;
     int spCost;

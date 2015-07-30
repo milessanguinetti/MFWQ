@@ -1,6 +1,7 @@
 package Structures;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/2/15.
@@ -9,7 +10,7 @@ import java.io.PrintWriter;
  * of syntax. Due to the additional data member, some of this
  * data type's functions differ slightly.
  */
-public class dualStringData implements Data{
+public class dualStringData implements Data, Serializable{
     private String Name;
     private String Description;
 

@@ -3,12 +3,13 @@ package Characters.Inventory;
 import Characters.combatEffect;
 import Structures.*;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
  * Created by Miles Sanguinetti on 3/22/15.
  */
-public class Inventory {
+public class Inventory implements Serializable{
     private orderedDLL [] Items = new orderedDLL[5];
     //0 = consumables
     //1 = weapons

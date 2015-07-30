@@ -4,11 +4,12 @@ import Characters.gameCharacter;
 import Structures.Data;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 4/2/15.
  */
-public abstract class passiveSkill implements Data{
+public abstract class passiveSkill implements Data, Serializable{
     String skillName;
     String Description;
 

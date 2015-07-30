@@ -197,15 +197,14 @@ public class mainMenu {
     public void intToAction(int toConvert){
         intToButton(toConvert).setUnselected();
         if(toConvert == 0) {
-            currentGame.currentMap.enterFromOverworld();
-            currentGame.swapToMap(); //NEW GAME ACTION
+            currentGame.newPlayer(); //new game
         }
         else if(toConvert == 1)
-            return; //LOAD GAME ACTION
+            currentGame.loadPlayer(); //load game
         else if(toConvert == 2)
-            return; //options are not yet implemented
+            return; //options (NYI)
         else
-            System.exit(0);
+            System.exit(0); //exit
     }
 
     public Game getCurrentGame(){

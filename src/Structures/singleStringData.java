@@ -1,6 +1,7 @@
 package Structures;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/5/15.
@@ -8,7 +9,7 @@ import java.io.PrintWriter;
  * and features functions that easily interface it with the rest of
  * the program.
  */
-public class singleStringData implements Data {
+public class singleStringData implements Data, Serializable {
     private String Name;
 
     //default constructor

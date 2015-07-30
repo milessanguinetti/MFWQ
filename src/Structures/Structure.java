@@ -1,6 +1,7 @@
 package Structures;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/2/15.
@@ -9,7 +10,7 @@ import java.io.PrintWriter;
  * methods granted that these are not necessarily hingent on the data structure
  * in question assuming that you make use of the abstract retrieval method.
  */
-abstract public class Structure {
+abstract public class Structure implements Serializable{
     //display method
     abstract public void Display();
 

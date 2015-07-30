@@ -20,13 +20,13 @@ public class Nodachi extends Weapon {
     public Nodachi(){
         super("Blazing Nodachi",
                 "An unspeakably powerful weapon from a foreign land.",
-                100, "1h Melee", "Fire");
+                100, "1h Edged", "Fire");
     }
 
     public Nodachi(int Damage){
         super("Blazing Nodachi",
                 "An unspeakably powerful weapon from a foreign land.",
-                100 + Damage, "1h Melee", "Fire");
+                100 + Damage, "1h Edged", "Fire");
     }
 
     //combat effect methods

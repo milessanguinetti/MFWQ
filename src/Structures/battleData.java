@@ -9,12 +9,13 @@ import Profile.Game;
 import javafx.scene.media.Media;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 4/9/15.
  */
 //a class that represents an individual unit's turn in the midst of a battle.
-public class battleData implements Data {
+public class battleData implements Data, Serializable {
     private int attackerSpeed; //the attacker's speed; used for sorted insertion
     private gameCharacter Attacker; //the character whose turn this datum represents
     private int targetIndex; //index of the character being attacked (or healed, etc)
