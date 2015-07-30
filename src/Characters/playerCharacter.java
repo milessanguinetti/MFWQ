@@ -1,10 +1,7 @@
 package Characters;
 
 import Characters.Classes.characterClass;
-import Characters.Inventory.Accessory;
-import Characters.Inventory.Armor;
-import Characters.Inventory.Consumable;
-import Characters.Inventory.Weapon;
+import Characters.Inventory.*;
 import Characters.Properties.Neutral;
 import Characters.Skills.Flee;
 import Characters.Skills.Skill;
@@ -763,8 +760,7 @@ public class playerCharacter extends gameCharacter {
     //function for dropping loot at the end of a battle.
     //if a player character dies, they drop their equipment
     //so that it isn't lost.
-    public void Loot(){
-        System.out.println(Name + " dropped their equipment.");
+    public Item Loot(){
         if(!(Right == Left)){ //if this isn't a two-handed weapon
             if(Right != null)
                 Game.Player.Insert(Right); //add right to inventory
@@ -781,6 +777,7 @@ public class playerCharacter extends gameCharacter {
             Game.Player.Insert(Accessory1);
         if(Accessory2 != null)
             Game.Player.Insert(Accessory2);
+        return null;
     }
 
     @Override

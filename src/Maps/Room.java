@@ -2,10 +2,7 @@ package Maps;
 
 import Characters.Inventory.Item;
 import Characters.Monster;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -27,6 +24,7 @@ import java.util.Random;
  */
 public class Room extends Pane {
     private static ImageView playerIcon;
+    private static boolean playerInMotion = false;
     public static Map currentMap; //the name of the current map; having a static variable
     private int roomType = 0; //denotes the format of the room's tiles.
     private short [] Tiles;

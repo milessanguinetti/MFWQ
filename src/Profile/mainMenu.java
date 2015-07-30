@@ -52,8 +52,8 @@ public class mainMenu {
 
         menuContainer buttons = new menuContainer(newGame, loadGame, Options, Exit);
 
-        buttons.setTranslateX(310);
-        buttons.setTranslateY(300);
+        buttons.setTranslateX(475);
+        buttons.setTranslateY(400);
 
         contentRoot.getChildren().add(buttons);
 
@@ -92,7 +92,6 @@ public class mainMenu {
     public Scene getScene(){
         return scene;
     }
-
 
     public void setGame(Game currentgame){
         currentGame = currentgame;

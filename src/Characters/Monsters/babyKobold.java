@@ -1,6 +1,7 @@
 package Characters.Monsters;
 
 import Characters.Inventory.Consumables.Potion;
+import Characters.Inventory.Item;
 import Characters.Monster;
 import Characters.Properties.Neutral;
 import Characters.Skills.Monster.genericMonsterAttack;
@@ -20,12 +21,12 @@ public class babyKobold extends Monster{
     }
 
     @Override
-    public void Loot() {
+    public Item Loot() {
         Random Rand = new Random();
         if(Rand.nextInt(5) == 0) {
-            System.out.println("Baby Kobold dropped a potion!");
-            Game.Player.Insert(new Potion());
+            return new Potion();
         }
+        return null;
     }
 
     @Override

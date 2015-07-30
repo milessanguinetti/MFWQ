@@ -1,10 +1,12 @@
 package Structures;
 
+import Characters.Inventory.Item;
 import Characters.Skills.Skill;
 import Characters.Skills.fleeObject;
 import Characters.combatEffect;
 import Characters.gameCharacter;
 import Profile.Game;
+import javafx.scene.media.Media;
 
 import java.io.PrintWriter;
 
@@ -132,6 +134,11 @@ public class battleData implements Data {
                     }                          //longer the primary target.
                     try {
                         toCast.takeAction(Attacker, Defender);
+                        if(toCast instanceof Item)
+                            Game.battle.playMedia("basicattack");
+                        else
+                            Game.battle.playMedia("skill");
+                        Game.mainmenu.getCurrentGame().setDelay(1000);
                     }
                     catch(fleeObject Caught){
                         throw Caught; //if the "attacker" fled, throw the caught flee object

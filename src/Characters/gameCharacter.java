@@ -1,5 +1,6 @@
 package Characters;
 
+import Characters.Inventory.Item;
 import Characters.Properties.Property;
 import Characters.Skills.Passive.passiveSkill;
 import Characters.Status.Counter;
@@ -110,9 +111,11 @@ public abstract class gameCharacter extends Stats {
         if(toTake <= 0)
             toTake = 1; //damage is 1 minimum
         subtractHP(toTake); //take the damage
-        if(!isAlive())
+        if(!isAlive()) {
             Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
                     + toTake + " damage and was downed!");
+            Game.battle.playMedia("death");
+        }
         else
             Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
                     +toTake + " damage.");
@@ -153,7 +156,7 @@ public abstract class gameCharacter extends Stats {
     //function for dropping loot at the end of a battle.
     //if a player character dies, they drop their equipment
     //so that it isn't lost.
-    public abstract void Loot();
+    public abstract Item Loot();
 
     public abstract void applyAutoBuffs();
 

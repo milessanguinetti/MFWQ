@@ -4,7 +4,13 @@ import Characters.Inventory.Weapon;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Profile.Game;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 /**
@@ -66,5 +72,20 @@ public class koboldSlayingSword extends Weapon{
     @Override
     public void subtractStats(playerCharacter toSubtract) {
         toSubtract.incrementStat(0, -1);
+    }
+
+    @Override
+    public ImageView getIcon(){
+        try(InputStream imginput = Files.newInputStream(Paths.get("resources/thumbnails/placeholder.png"))){
+            ImageView Icon = new ImageView(new Image(imginput));
+            Icon.setFitWidth(96);
+            Icon.setFitHeight(96); //preserve aspect ratio
+            return Icon;
+        }
+
+        catch (IOException e){
+            System.out.println("Error loading" + itemName + " icon.");
+        }
+        return null;
     }
 }

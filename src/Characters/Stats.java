@@ -3,7 +3,7 @@ package Characters;
 /**
  * Created by Miles Sanguinetti on 3/17/15.
  */
-public class Stats {
+public class Stats extends spritePane{
     protected int HP; //health parameter
     protected int MHP; //maximum health parameter
     protected int SP; //skill points parameter

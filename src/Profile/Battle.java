@@ -1,5 +1,6 @@
 package Profile;
 
+import Characters.Inventory.Item;
 import Characters.Monster;
 import Characters.Skills.fleeObject;
 import Characters.gameCharacter;
@@ -9,6 +10,8 @@ import Structures.battleData;
 import Structures.orderedLLL;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 
@@ -27,11 +30,13 @@ public class Battle {
     private Scene scene;
     private battleData BTemp;
     private int State = 0;
+    MediaPlayer mediaPlayer;
     /*
     The current state of the battle; values are as follows:
     0-3 = currently filling a player's commands at index n
     4 = done filling player commands and ready to fill AI commands
     5 = currently executing extant combat commands.
+    6 = wrapping up the battle; one more command will return to the map
      */
     private gameCharacter toRoute = null; //a variable to route input to.
 
@@ -48,43 +53,55 @@ public class Battle {
         contentRoot.getChildren().add(Interface);
 
         scene.setOnKeyReleased(event -> {
-            if (toRoute != null) { //if we're currently storing user commands from input
-                toRoute.handleInput(event); //let the character handle the input
-                fillBattleData(); //and call the fillbattledata method to see what to do next.
-            } else { //otherwise, we're currently mid-turn
-                if (turnOrder.Peek() == null) { //if we've executed all commands for this given turn...
-                    for (int i = 0; i < 4; ++i) { //end turn for all extant combatants
-                        if (playerParty[i] != null)
-                            playerParty[i].endTurn();
-                        if (enemyParty[i] != null)
-                            enemyParty[i].endTurn();
-                        if (playerMinions[i] != null)
-                            playerMinions[i].endTurn();
-                        if (enemyMinions[i] != null)
-                            enemyMinions[i].endTurn();
-                        if (playerVictory() || enemyVictory())
-                            endBattle();
+            if(Game.mainmenu.getCurrentGame().isDelayOver()) {
+                if(State == 6){
+                    if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
+                        Game.mainmenu.getCurrentGame().swapToMainMenu();
                     }
-                    State = 0; //and if there aren't, we reset state to 0.
-                    for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
-                        if (playerParty[i] != null) {
-                            if (playerParty[i].isAlive()) {
-                                BTemp = playerParty[i].getAndWipeBattleData(true); //set BTemp to their data...
-                                toRoute = playerParty[i]; //route user input to them...
-                                playerParty[i].initializeCombatData(); //and begin initializing their combat data
-                                break;
+                    else
+                        Game.mainmenu.getCurrentGame().swapToMap();
+                    return; //nothing else to be done.
+                }
+                if (toRoute != null) { //if we're currently storing user commands from input
+                    toRoute.handleInput(event); //let the character handle the input
+                    fillBattleData(); //and call the fillbattledata method to see what to do next.
+                } else { //otherwise, we're currently mid-turn
+                    if (turnOrder.Peek() == null) { //if we've executed all commands for this given turn...
+                        for (int i = 0; i < 4; ++i) { //end turn for all extant combatants
+                            if (playerParty[i] != null)
+                                playerParty[i].endTurn();
+                            if (enemyParty[i] != null)
+                                enemyParty[i].endTurn();
+                            if (playerMinions[i] != null)
+                                playerMinions[i].endTurn();
+                            if (enemyMinions[i] != null)
+                                enemyMinions[i].endTurn();
+                            if (playerVictory() || enemyVictory()) {
+                                endBattle();
                             }
                         }
-                        ++State; //incrementing the state as we go to ensure that we know what char we're on.
-                    }
-                } else {
-                    if (executeTurn()) //so we continue executing the turn
-                        endBattle();
-                    while (turnOrder.Peek() != null) {
-                        if (((battleData) turnOrder.Peek().returnData()).attackerIsDead())
-                            turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
-                        else
-                            break;
+                        State = 0; //and if there aren't, we reset state to 0.
+                        for (int i = 0; i < 4; ++i) { //find a new character that needs their battle data filled...
+                            if (playerParty[i] != null) {
+                                if (playerParty[i].isAlive()) {
+                                    BTemp = playerParty[i].getAndWipeBattleData(true); //set BTemp to their data...
+                                    toRoute = playerParty[i]; //route user input to them...
+                                    playerParty[i].initializeCombatData(); //and begin initializing their combat data
+                                    break;
+                                }
+                            }
+                            ++State; //incrementing the state as we go to ensure that we know what char we're on.
+                        }
+                    } else {
+                        if (executeTurn()) { //so we continue executing the turn
+                            endBattle();
+                        }
+                        while (turnOrder.Peek() != null) {
+                            if (((battleData) turnOrder.Peek().returnData()).attackerIsDead())
+                                turnOrder.Pop(); //ensure that the next data entry is not one in which the attacker is dead.
+                            else
+                                break;
+                        }
                     }
                 }
             }
@@ -128,7 +145,15 @@ public class Battle {
     public void endBattle(){
         int totalexp = 0;
         int totaljexp = 0; //total values for exp and jexp.
-        for (int i = 0; i < 4; ++i) { //for the entirety of the user's party
+        Item [] Drops = new Item[4]; //array for enemy loot
+        for (int i = 0; i < 4; ++i) { //for the entirety of both parties
+            if (enemyParty[i] != null) {
+                if (!enemyParty[i].isAlive()) {
+                    Drops[i] = enemyParty[i].Loot(); //loot all enemies
+                    totalexp += ((Monster) enemyParty[i]).getExp(); //and gain exp
+                    totaljexp += ((Monster) enemyParty[i]).getJexp();
+                }
+            }
             if (playerParty[i] != null) { //if a character exists
                 playerParty[i].clearStatus(); //clear their status.
                 if (!playerParty[i].isAlive()) { //if they are dead
@@ -136,16 +161,11 @@ public class Battle {
                     Game.Player.killCharacter(i); //and kill them
                 }
             }
-            if (enemyParty[i] != null) {
-                if (!enemyParty[i].isAlive()) {
-                    enemyParty[i].Loot(); //loot all enemies as well.
-                    totalexp += ((Monster) enemyParty[i]).getExp(); //and gain exp
-                    totaljexp += ((Monster) enemyParty[i]).getJexp();
-                }
-            }
             playerMinions[i] = null; //clear minions
             enemyMinions[i] = null;
         }
+
+        Game.notification.lootNotification(Drops);
 
         Interface.printLeftAtNextAvailable("Your party gained " + totalexp + " experience and " + totaljexp +
                 " job experience.");
@@ -157,11 +177,7 @@ public class Battle {
                 }
             }
         }
-        if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
-            Game.mainmenu.getCurrentGame().swapToMainMenu();
-        }
-        else
-            Game.mainmenu.getCurrentGame().swapToMap();
+        State = 6;
     }
 
     //Executes a turn that has all of its commands decided upon by the combatants
@@ -503,5 +519,12 @@ public class Battle {
                 return;
             }
         }
+    }
+
+    public void playMedia(String toPlay){
+        mediaPlayer = new MediaPlayer(
+                new Media((getClass().getResource("soundeffects/" + toPlay + ".mp3")).toString()));
+        mediaPlayer.setCycleCount(1);
+        mediaPlayer.play();
     }
 }

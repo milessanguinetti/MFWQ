@@ -3,6 +3,8 @@ package Characters.Inventory;
 import Characters.gameCharacter;
 import Structures.Data;
 import Structures.incrementableData;
+import javafx.scene.image.ImageView;
+
 import java.io.PrintWriter;
 
 /**
@@ -29,12 +31,19 @@ public abstract class Item implements incrementableData {
         Quantity = 1;
     }
 
+    //returns an imageview corresponding to the item in question
+    public abstract ImageView getIcon();
+
     public boolean Use(){
         //INTERFACING METHOD FOR CHARACTERS
         return true;
     }
 
     public abstract boolean Use(gameCharacter toUseOn);
+
+    public String getDescription(){
+        return Description;
+    }
 
     @Override
     public int Increment(int toIncrement) {

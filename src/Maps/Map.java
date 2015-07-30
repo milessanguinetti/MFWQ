@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
  * Created by Miles Sanguinetti on 5/20/2015.
  */
 public abstract class Map extends Tileset{
+    Pane sceneRoot = new Pane();
     Pane contentRoot = new Pane();
     protected int xBound, yBound; //the x and y bounds of the map in question
     protected Room [] Rooms; //array of rooms contained within the map
@@ -19,15 +20,17 @@ public abstract class Map extends Tileset{
     protected int [] connectionRooms = new int[]{-1, -1, -1, -1}; //rooms that lead in from connections
     private int currentRoom;
     private int encounterRate; //rate at which enemies are encountered; expressed as a percentage integer
-    protected static int Difficulty; //
+    protected static int Difficulty;
     private Scene scene;
 
     public Map(){}
 
     public Map(String name, int xbound, int ybound, int encounterrate, Map North, Map East, Map South, Map West){
         encounterRate = encounterrate;
-        contentRoot.setPrefSize(1280, 800);
-        scene = new Scene(contentRoot);
+        sceneRoot.setPrefSize(1280, 800);
+        sceneRoot.getChildren().add(contentRoot);
+        sceneRoot.getChildren().add(Game.notification);
+        scene = new Scene(sceneRoot);
         Name += name;
         xBound = xbound;
         yBound = ybound;
@@ -45,11 +48,12 @@ public abstract class Map extends Tileset{
 
         //key released listening code
         scene.setOnKeyReleased(event1 -> {
+            if(Game.notification.handleInput())
+                return;
             //ENTER CASE
             if (event1.getCode() == KeyCode.ENTER) {
                 switch (Rooms[currentRoom].Interact()) {
                     case 0: { //just break; nothing happened
-                        System.out.println("lol bro u cant even interact w/ that XD");
                         break;
                     }
                     case 1: { //exit to north
@@ -121,8 +125,7 @@ public abstract class Map extends Tileset{
                     }
                     case 5: { //treasure case
                         if (Rooms[currentRoom].getLoot() != null) {
-                            Game.Player.Insert(Rooms[currentRoom].getLoot()); //add in the item
-                            //IMPLEMENT NOTIFICATION LATER
+                            Game.notification.lootNotification(Rooms[currentRoom].getLoot()); //add in the item
                         }
                         break;
                     }
@@ -173,7 +176,7 @@ public abstract class Map extends Tileset{
                 //LEFT CASE
                 else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                     if (Rooms[currentRoom].Move(4)) {
-                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        Game.mainmenu.getCurrentGame().setDelay(1000);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle();

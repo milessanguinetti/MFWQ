@@ -1,5 +1,6 @@
 package Characters.Monsters;
 
+import Characters.Inventory.Item;
 import Characters.Monster;
 import Characters.Properties.Neutral;
 import Characters.Skills.Monster.selfDestruct;
@@ -22,8 +23,9 @@ public class sphaeraeEversioSui extends Monster{
     }
 
     @Override
-    public void Loot() {
-        //this is a gene-splicer minion and does not drop loot
+    public Item Loot() {
+        return null;
+        //this is a homunculus minion and does not drop loot
     }
 
     @Override

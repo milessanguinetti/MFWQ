@@ -1,6 +1,7 @@
 package Characters.Monsters;
 
 import Characters.Inventory.Consumables.Potion;
+import Characters.Inventory.Item;
 import Characters.Monster;
 import Characters.Properties.Undead;
 import Characters.Skills.Monster.genericElementalAttack;
@@ -29,12 +30,12 @@ public class Zombie extends Monster {
     }
 
     @Override
-    public void Loot() {
+    public Item Loot() {
         Random Rand = new Random();
-        if(Rand.nextInt(3) == 0) {
-            System.out.println("Zombie dropped a potion!");
-            Game.Player.Insert(new Potion());
+        if(Rand.nextInt(5) == 0) {
+            return new Potion();
         }
+        return null;
     }
 
     @Override

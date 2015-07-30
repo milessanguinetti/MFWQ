@@ -1,5 +1,6 @@
 package Characters.Monsters;
 
+import Characters.Inventory.Item;
 import Characters.Monster;
 import Characters.Properties.Fire;
 import Characters.Properties.Organic;
@@ -40,7 +41,8 @@ public class basalHomunculus extends Monster{
     }
 
     @Override
-    public void Loot() {
+    public Item Loot() {
+        return null;
         //this is a homunculus minion and does not drop loot
     }
 
