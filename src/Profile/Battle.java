@@ -14,6 +14,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
+
 
 /**
  * Created by Miles Sanguinetti on 4/9/15.
@@ -28,9 +30,10 @@ public class Battle {
     private orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
     private battleUI Interface = new battleUI();
     private Scene scene;
+    private Pane contentRoot;
     private battleData BTemp;
     private int State = 0;
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     /*
     The current state of the battle; values are as follows:
     0-3 = currently filling a player's commands at index n
@@ -41,7 +44,7 @@ public class Battle {
     private gameCharacter toRoute = null; //a variable to route input to.
 
     public Battle() {
-        Pane contentRoot = new Pane();
+        contentRoot = new Pane();
         contentRoot.setPrefSize(1280, 800);
         scene = new Scene(contentRoot);
 
@@ -55,6 +58,7 @@ public class Battle {
         scene.setOnKeyReleased(event -> {
             if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 if(State == 6){
+                    endBattle();
                     if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
                         Game.mainmenu.getCurrentGame().swapToMainMenu();
                     }
@@ -77,7 +81,8 @@ public class Battle {
                             if (enemyMinions[i] != null)
                                 enemyMinions[i].endTurn();
                             if (playerVictory() || enemyVictory()) {
-                                endBattle();
+                                State = 6;
+                                return;
                             }
                         }
                         State = 0; //and if there aren't, we reset state to 0.
@@ -92,9 +97,20 @@ public class Battle {
                             }
                             ++State; //incrementing the state as we go to ensure that we know what char we're on.
                         }
-                    } else {
+                    } else { //otherwise, we're still displaying attacks to the user.
+                        for (int i = 0; i < 4; ++i) { //set all characters to waiting or dead prior to attack animations
+                            if(playerParty[i] != null)
+                                playerParty[i].updateAnimation();
+                            if(playerMinions[i] != null)
+                                playerMinions[i].updateAnimation();
+                            if(enemyParty[i] != null)
+                                enemyParty[i].updateAnimation();
+                            if(enemyMinions[i] != null)
+                                enemyMinions[i].updateAnimation();
+                        }
                         if (executeTurn()) { //so we continue executing the turn
-                            endBattle();
+                            State = 6;
+                            return;
                         }
                         while (turnOrder.Peek() != null) {
                             if (((battleData) turnOrder.Peek().returnData()).attackerIsDead())
@@ -119,10 +135,22 @@ public class Battle {
     //bool signifies whether or not the player won or escaped.
     public void commenceBattle(gameCharacter[] Allies, gameCharacter[] Enemies) {
         turnOrder.removeAll(); //nullifies any extant turn order data from previous battles
+        contentRoot.getChildren().add(Game.currentMap); //add the current map's background image to the battle
         for (int i = 0; i < 4; ++i) {
-            if (Allies[i] != null)
+            if (Allies[i] != null) {
+                Allies[i].setTranslateY(450 - i*136);
+                Allies[i].setTranslateX(200);
+                Allies[i].Flip(true); //flip this ally's sprite so it faces the right way.
+                                      //this isn't necessary for enemies, as they're innately not flipped.
+                Allies[i].Animate(true);
+                contentRoot.getChildren().add(Allies[i]);
                 Allies[i].applyAutoBuffs(); //initialize stats
+            }
             if (Enemies[i] != null) {
+                Enemies[i].setTranslateY(450 - i*136);
+                Enemies[i].setTranslateX(984);
+                Enemies[i].Animate(true);
+                contentRoot.getChildren().add(Enemies[i]);
                 Enemies[i].applyAutoBuffs();
             }
         }
@@ -148,6 +176,8 @@ public class Battle {
         Item [] Drops = new Item[4]; //array for enemy loot
         for (int i = 0; i < 4; ++i) { //for the entirety of both parties
             if (enemyParty[i] != null) {
+                contentRoot.getChildren().remove(enemyParty[i]); //remove this unit from the scene
+                enemyParty[i].Animate(false); //stop this unit's animation
                 if (!enemyParty[i].isAlive()) {
                     Drops[i] = enemyParty[i].Loot(); //loot all enemies
                     totalexp += ((Monster) enemyParty[i]).getExp(); //and gain exp
@@ -155,15 +185,26 @@ public class Battle {
                 }
             }
             if (playerParty[i] != null) { //if a character exists
+                contentRoot.getChildren().remove(playerParty[i]);
+                playerParty[i].Animate(false); //stop this unit's animation
                 playerParty[i].clearStatus(); //clear their status.
                 if (!playerParty[i].isAlive()) { //if they are dead
                     playerParty[i].Loot(); //get their equipment
                     Game.Player.killCharacter(i); //and kill them
                 }
             }
-            playerMinions[i] = null; //clear minions
-            enemyMinions[i] = null;
+            if(playerMinions[i] != null) {
+                contentRoot.getChildren().remove(playerMinions[i]);
+                playerMinions[i].Animate(false); //stop this unit's animation
+                playerMinions[i] = null; //clear player minions
+            }
+            if(enemyMinions[i] != null) {
+                contentRoot.getChildren().remove(enemyMinions[i]);
+                enemyMinions[i].Animate(false); //stop this unit's animation
+                enemyMinions[i] = null; //clear enemy minions
+            }
         }
+        contentRoot.getChildren().remove(Game.currentMap); //remove the current map's background from the pane
 
         Game.notification.lootNotification(Drops);
 
@@ -226,7 +267,7 @@ public class Battle {
             }
             toRoute = null;
             if(executeTurn()){
-                endBattle();
+                State = 6;
             }
         }
     }
@@ -474,16 +515,23 @@ public class Battle {
             System.out.print("A ");
             toAdd.printName();
             System.out.println(" joined your party!");
+            toAdd.Flip(true); //flip the minion's sprite so it faces the right way
+            toAdd.setTranslateX(296); //set translate x to a value suitable for the player's side of the field
         }
         else {
             Minions = enemyMinions; //set minions to the appropriate side.
             System.out.print("A ");
             toAdd.printName();
             System.out.println(" joined the enemy!");
+            toAdd.Flip(false); //(possibly) flip the minion's sprite so it faces the right way
+            toAdd.setTranslateX(888); //set translate x to a value suitable for the enemy's side of the field
         }
         for(int i = 0; i < 4; ++i){
             if(Minions[i] == null){ //if an index is empty
                 Minions[i] = toAdd; //add the minion into that index
+                toAdd.setTranslateY(450 - i*136); //adjust translate y accordingly
+                toAdd.Animate(true);
+                contentRoot.getChildren().add(toAdd);
                 return; //and return; we're done.
             }
         }//if we get here, all indices are full.
@@ -497,24 +545,35 @@ public class Battle {
         toAdd.printName();
         System.out.println(".");
         Minions[weakest] = toAdd; //replace weakest with toadd.
+        toAdd.setTranslateY(450 - weakest*136); //adjust translate y accordingly
+        toAdd.Animate(true);
+        contentRoot.getChildren().add(toAdd);
     }
 
     //removes a passed combatant from the fight.
     public void nullCombatant(gameCharacter toRemove){
+        if(toRemove == null)
+            return;
         for(int i = 0; i < 4; ++i){
             if(toRemove == playerMinions[i]) {
+                contentRoot.getChildren().remove(playerMinions[i]);
+                playerMinions[i].Animate(false);
                 playerMinions[i] = null;
                 return;
             }
             if(toRemove == playerParty[i]) {
+                contentRoot.getChildren().remove(playerParty[i]);
+                playerParty[i].Animate(false);
                 playerParty[i] = null;
                 return;
             }
             if(toRemove == enemyParty[i]) {
+                contentRoot.getChildren().remove(enemyParty[i]);
                 enemyParty[i] = null;
                 return;
             }
             if(toRemove == enemyMinions[i]) {
+                contentRoot.getChildren().remove(enemyMinions[i]);
                 enemyMinions[i] = null;
                 return;
             }

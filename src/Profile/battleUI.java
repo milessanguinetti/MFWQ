@@ -11,11 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.io.Serializable;
+
 
 /**
  * Created by Miles Sanguinetti on 5/21/15.
  */
-public class battleUI extends Pane{
+public class battleUI extends Pane {
     static private int Selection = 0;
     static private battleUIButton [] Left;
     static private battleUILabel [] Right;

@@ -5,15 +5,22 @@ import Characters.Inventory.Weapons.*;
 import Characters.Monster;
 import Profile.Game;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created by Miles Sanguinetti on 5/20/2015.
  */
 public abstract class Map extends Tileset{
-    Pane sceneRoot = new Pane();
-    Pane contentRoot = new Pane();
+    private Pane sceneRoot = new Pane();
+    private Pane contentRoot = new Pane();
     protected int xBound, yBound; //the x and y bounds of the map in question
     protected Room [] Rooms; //array of rooms contained within the map
     private Map [] Connections = new Map[4]; //connections
@@ -32,6 +39,15 @@ public abstract class Map extends Tileset{
         sceneRoot.getChildren().add(Game.notification);
         scene = new Scene(sceneRoot);
         Name += name;
+        try(InputStream imginput = Files.newInputStream(Paths.get(Name + "background.jpg"))){
+            setImage(new Image(imginput)); //set battle background image to this
+            setFitWidth(1280);             //imageview for calls from battle object.
+            setFitHeight(600);
+        }
+
+        catch (IOException e){
+            System.out.println("Error loading " + Name + "'s battle background.");
+        }
         xBound = xbound;
         yBound = ybound;
         Rooms = new Room[xBound * yBound]; //allocate rooms
@@ -429,7 +445,7 @@ public abstract class Map extends Tileset{
         contentRoot.getChildren().add(Rooms[currentRoom]); //add current room's graphics.
     }
 
-    public Scene getScene(){
+    public Scene getMapScene(){
         return scene;
     }
 

@@ -13,13 +13,14 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
  * Created by Miles on 7/29/2015.
  */
-public class Notification extends StackPane {
+public class Notification extends StackPane implements Serializable{
     private static Text Title = new Text();
     private static Text Description = new Text();
     private lootContainer lootcontainer;

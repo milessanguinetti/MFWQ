@@ -1,5 +1,6 @@
 package Characters.Skills.secondClass;
 
+import Characters.Monsters.basalHomunculus;
 import Characters.Monsters.caperEmissarius;
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
@@ -39,9 +40,9 @@ public class geneSplicerCreateHomunculus extends Skill{
         return toCheck.getSP() >= 50;
     }
 
-    @Override //adds a caper emissarius minion that defends whoever this spell was cast on.
+    @Override //adds a basal homunculus minion that defends whoever this spell was cast on.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Game.battle.addMinion(true,
-                new caperEmissarius(Caster.getTempDex(), Defender));
+                new basalHomunculus(Caster));
     }
 }

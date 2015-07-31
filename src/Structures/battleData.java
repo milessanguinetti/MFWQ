@@ -107,6 +107,7 @@ public class battleData implements Data, Serializable {
     //LLL structure in the battle class. returns true if the attacker was dead.
     public boolean executeCombat(gameCharacter Defender) throws fleeObject{
         if(Attacker.isAlive()){
+            Attacker.attackAnimation(); //run the attacker's attack animation.
             if(targetIndex == 0) { //if the character is targeting themselves
                 //display a simple message
                 Game.battle.getInterface().printLeft(Attacker.getName() +
@@ -146,6 +147,7 @@ public class battleData implements Data, Serializable {
                     }
                 }
             }
+
             return false; //if we got here, the attacker is alive.
         }
         return true; //if the attacker is dead, return false.

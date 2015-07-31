@@ -22,7 +22,6 @@ import java.util.Random;
 
 //abstract character base class--derived from stats
 public abstract class gameCharacter extends Stats {
-    protected String Name; //character name
     protected passiveSkill currentPassive; //the character's passive skill.
     protected Property charProperty; //the character's property
     protected Property tempProperty; //temporary battle property based on buffs
@@ -110,11 +109,11 @@ public abstract class gameCharacter extends Stats {
         toTake -= tempArmor; //subtract armor from damage value
         if(toTake <= 0)
             toTake = 1; //damage is 1 minimum
+        setGettingHit(); //set the char's sprite to getting hit.
         subtractHP(toTake); //take the damage
         if(!isAlive()) {
             Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
                     + toTake + " damage and was downed!");
-            Game.battle.playMedia("death");
         }
         else
             Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
@@ -232,6 +231,7 @@ public abstract class gameCharacter extends Stats {
             if(clearStatus()) //clear status if the character is dead.
                 updateStatTemps(); //if we removed any stat changes, update temps.
         }
+        updateAnimation();
     }
 
     //update the character's temporary stat values
@@ -240,52 +240,15 @@ public abstract class gameCharacter extends Stats {
         statChangeList.changeStats(this);
     }
 
-    //prints the character's name and stats.
-    public void printStats(){
-        System.out.print("Name: ");
-        System.out.println(Name);
-        System.out.print("Property");
-        System.out.println(charProperty.getName());
-        System.out.print("HP: " + HP + "/");
-        System.out.println(MHP);
-        System.out.print("SP: " + SP + "/");
-        System.out.println(MSP);
-        System.out.print("Vitality: ");
-        System.out.println(Vit);
-        System.out.print("Armor: ");
-        System.out.println(Armor);
-        System.out.print("Strength: ");
-        System.out.println(Str);
-        System.out.print("Dexterity: ");
-        System.out.println(Dex);
-        System.out.print("Intelligence: ");
-        System.out.println(Int);
-        System.out.print("Faith: ");
-        System.out.println(Fth);
+    public void updateAnimation(){
+        if(isAlive())
+            setWaiting();
+        else
+            setDead();
     }
 
-    //prints the character's name and TEMPORARY stats
-    public void printTempStats(){
-        System.out.print("Name: ");
-        System.out.println(Name);
-        System.out.print("Property");
-        System.out.println(tempProperty.getName());
-        System.out.print("HP: " + HP + "/");
-        System.out.println(MHP);
-        System.out.print("SP: " + SP + "/");
-        System.out.println(MSP);
-        System.out.print("Vitality: ");
-        System.out.println(tempVit);
-        System.out.print("Armor: ");
-        System.out.println(tempArmor);
-        System.out.print("Strength: ");
-        System.out.println(tempStr);
-        System.out.print("Dexterity: ");
-        System.out.println(tempDex);
-        System.out.print("Intelligence: ");
-        System.out.println(tempInt);
-        System.out.print("Faith: ");
-        System.out.println(tempFth);
+    public void attackAnimation(){
+        setAttacking();
     }
 
     abstract public boolean hasTwoHandedWeapon();

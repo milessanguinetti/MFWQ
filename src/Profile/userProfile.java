@@ -2,9 +2,6 @@ package Profile;
 
 import Characters.Inventory.Inventory;
 import Characters.playerCharacter;
-import Maps.Map;
-
-import java.io.Serializable;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.

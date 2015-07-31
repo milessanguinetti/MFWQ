@@ -64,8 +64,12 @@ public class Game {
             FileInputStream fileInput = new FileInputStream("MFWQsave.dat");
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
             Player = (userProfile) objectInput.readObject(); //set player to the loaded object cast as a userprofile
+            objectInput.close();
         }
-        catch (Exception e){
+        catch (IOException e){
+            System.err.println("Load unsuccessful; "+ e.getMessage() + " not serializable");
+        }
+        catch (ClassNotFoundException e){
             System.err.println("Load unsuccessful.");
         }
 
@@ -81,11 +85,9 @@ public class Game {
             ObjectOutputStream ObjectOutput = new ObjectOutputStream(FileOutput);
             ObjectOutput.writeObject(Player); //write the game out to file
             ObjectOutput.close(); //close the stream
-
-
         }
-        catch (Exception e) {
-            System.err.println ("Save unsuccessful.");
+        catch (IOException e) {
+            System.err.println ("Save unsuccessful; "+ e.getMessage() + " not serializable");
         }
     }
 
@@ -110,7 +112,7 @@ public class Game {
 
     public void swapToMap(){
         if(currentMap != null){
-            primaryStage.setScene(currentMap.getScene());
+            primaryStage.setScene(currentMap.getMapScene());
             if(mediaPlayer != null)
                 mediaPlayer.stop();
             mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/maptheme.mp3")).toString()));

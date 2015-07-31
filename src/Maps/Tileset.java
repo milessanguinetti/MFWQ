@@ -3,8 +3,10 @@ package Maps;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -12,7 +14,7 @@ import java.util.Random;
 /**
  * Created by Miles on 6/11/2015.
  */
-public class Tileset {
+public class Tileset extends ImageView {
     String Name = "resources/images/"; //the name of the tileset in question
     Random Rand = new Random(); //RNG for construction of fairly random
 
@@ -150,6 +152,5 @@ public class Tileset {
             System.out.println("Error loading '" + Name + addendum + "' image.");
             return null;
         }
-
     }
 }
