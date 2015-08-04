@@ -1,13 +1,17 @@
 package Characters;
 
-import javafx.animation.Animation;
-import javafx.animation.Interpolator;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +24,9 @@ import java.nio.file.Paths;
  */
 public class spritePane extends StackPane implements Serializable{
     protected String Name; //character name; stored here for access to spritesheet images.
+    private transient Text damageText;
     private transient characterSpriteAnimation charAnimation = null;
+    private transient ColorAdjust colorAdjust;
 
     public spritePane(){
         setAlignment(Pos.CENTER); //center any added children.
@@ -28,12 +34,38 @@ public class spritePane extends StackPane implements Serializable{
             ImageView thisSprite = new ImageView(new Image(imginput));
             thisSprite.setViewport(new Rectangle2D(0, 0, 96, 96)); //initalize viewport to starting parameters
             charAnimation = new characterSpriteAnimation(thisSprite); //animate sprite
+            colorAdjust = new ColorAdjust();
+            thisSprite.setEffect(colorAdjust);
             getChildren().add(thisSprite); //add sprite to the stackpane.
         }
 
         catch (IOException e){
             System.out.println("Error loading " + Name + "'s sprite.");
         }
+    }
+
+    public void animateDamage(int toTake){
+        getChildren().remove(damageText);
+        damageText = new Text();
+        damageText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 40));
+        damageText.setOpacity(1);
+        final Timeline timeline = new Timeline();
+        timeline.setCycleCount(1);
+        final KeyValue kv1 = new KeyValue(damageText.translateYProperty(), -100, Interpolator.EASE_OUT); //y property
+        final KeyValue kv2 = new KeyValue(damageText.translateXProperty(), 10, Interpolator.EASE_IN); //x property
+        final KeyValue kv3 = new KeyValue(damageText.opacityProperty(), 0, Interpolator.EASE_IN); //opacity
+        final KeyFrame kf = new KeyFrame(Duration.millis(3000), kv1, kv2, kv3);
+        timeline.getKeyFrames().add(kf);
+        if(toTake < 0){ //healing case
+            damageText.setText("" + toTake*-1);
+            damageText.setFill(Color.GREEN);
+        }
+        else{ //damage case
+            damageText.setText("" + toTake);
+            damageText.setFill(Color.RED);
+        }
+        getChildren().add(damageText);
+        timeline.play();
     }
 
     protected void setWaiting(){
@@ -117,10 +149,12 @@ public class spritePane extends StackPane implements Serializable{
 
     //wrapper function that passes a boolean to char animation for sprite flipping purposes
     public void Flip(boolean toFlip){
-        if(charAnimation == null){
+        if(charAnimation == null){ //if we're loading a save and consequently missing our transient vars
+            colorAdjust = new ColorAdjust();
             setAlignment(Pos.CENTER); //center any added children.
             try(InputStream imginput = Files.newInputStream(Paths.get("resources/sprites/testsprites.png"))){
                 ImageView thisSprite = new ImageView(new Image(imginput));
+                thisSprite.setEffect(colorAdjust);
                 thisSprite.setViewport(new Rectangle2D(0, 0, 96, 96)); //initalize viewport to starting parameters
                 charAnimation = new characterSpriteAnimation(thisSprite); //animate sprite
                 getChildren().add(thisSprite); //add sprite to the stackpane.
@@ -131,5 +165,16 @@ public class spritePane extends StackPane implements Serializable{
             }
         }
         charAnimation.Flip(toFlip);
+    }
+
+    public void setPlain(){
+        colorAdjust.setBrightness(0);
+    }
+
+    public void setTargeted(){
+        colorAdjust.setBrightness(-.4);
+    }
+    public void setTurn(){
+        colorAdjust.setBrightness(.4);
     }
 }

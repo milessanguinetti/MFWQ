@@ -3,9 +3,11 @@ package Maps;
 import Characters.Inventory.Item;
 import Characters.Monster;
 import javafx.animation.PathTransition;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -22,7 +24,7 @@ import java.util.Random;
 /**
  * Created by Miles Sanguinetti on 5/20/2015.
  */
-public class Room extends Pane {
+public class Room extends StackPane {
     private static ImageView playerIcon;
     private static boolean playerInMotion = false;
     public static Map currentMap; //the name of the current map; having a static variable
@@ -39,19 +41,11 @@ public class Room extends Pane {
     //m is the player's main coordinate in the array of tiles; s denotes the space within that tile; f is their facing
 
     Room(){
-        setPrefSize(1280, 800);
-        //setTranslateY(600); TBD IF WE NEED THIS
-        Rectangle Background = new Rectangle(1280, 800); //establish a mostly-translucent shaded background
-        Background.setFill(Color.BLACK);
-        getChildren().add(Background);
+        setAlignment(Pos.CENTER);
     }
 
     Room(Monster [] boss){
-        setPrefSize(1280, 800);
-        //setTranslateY(600); TBD IF WE NEED THIS
-        Rectangle Background = new Rectangle(1280, 800); //establish a mostly-translucent shaded background
-        Background.setFill(Color.BLACK);
-        getChildren().add(Background);
+        setAlignment(Pos.CENTER);
         Boss = new Monster[4];
         for(int i = 0; i < 4; ++i){
             Boss[i] = boss[i];
@@ -59,11 +53,7 @@ public class Room extends Pane {
     }
 
     Room(Item loot){
-        setPrefSize(1280, 800);
-        //setTranslateY(600); TBD IF WE NEED THIS
-        Rectangle Background = new Rectangle(1280, 800); //establish a mostly-translucent shaded background
-        Background.setFill(Color.BLACK);
-        getChildren().add(Background);
+        setAlignment(Pos.CENTER);
         Loot = loot;
     }
 
@@ -91,8 +81,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for northern entrance
                 if(Tiles[i] == 5){
                     m = i;
-                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(240 + 96 * (m%9));
+                    playerIcon.setTranslateY(-384 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(-384 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -103,8 +93,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for eastern entrance
                 if(Tiles[i] == 6){
                     m = i;
-                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(240 + 96 * (m%9));
+                    playerIcon.setTranslateY(-384 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(-384 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -115,8 +105,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for southern entrance
                 if(Tiles[i] == 7){
                     m = i;
-                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(240 + 96 * (m%9));
+                    playerIcon.setTranslateY(-384 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(-384 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -127,8 +117,8 @@ public class Room extends Pane {
             for(int i = 0; i < 81; ++i){ //search map for western entrance
                 if(Tiles[i] == 8){
                     m = i;
-                    playerIcon.setTranslateY(-16 + 96 * (m/9)); //add player icon @ this posiiton
-                    playerIcon.setTranslateX(240 + 96 * (m%9));
+                    playerIcon.setTranslateY(-384 + 96 * (m/9)); //add player icon @ this posiiton
+                    playerIcon.setTranslateX(-384 + 96 * (m%9));
                     getChildren().add(playerIcon);
                     break;
                 }
@@ -148,8 +138,8 @@ public class Room extends Pane {
             if(f == 3 && s == 2 || f == 4 && s == 6 || f == 1 && s == 8 || f == 2 && s == 4){
                 Tiles[m] = 0;
                 ImageView toPlace = currentMap.getBlankGround(); //replace treasure with blank ground
-                toPlace.setTranslateY(-48 + 96 * (m/9)); //on the player's current tile.
-                toPlace.setTranslateX(208 + 96 * (m % 9));
+                toPlace.setTranslateY(-384 + 96 * (m/9)); //on the player's current tile.
+                toPlace.setTranslateX(-384 + 96 * (m % 9));
                 getChildren().add(toPlace);
                 getChildren().remove(playerIcon);
                 getChildren().add(playerIcon);
@@ -162,8 +152,8 @@ public class Room extends Pane {
                         Tiles[m] == 15 && s == 8 || Tiles[m] == 16 && s == 3) {
                     Tiles[m] -= 8;
                     ImageView toPlace = currentMap.getExit(Tiles[m]); //replace boss with empty exit
-                    toPlace.setTranslateY(-48 + 96 * (m/9)); //on the player's current tile.
-                    toPlace.setTranslateX(208 + 96 * (m%9));
+                    toPlace.setTranslateY(-384 + 96 * (m/9)); //on the player's current tile.
+                    toPlace.setTranslateX(-384 + 96 * (m%9));
                     getChildren().add(toPlace);
                     return 6; //return 6 if the player is in the right spot as well.
                 }
@@ -333,9 +323,6 @@ public class Room extends Pane {
         if(Valid){ //if the move was valid.
             s = targetedSpace; //set s to targeted space.
             m = targetedTile; //set m to the original targeted tile.
-            //playerIcon.setTranslateX(playerIcon.getTranslateX() + -32 * (f - 3) * ((f + 1) % 2)); //update player icon's location
-            //playerIcon.setTranslateY(playerIcon.getTranslateY() + 32 * (f - 2) * ((f) % 2));
-            //TEST
             Path playerpath = new Path();
             playerpath.getElements().add(new MoveTo(playerIcon.getTranslateX() + 16, playerIcon.getTranslateY() + 16));
             playerpath.getElements().add(new LineTo(playerIcon.getTranslateX() + 16 - 32 * (f - 3) * ((f + 1) % 2),
@@ -346,7 +333,6 @@ public class Room extends Pane {
             playermotion.setPath(playerpath);
             playermotion.setDuration(Duration.millis(100));
             playermotion.play(); //play the transition
-            //TEST
             return true;
         }
         return false; //return false if the player could not move.
@@ -813,8 +799,10 @@ public class Room extends Pane {
                 toPlace = currentMap.getTreasure();
             }
             //by now we have (barring some kind of bug) gotten the imageview that we want.
-            toPlace.setTranslateY(-48 + 96 * (i / 9));
-            toPlace.setTranslateX(208 + 96 * (i % 9));
+            //toPlace.setTranslateY(-48 + 96 * (i / 9));
+            //toPlace.setTranslateX(208 + 96 * (i % 9));
+            toPlace.setTranslateY(-384 + 96 * (i / 9));
+            toPlace.setTranslateX(-384 + 96 * (i % 9));
             getChildren().add(toPlace);
         }
     }

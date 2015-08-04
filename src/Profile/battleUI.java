@@ -17,18 +17,17 @@ import java.io.Serializable;
 /**
  * Created by Miles Sanguinetti on 5/21/15.
  */
-public class battleUI extends Pane {
+public class battleUI extends StackPane {
     static private int Selection = 0;
     static private battleUIButton [] Left;
     static private battleUILabel [] Right;
 
     public battleUI() {
-        setPrefSize(1280, 200);
-        setTranslateY(600);
+        setTranslateY(300);
+        setAlignment(Pos.CENTER);
         Rectangle Background = new Rectangle(1280, 200); //establish a mostly-translucent shaded background
-        Background.setFill(Color.DEEPSKYBLUE);
+        Background.setFill(Color.GRAY);
         Background.setOpacity(.3);
-        getChildren().add(Background);
         Left = new battleUIButton[4]; //generally selection and user-input driven buttons
         Right = new battleUILabel[4]; //generally information-based, descriptive labels
         for(int i = 0; i < 4; ++i){ //allocate all buttons
@@ -37,15 +36,16 @@ public class battleUI extends Pane {
         }
         textBox lbox = new textBox(Left[0], Left[1], Left[2], Left[3]);
         textBox rbox = new textBox(Right[0], Right[1], Right[2], Right[3]);
-        lbox.setTranslateX(8);
-        lbox.setTranslateY(10);
-        rbox.setTranslateX(642);
-        rbox.setTranslateY(10);
-        getChildren().addAll(lbox, rbox);
+        lbox.setTranslateX(-319); //642, 8
+        lbox.setTranslateY(0);
+        rbox.setTranslateX(319);
+        rbox.setTranslateY(0);
+        getChildren().addAll(Background, lbox, rbox);
     }
 
     private static class textBox extends VBox{
         public textBox(battleUIButton... all){
+            setAlignment(Pos.CENTER);
             getChildren().add(generateLine());
             //generate one line at the very top.
 
@@ -56,6 +56,7 @@ public class battleUI extends Pane {
         }
 
         public textBox(battleUILabel... all){
+            setAlignment(Pos.CENTER);
             getChildren().add(generateLine());
             //generate one line at the very top.
 
@@ -111,12 +112,12 @@ public class battleUI extends Pane {
 
         public void setPlain(){
             buttonShape.setOpacity(.6);
-            buttonText.setFill(Color.WHITE);
+            buttonText.setFill(Color.LIGHTGRAY);
         }
 
         public void setBold(){
             buttonShape.setOpacity(.4);
-            buttonText.setFill(Color.BLACK);
+            buttonText.setFill(Color.WHITE);
         }
 
         public void setText(String toset){

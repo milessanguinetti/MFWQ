@@ -36,9 +36,9 @@ public class mainMenu {
 
     public mainMenu(){
         Selection = 0;
-        Pane contentRoot = new Pane();
-        contentRoot.setPrefSize(1280, 800);
-        scene = new Scene(contentRoot);
+        StackPane contentRoot = new StackPane();
+        contentRoot.setAlignment(Pos.CENTER);
+        scene = new Scene(contentRoot, Color.BLACK);
         try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/title.jpg"))){
             ImageView titlescrn = new ImageView(new Image(imginput));
             titlescrn.setFitWidth(1280);
@@ -51,9 +51,6 @@ public class mainMenu {
         }
 
         menuContainer buttons = new menuContainer(newGame, loadGame, Options, Exit);
-
-        buttons.setTranslateX(475);
-        buttons.setTranslateY(400);
 
         contentRoot.getChildren().add(buttons);
 
@@ -100,6 +97,7 @@ public class mainMenu {
     //class for housing buttons within the main menu.
     private static class menuContainer extends VBox{
         public menuContainer(menuButton... all){
+            setAlignment(Pos.CENTER);
             getChildren().add(generateLine());
             //generate one line at the very top.
 

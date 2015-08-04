@@ -103,7 +103,7 @@ public abstract class gameCharacter extends Stats {
         toTake = calculateDamage(toTake, property); //take status into account
         toTake = tempProperty.calculateDamage(toTake, property); //take property into account
         if(toTake <= 0){
-            Game.battle.getInterface().printLeftAtNextAvailable("The attack had no effect on " + Name +".");
+                animateDamage(0);
             return HP;
         }
         toTake -= tempArmor; //subtract armor from damage value
@@ -111,13 +111,7 @@ public abstract class gameCharacter extends Stats {
             toTake = 1; //damage is 1 minimum
         setGettingHit(); //set the char's sprite to getting hit.
         subtractHP(toTake); //take the damage
-        if(!isAlive()) {
-            Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
-                    + toTake + " damage and was downed!");
-        }
-        else
-            Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
-                    +toTake + " damage.");
+        animateDamage(toTake);
         return HP; //some skills' effects hinge on whether or not the target died.
     }
 
@@ -126,18 +120,7 @@ public abstract class gameCharacter extends Stats {
         if(!isAlive())
             return 0; //dead characters cannot be healed and cannot take damage.
         subtractHP(toTake);
-        if(toTake > 0){
-            if(!isAlive())
-                Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
-                        + toTake + " damage and was downed!");
-            else
-                Game.battle.getInterface().printLeftAtNextAvailable(Name + " took "
-                        +toTake + " damage.");
-        }
-        else{
-            Game.battle.getInterface().printLeftAtNextAvailable(Name + " was healed for "
-                    + toTake + " health.");
-        }
+        animateDamage(toTake);
         return HP;
     }
 
@@ -268,4 +251,8 @@ public abstract class gameCharacter extends Stats {
 
     //gets attack damage
     abstract public int getWeaponDamage(boolean isRight);
+
+    public boolean isPlayerSide(){
+        return Commands.isPlayerSide();
+    }
 }

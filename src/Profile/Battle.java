@@ -8,8 +8,10 @@ import Characters.playerCharacter;
 import Structures.LLLnode;
 import Structures.battleData;
 import Structures.orderedLLL;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -30,7 +32,7 @@ public class Battle {
     private orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
     private battleUI Interface = new battleUI();
     private Scene scene;
-    private Pane contentRoot;
+    private StackPane contentRoot;
     private battleData BTemp;
     private int State = 0;
     private MediaPlayer mediaPlayer;
@@ -44,14 +46,9 @@ public class Battle {
     private gameCharacter toRoute = null; //a variable to route input to.
 
     public Battle() {
-        contentRoot = new Pane();
-        contentRoot.setPrefSize(1280, 800);
-        scene = new Scene(contentRoot);
-
-        //TEST TEST TEST TEST
-        javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(1280, 800);
-        Background.setFill(Color.ALICEBLUE);
-        contentRoot.getChildren().add(Background);
+        contentRoot = new StackPane();
+        contentRoot.setAlignment(Pos.CENTER);
+        scene = new Scene(contentRoot, Color.BLACK);
 
         contentRoot.getChildren().add(Interface);
 
@@ -134,12 +131,14 @@ public class Battle {
 
     //bool signifies whether or not the player won or escaped.
     public void commenceBattle(gameCharacter[] Allies, gameCharacter[] Enemies) {
+        Game.mainmenu.getCurrentGame().setDelay(500); //1/2 second UI delay at start of battle.
         turnOrder.removeAll(); //nullifies any extant turn order data from previous battles
         contentRoot.getChildren().add(Game.currentMap); //add the current map's background image to the battle
+        Game.currentMap.setTranslateY(-100);
         for (int i = 0; i < 4; ++i) {
             if (Allies[i] != null) {
-                Allies[i].setTranslateY(450 - i*136);
-                Allies[i].setTranslateX(200);
+                Allies[i].setTranslateY(-275 + i*136);
+                Allies[i].setTranslateX(-392);
                 Allies[i].Flip(true); //flip this ally's sprite so it faces the right way.
                                       //this isn't necessary for enemies, as they're innately not flipped.
                 Allies[i].Animate(true);
@@ -147,8 +146,8 @@ public class Battle {
                 Allies[i].applyAutoBuffs(); //initialize stats
             }
             if (Enemies[i] != null) {
-                Enemies[i].setTranslateY(450 - i*136);
-                Enemies[i].setTranslateX(984);
+                Enemies[i].setTranslateY(-275 + i*136);
+                Enemies[i].setTranslateX(392);
                 Enemies[i].Animate(true);
                 contentRoot.getChildren().add(Enemies[i]);
                 Enemies[i].applyAutoBuffs();
@@ -516,7 +515,7 @@ public class Battle {
             toAdd.printName();
             System.out.println(" joined your party!");
             toAdd.Flip(true); //flip the minion's sprite so it faces the right way
-            toAdd.setTranslateX(296); //set translate x to a value suitable for the player's side of the field
+            toAdd.setTranslateX(-296); //set translate x to a value suitable for the player's side of the field
         }
         else {
             Minions = enemyMinions; //set minions to the appropriate side.
@@ -524,12 +523,12 @@ public class Battle {
             toAdd.printName();
             System.out.println(" joined the enemy!");
             toAdd.Flip(false); //(possibly) flip the minion's sprite so it faces the right way
-            toAdd.setTranslateX(888); //set translate x to a value suitable for the enemy's side of the field
+            toAdd.setTranslateX(296); //set translate x to a value suitable for the enemy's side of the field
         }
         for(int i = 0; i < 4; ++i){
             if(Minions[i] == null){ //if an index is empty
                 Minions[i] = toAdd; //add the minion into that index
-                toAdd.setTranslateY(450 - i*136); //adjust translate y accordingly
+                toAdd.setTranslateY(-275 + i*136); //adjust translate y accordingly
                 toAdd.Animate(true);
                 contentRoot.getChildren().add(toAdd);
                 return; //and return; we're done.

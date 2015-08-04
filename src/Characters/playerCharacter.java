@@ -71,6 +71,7 @@ public class playerCharacter extends gameCharacter {
     //initializes combat data; resetting state information for player characters.
     @Override
     public void initializeCombatData(){
+        setTurn(); //indicate that it is now this character's turn.
         Selection = 0; //reset variables linked to UI selection.
         uSelectionView = 0;
         lSelectionView = 3;
@@ -110,17 +111,17 @@ public class playerCharacter extends gameCharacter {
                 lowerBound = 0;
                 uSelectionView = 0;
                 lSelectionView = 3;
-                boolean whichSide = currentlyTargeting > 0;
-                chooseTarget(Game.battle.getParty(whichSide), Game.battle.getMinions(whichSide), 1);
-                //utilize the choosetarget method to just print possible targets, as an up command will do
-                //nothing at selection 0.
+                if(currentlyTargeting != 0) { //assuming we actually need to print anything...
+                    boolean whichSide = currentlyTargeting > 0;
+                    chooseTarget(Game.battle.getParty(whichSide), Game.battle.getMinions(whichSide), 1);
+                    //utilize the choosetarget method to just print possible targets, as an up command will do
+                    //nothing at selection 0.
+                }
+                else
+                    setPlain(); //otherwise, set plain as it is no longer our turn.
             }
         }
         else{ //strictly target selection
-            if(Input == 0){ //cancel case
-                initializeCombatData(); //essentially reset the combat data so that we're back in the original menus
-                return; //and return.
-            }
             lowerBound = 0; //reset lower bound.
             boolean whichSide = currentlyTargeting > 0;
             int targetIndex = chooseTarget(Game.battle.getParty(whichSide), Game.battle.getMinions(whichSide), Input);
@@ -165,7 +166,12 @@ public class playerCharacter extends gameCharacter {
                       //were just inserting rather than the actual lower bound in the above for-loop.
 
         //here we actually have the user select a target.
-        if (Input == 1) { //up case
+        //in any given case, we re-evaluate what we're highlighting in the GUI.
+        targetArray[Selection].setPlain();
+        if(Input == 0){ //cancel case
+            initializeCombatData(); //essentially reset the combat data so that we're back in the original menus
+            return 0; //and return.
+        } else if (Input == 1) { //up case
             if (Selection > 0) //unless we're at the lowest selection value
                 --Selection; //decrement selection
             if (Selection < uSelectionView) {
@@ -185,9 +191,12 @@ public class playerCharacter extends gameCharacter {
                 if (chars[l] != null) {
                     if (chars[l].isAlive() == notUsableOnDead) {
                         //if the character exists and the skill can be used on them
-                        if (Input == 1)
+                        if (Input == 1) {
+                            targetArray[Selection].setPlain();
+                            setPlain(); //set the character + their target to an unselected graphic state.
                             return l + 1; //return l+1 to essentially have a meaningful
-                        else              //reference to where the target is located.
+                        }                 //reference to where the target is located.
+                        else
                             --Input; //otherwise decrement input by 1 so that we know that
                     }                //we have passed a character and are closer to the input value
                 }
@@ -196,9 +205,12 @@ public class playerCharacter extends gameCharacter {
                 if (mins[m] != null) {
                     if (mins[m].isAlive() == notUsableOnDead) {
                         //if the character exists and the skill can be used on them
-                        if (Input == 1)
+                        if (Input == 1) {
+                            targetArray[Selection].setPlain();
+                            setPlain(); //set the character + their target to an unselected graphic state.
                             return m + 5; //return l+5 to essentially have a meaningful
-                        else              //reference to where the target is located; +5 denotes a minion.
+                        }                 //reference to where the target is located; +5 denotes a minion.
+                        else
                             --Input; //otherwise decrement input by m so that we know that
                     }                //we have passed a character and are closer to the input value
                 }
@@ -233,8 +245,11 @@ public class playerCharacter extends gameCharacter {
                         "HP: " + targetArray[Selection].getHP() + "/" + //target's HP and HP cap
                                 targetArray[Selection].getHPCap());
                 Interface.setTextFocus(Selection - uSelectionView); //make whatever is selected bold
+                targetArray[Selection].setTargeted();
             }
         }
+        else
+            targetArray[Selection].setPlain();
         return 0; //return 0, signifying that we have not retrieved a valid target yet.
     }
 

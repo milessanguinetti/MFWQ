@@ -6,6 +6,7 @@ import Characters.Inventory.Weapons.genericGun;
 import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -32,9 +33,9 @@ public class Game {
         mainmenu.setGame(this);
         primaryStage = primarystage;
         primaryStage.setTitle("MFWQ");
-        primaryStage.minWidthProperty().bind(battle.getScene().heightProperty().multiply(1.6));
-        primarystage.minHeightProperty().bind(battle.getScene().widthProperty().divide(1.6));
-        //maintain aspect ratio of graphics if window is resized.
+        primaryStage.setFullScreen(true);
+        primaryStage.setResizable(false);
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         swapToMainMenu();
         primaryStage.show();
     }
@@ -98,6 +99,8 @@ public class Game {
         mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+        primaryStage.setFullScreen(false);
+        primaryStage.setFullScreen(true);
     }
 
     public void swapToMainMenu(){
@@ -107,6 +110,8 @@ public class Game {
         mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/titletheme.mp3")).toString()));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+        primaryStage.setFullScreen(false);
+        primaryStage.setFullScreen(true);
     }
 
 
@@ -118,6 +123,8 @@ public class Game {
             mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/maptheme.mp3")).toString()));
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.play();
+            primaryStage.setFullScreen(false);
+            primaryStage.setFullScreen(true);
         }
     }
 
@@ -125,6 +132,8 @@ public class Game {
         //NOT YET IMPLEMENTED
         writeToDisk();
         swapToMainMenu();
+        primaryStage.setFullScreen(false);
+        primaryStage.setFullScreen(true);
     }
 
     public void setDelay(int Delay){

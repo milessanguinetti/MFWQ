@@ -4,11 +4,13 @@ import Characters.Inventory.Item;
 import Characters.Inventory.Weapons.*;
 import Characters.Monster;
 import Profile.Game;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +21,8 @@ import java.nio.file.Paths;
  * Created by Miles Sanguinetti on 5/20/2015.
  */
 public abstract class Map extends Tileset{
-    private Pane sceneRoot = new Pane();
-    private Pane contentRoot = new Pane();
+    private StackPane sceneRoot = new StackPane();
+    private StackPane contentRoot = new StackPane();
     protected int xBound, yBound; //the x and y bounds of the map in question
     protected Room [] Rooms; //array of rooms contained within the map
     private Map [] Connections = new Map[4]; //connections
@@ -34,10 +36,11 @@ public abstract class Map extends Tileset{
 
     public Map(String name, int xbound, int ybound, int encounterrate, Map North, Map East, Map South, Map West){
         encounterRate = encounterrate;
-        sceneRoot.setPrefSize(1280, 800);
+        contentRoot.setAlignment(Pos.CENTER);
+        sceneRoot.setAlignment(Pos.CENTER);
         sceneRoot.getChildren().add(contentRoot);
         sceneRoot.getChildren().add(Game.notification);
-        scene = new Scene(sceneRoot);
+        scene = new Scene(sceneRoot, Color.BLACK);
         Name += name;
         try(InputStream imginput = Files.newInputStream(Paths.get(Name + "background.jpg"))){
             setImage(new Image(imginput)); //set battle background image to this
@@ -192,7 +195,7 @@ public abstract class Map extends Tileset{
                 //LEFT CASE
                 else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                     if (Rooms[currentRoom].Move(4)) {
-                        Game.mainmenu.getCurrentGame().setDelay(1000);
+                        Game.mainmenu.getCurrentGame().setDelay(100);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle();

@@ -33,9 +33,8 @@ public class Notification extends StackPane implements Serializable{
         Description.setFill(Color.GOLD);
         Description.setTranslateY(200);
         Description.setWrappingWidth(600); //wrap text if need be
-        setPrefSize(1280, 800);
         setVisible(false); //initialize object as invisible
-        javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(1280, 800);
+        javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(3000, 3000);
         Background.setFill(Color.BLACK);
         Background.setOpacity(.3);
         javafx.scene.shape.Rectangle Background2 = new javafx.scene.shape.Rectangle(800, 600);
