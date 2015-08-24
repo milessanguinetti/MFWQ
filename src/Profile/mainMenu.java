@@ -31,14 +31,13 @@ public class mainMenu {
     private menuButton loadGame = new menuButton("LOAD GAME", 1);
     private menuButton Options = new menuButton("OPTIONS", 2);
     private menuButton Exit = new menuButton("EXIT", 3);
-    private Scene scene;
+    StackPane contentRoot;
     //create a scene endemic to the menu
 
     public mainMenu(){
         Selection = 0;
-        StackPane contentRoot = new StackPane();
+        contentRoot = new StackPane();
         contentRoot.setAlignment(Pos.CENTER);
-        scene = new Scene(contentRoot, Color.BLACK);
         try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/title.jpg"))){
             ImageView titlescrn = new ImageView(new Image(imginput));
             titlescrn.setFitWidth(1280);
@@ -57,7 +56,7 @@ public class mainMenu {
         newGame.setHighLit(); //set newgame to highlit for starts.
 
         //key pressed listening code
-        scene.setOnKeyPressed(event -> {
+        contentRoot.setOnKeyPressed(event -> {
             //ENTER CASE
             if (event.getCode() == KeyCode.ENTER) {
                 intToButton(Selection).setSelected();
@@ -65,7 +64,7 @@ public class mainMenu {
         });
 
         //key released listening code
-        scene.setOnKeyReleased(event -> {
+        contentRoot.setOnKeyReleased(event -> {
             //DOWN CASE
             if (event.getCode() == KeyCode.DOWN && Selection < 3 || event.getCode() == KeyCode.S && Selection < 3) {
                 intToButton(Selection).setPlain();
@@ -86,8 +85,8 @@ public class mainMenu {
         });
     }
 
-    public Scene getScene(){
-        return scene;
+    public Pane getPane(){
+        return contentRoot;
     }
 
     public void setGame(Game currentgame){

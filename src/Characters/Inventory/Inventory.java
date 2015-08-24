@@ -93,7 +93,6 @@ public class Inventory implements Serializable{
     }
 
     public void Insert(Item toInsert){
-        System.out.println(toInsert.returnKey() + " inserted.");
         orderedDLL itemType = null;
         if(toInsert instanceof Consumable)
             itemType = Items[0];

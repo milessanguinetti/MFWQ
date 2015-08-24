@@ -20,7 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Created by Miles on 7/29/2015.
+ * Created by Miles Sanguinetti on 7/29/2015.
  */
 public class spritePane extends StackPane implements Serializable{
     protected String Name; //character name; stored here for access to spritesheet images.
@@ -47,7 +47,7 @@ public class spritePane extends StackPane implements Serializable{
     public void animateDamage(int toTake){
         getChildren().remove(damageText);
         damageText = new Text();
-        damageText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 40));
+        damageText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 40));
         damageText.setOpacity(1);
         final Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
@@ -111,6 +111,7 @@ public class spritePane extends StackPane implements Serializable{
         }
 
         public void setGraphicMode(int toSet){
+            lastIndex = -1; //ensure that we aren't going to skip a frame after switching.
             if(toSet != 3){
                 if(toSet == 0) {
                     //setCycleCount(Animation.INDEFINITE); //waiting repeats infinitely

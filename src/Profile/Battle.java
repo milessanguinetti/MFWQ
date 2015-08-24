@@ -31,11 +31,9 @@ public class Battle {
     private gameCharacter[] enemyMinions = new gameCharacter[4];
     private orderedLLL turnOrder = new orderedLLL(); //ordered LLL to handle turns.
     private battleUI Interface = new battleUI();
-    private Scene scene;
     private StackPane contentRoot;
     private battleData BTemp;
     private int State = 0;
-    private MediaPlayer mediaPlayer;
     /*
     The current state of the battle; values are as follows:
     0-3 = currently filling a player's commands at index n
@@ -48,19 +46,20 @@ public class Battle {
     public Battle() {
         contentRoot = new StackPane();
         contentRoot.setAlignment(Pos.CENTER);
-        scene = new Scene(contentRoot, Color.BLACK);
 
         contentRoot.getChildren().add(Interface);
 
-        scene.setOnKeyReleased(event -> {
+        contentRoot.setOnKeyReleased(event -> {
             if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 if(State == 6){
                     endBattle();
                     if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
-                        Game.mainmenu.getCurrentGame().swapToMainMenu();
+                        Game.mainmenu.getCurrentGame().swapToMainMenu(contentRoot);
                     }
-                    else
-                        Game.mainmenu.getCurrentGame().swapToMap();
+                    else {
+                        Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                        Game.mainmenu.getCurrentGame().notificationToFront();
+                    }
                     return; //nothing else to be done.
                 }
                 if (toRoute != null) { //if we're currently storing user commands from input
@@ -121,8 +120,8 @@ public class Battle {
         });
     }
 
-    public Scene getScene() {
-        return scene;
+    public Pane getPane() {
+        return contentRoot;
     }
 
     public battleUI getInterface() {
@@ -580,7 +579,7 @@ public class Battle {
     }
 
     public void playMedia(String toPlay){
-        mediaPlayer = new MediaPlayer(
+        MediaPlayer mediaPlayer = new MediaPlayer(
                 new Media((getClass().getResource("soundeffects/" + toPlay + ".mp3")).toString()));
         mediaPlayer.setCycleCount(1);
         mediaPlayer.play();

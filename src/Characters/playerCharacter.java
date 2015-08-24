@@ -64,6 +64,10 @@ public class playerCharacter extends gameCharacter {
                            int dex, int spd, int vit, int inte, int fth, int arm) {
         super(name, hp, sp, str, dex, spd, vit, inte, fth, arm);
         Race = race;
+        if(Race.equals("Faithful") || Race.equals("Homunculus"))
+            charType = 1; //male character
+        else
+            charType = 2; //female character
         expCap = 1000;
         charProperty = new Neutral();
     }

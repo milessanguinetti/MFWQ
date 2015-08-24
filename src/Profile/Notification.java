@@ -1,15 +1,18 @@
 package Profile;
 
 import Characters.Inventory.Item;
+import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +59,7 @@ public class Notification extends StackPane implements Serializable{
             }
         }
         if(count != 0) { //if at least one item dropped...
-            Game.mainmenu.getCurrentGame().setDelay(count * 500); //set a delay on any processed user input
+            Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
             setVisible(true); //set the notification pane to visible
         }
 
@@ -69,7 +72,8 @@ public class Notification extends StackPane implements Serializable{
         getChildren().add(lootcontainer);
         lootcontainer.addItem(toAdd);
         Game.Player.Insert(toAdd);
-        Game.mainmenu.getCurrentGame().setDelay(500); //set a delay on any processed user input
+        Game.mainmenu.getCurrentGame().setDelay(1000); //set a delay on any processed user input
+        Game.mainmenu.getCurrentGame().notificationToFront(); //move this to the front of game's stackpane
         setVisible(true); //set the notification pane to visible
     }
 
@@ -97,7 +101,7 @@ public class Notification extends StackPane implements Serializable{
         }
 
         public void addItem(Item toAdd){
-            getChildren().add(new itemBox(toAdd));
+            getChildren().add(new itemBox(toAdd, itemSum));
             ++itemSum;
         }
     }
@@ -109,13 +113,15 @@ public class Notification extends StackPane implements Serializable{
         private Item contents;
         private Text itemName = new Text();
 
-        public itemBox(Item Contents){
+        public itemBox(Item Contents, int itemNumber){
             contents = Contents;
             itemName.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
             itemName.setFill(Color.GRAY);
             itemName.setTranslateY(-100);
             itemName.setText(contents.returnKey());
+            itemName.setOpacity(0);
             Icon = contents.getIcon();
+            Icon.setOpacity(0);
             try(InputStream imginput = Files.newInputStream(Paths.get("resources/thumbnails/lootslot.jpg"))){
                 ImageView background = new ImageView(new Image(imginput));
                 background.setFitWidth(110);
@@ -128,22 +134,55 @@ public class Notification extends StackPane implements Serializable{
             setAlignment(Pos.CENTER); //center the box's sub-components.
             getChildren().addAll(backGround, Icon, itemName); //add the background and icon to the button.
 
-            setPlain(); //default to plain
+            //phase name and icon in sequentially using a sequential transition...
+            PauseTransition ptN = new PauseTransition(Duration.seconds(itemNumber)); //pause transition for name
+            PauseTransition ptI = new PauseTransition(Duration.seconds(itemNumber)); //pause transition for icon
+            FadeTransition ftN = new FadeTransition(Duration.seconds(1)); //fade transition for name
+            ftN.setFromValue(0);
+            ftN.setToValue(.9);
+            FadeTransition ftI = new FadeTransition(Duration.seconds(1)); //fade transition for icon
+            ftI.setFromValue(0);
+            ftI.setToValue(.9);
+            SequentialTransition stN = new SequentialTransition(itemName, ptN, ftN); //sequential transition for name
+            SequentialTransition stI = new SequentialTransition(Icon, ptI, ftI); //sequential transition for icon
+            Timeline lootSound = new Timeline(new KeyFrame( //loot sound effects
+                    Duration.seconds(itemNumber + 1),
+                    ae -> {
+                        Game.battle.playMedia("loot");
+                        Rectangle lootGlow = new Rectangle(110, 110);
+                        lootGlow.setFill(Color.DARKGOLDENROD);
+                        lootGlow.setOpacity(0);
+                        getChildren().addAll(lootGlow);
+                        FadeTransition ftG = new FadeTransition(Duration.seconds(.35), lootGlow); //fade lootglow
+                        ftG.setCycleCount(2); //ensure that the transition reverses itself.
+                        ftG.setFromValue(0);
+                        ftG.setToValue(.6);
+                        ftG.setAutoReverse(true);
+                        ftG.play();
+                    }));
+            lootSound.play(); //play all transitions and timelines
+            stN.play();
+            stI.play();
+
 
             //if the user enters any component of the image, set to highlit; set to plain if they leave.
             backGround.setOnMouseEntered(event -> {
-                setHighLit();
+                if(Game.mainmenu.getCurrentGame().isDelayOver())
+                    setHighLit();
             });
 
             backGround.setOnMouseExited(event -> {
-                setPlain();
+                if(Game.mainmenu.getCurrentGame().isDelayOver())
+                    setPlain();
             });
             Icon.setOnMouseEntered(event -> {
-                setHighLit();
+                if(Game.mainmenu.getCurrentGame().isDelayOver())
+                    setHighLit();
             });
 
             Icon.setOnMouseExited(event -> {
-                setPlain();
+                if(Game.mainmenu.getCurrentGame().isDelayOver())
+                    setPlain();
             });
         }
 

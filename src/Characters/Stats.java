@@ -1,9 +1,15 @@
 package Characters;
 
+import Profile.Game;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 /**
  * Created by Miles Sanguinetti on 3/17/15.
  */
 public class Stats extends spritePane{
+    protected short charType = 3; // 1=humanoid man, 2=humanoid woman, 3=mob or 4=boss.
     protected int HP; //health parameter
     protected int MHP; //maximum health parameter
     protected int SP; //skill points parameter
@@ -163,6 +169,20 @@ public class Stats extends spritePane{
             HP = 0; //no health pools lower than 0 either
         if(HP > 0)
             return true;
+        Timeline deathtimer = new Timeline(new KeyFrame(
+                Duration.millis(800),
+                ae -> {
+                    if(charType == 1)
+                        Game.battle.playMedia("mandeath");
+                    else if(charType == 2)
+                        Game.battle.playMedia("womandeath");
+                    else if(charType == 3)
+                        Game.battle.playMedia("mobdeath");
+                    else if(charType == 4)
+                        Game.battle.playMedia("bossdeath");
+                    setDead();
+                }));
+        deathtimer.play();
         return false; //return value based on whether or not character is alive
     }
 

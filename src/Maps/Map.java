@@ -5,12 +5,10 @@ import Characters.Inventory.Weapons.*;
 import Characters.Monster;
 import Profile.Game;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +28,6 @@ public abstract class Map extends Tileset{
     private int currentRoom;
     private int encounterRate; //rate at which enemies are encountered; expressed as a percentage integer
     protected static int Difficulty;
-    private Scene scene;
 
     public Map(){}
 
@@ -39,8 +36,7 @@ public abstract class Map extends Tileset{
         contentRoot.setAlignment(Pos.CENTER);
         sceneRoot.setAlignment(Pos.CENTER);
         sceneRoot.getChildren().add(contentRoot);
-        sceneRoot.getChildren().add(Game.notification);
-        scene = new Scene(sceneRoot, Color.BLACK);
+        //sceneRoot.getChildren().add(Game.notification);
         Name += name;
         try(InputStream imginput = Files.newInputStream(Paths.get(Name + "background.jpg"))){
             setImage(new Image(imginput)); //set battle background image to this
@@ -66,7 +62,7 @@ public abstract class Map extends Tileset{
         Fill(); //call fill to fill in any blanks left by the build method
 
         //key released listening code
-        scene.setOnKeyReleased(event1 -> {
+        sceneRoot.setOnKeyReleased(event1 -> {
             if(Game.notification.handleInput())
                 return;
             //ENTER CASE
@@ -81,9 +77,9 @@ public abstract class Map extends Tileset{
                             if (Connections[0] != null) {
                                 Game.currentMap = Connections[0];
                                 Connections[0].Enter(3);
-                                Game.mainmenu.getCurrentGame().swapToMap();
+                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot);
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld();
+                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot);
                         } else { //a simple change of rooms within the map
                             currentRoom -= yBound; //decrement current room by y bound
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
@@ -97,10 +93,10 @@ public abstract class Map extends Tileset{
                             if (Connections[1] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[1].Enter(4); //enter from the west
-                                Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
+                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
-                            //entire series of maps
+                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                                // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             ++currentRoom; //increment current room by 1
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
@@ -114,10 +110,10 @@ public abstract class Map extends Tileset{
                             if (Connections[2] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[2].Enter(1); //enter from the north
-                                Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
+                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
-                            //entire series of maps
+                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                            // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             currentRoom += yBound; //increment currentroom by yBound
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
@@ -131,10 +127,10 @@ public abstract class Map extends Tileset{
                             if (Connections[3] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[3].Enter(2); //enter from the east
-                                Game.mainmenu.getCurrentGame().swapToMap(); //load the new map's scene, basically
+                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(); //we have left the scope of this
-                            //entire series of maps
+                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                            // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             --currentRoom; //decrement currentroom by 1
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
@@ -151,7 +147,7 @@ public abstract class Map extends Tileset{
                     case 6: { //boss case
                         if (Rooms[currentRoom].getBoss() != null) {
                             Game.battle.commenceBattle(Game.Player.getParty(), Rooms[currentRoom].getBoss());
-                            Game.mainmenu.getCurrentGame().swapToBattle();
+                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
                         }
                         break;
                     }
@@ -160,7 +156,7 @@ public abstract class Map extends Tileset{
         });
 
         //key pressed listening code
-        scene.setOnKeyPressed(event -> {
+        sceneRoot.setOnKeyPressed(event -> {
             if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 //UP CASE
                 if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
@@ -168,7 +164,7 @@ public abstract class Map extends Tileset{
                         Game.mainmenu.getCurrentGame().setDelay(100);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                            Game.mainmenu.getCurrentGame().swapToBattle();
+                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
                         }
                     }
                 }
@@ -178,7 +174,7 @@ public abstract class Map extends Tileset{
                         Game.mainmenu.getCurrentGame().setDelay(100);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                            Game.mainmenu.getCurrentGame().swapToBattle();
+                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
                         }
                     }
                 }
@@ -188,7 +184,7 @@ public abstract class Map extends Tileset{
                         Game.mainmenu.getCurrentGame().setDelay(100);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                            Game.mainmenu.getCurrentGame().swapToBattle();
+                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
                         }
                     }
                 }
@@ -198,7 +194,7 @@ public abstract class Map extends Tileset{
                         Game.mainmenu.getCurrentGame().setDelay(100);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-                            Game.mainmenu.getCurrentGame().swapToBattle();
+                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
                         }
                     }
                 }
@@ -448,8 +444,8 @@ public abstract class Map extends Tileset{
         contentRoot.getChildren().add(Rooms[currentRoom]); //add current room's graphics.
     }
 
-    public Scene getMapScene(){
-        return scene;
+    public Pane getPane(){
+        return sceneRoot;
     }
 
     public Item generateLoot(){

@@ -6,9 +6,14 @@ import Characters.Inventory.Weapons.genericGun;
 import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
+import Maps.overWorld;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -23,8 +28,10 @@ public class Game {
     public static userProfile Player; //the game's player.
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
+    public static overWorld overworld = new overWorld();
     public static Map currentMap;
     private Stage primaryStage;
+    private StackPane gameRoot = new StackPane();
     private long delayStartTime; //variable to track time at which a delay was requested.
     private int delayDuration; //variable to track requested delay
     private MediaPlayer mediaPlayer; //media player variable for playing music.
@@ -36,7 +43,10 @@ public class Game {
         primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        swapToMainMenu();
+        Scene gameScene = new Scene(gameRoot, Color.BLACK);
+        primaryStage.setScene(gameScene);
+        gameRoot.getChildren().add(notification);
+        swapToMainMenu(null);
         primaryStage.show();
     }
 
@@ -56,7 +66,7 @@ public class Game {
 
         currentMap = new Valley01();
         currentMap.enterFromOverworld();
-        swapToMap();
+        swapToMap(mainmenu.getPane());
         writeToDisk();
     }
 
@@ -76,7 +86,7 @@ public class Game {
 
         currentMap = new Valley01();
         currentMap.enterFromOverworld();
-        swapToMap();
+        swapToMap(mainmenu.getPane());
         writeToDisk();
     }
 
@@ -92,48 +102,52 @@ public class Game {
         }
     }
 
-    public void swapToBattle(){
-        primaryStage.setScene(battle.getScene());
+    public void swapToBattle(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        gameRoot.getChildren().add(battle.getPane());
+        battle.getPane().requestFocus();
         if(mediaPlayer != null)
             mediaPlayer.stop();
         mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        primaryStage.setFullScreen(false);
-        primaryStage.setFullScreen(true);
+
     }
 
-    public void swapToMainMenu(){
-        primaryStage.setScene(mainmenu.getScene());
+    public void swapToMainMenu(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        gameRoot.getChildren().add(mainmenu.getPane());
+        mainmenu.getPane().requestFocus();
         if(mediaPlayer != null)
             mediaPlayer.stop();
         mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/titletheme.mp3")).toString()));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        primaryStage.setFullScreen(false);
-        primaryStage.setFullScreen(true);
     }
 
 
-    public void swapToMap(){
+    public void swapToMap(Node toRemove){
         if(currentMap != null){
-            primaryStage.setScene(currentMap.getMapScene());
+            if(toRemove != null)
+                gameRoot.getChildren().remove(toRemove);
+            gameRoot.getChildren().add(currentMap.getPane());
+            currentMap.getPane().requestFocus();
             if(mediaPlayer != null)
                 mediaPlayer.stop();
             mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/maptheme.mp3")).toString()));
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.play();
-            primaryStage.setFullScreen(false);
-            primaryStage.setFullScreen(true);
         }
     }
 
-    public void swapToOverworld(){
+    public void swapToOverworld(Node toRemove){
         //NOT YET IMPLEMENTED
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
         writeToDisk();
-        swapToMainMenu();
-        primaryStage.setFullScreen(false);
-        primaryStage.setFullScreen(true);
+        swapToMainMenu(null);
     }
 
     public void setDelay(int Delay){
@@ -145,5 +159,10 @@ public class Game {
         if(System.currentTimeMillis() - delayDuration > delayStartTime)
             return true;
         return false;
+    }
+
+    public void notificationToFront(){
+        gameRoot.getChildren().remove(notification);
+        gameRoot.getChildren().add(notification);
     }
 }

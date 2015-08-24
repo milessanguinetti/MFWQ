@@ -1,7 +1,6 @@
 package Profile;
 
 import javafx.geometry.Pos;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -10,9 +9,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
-import java.io.Serializable;
-
 
 /**
  * Created by Miles Sanguinetti on 5/21/15.
