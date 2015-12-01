@@ -2,7 +2,8 @@ package Maps;
 
 import Characters.Inventory.Item;
 import Characters.Monster;
-import javafx.animation.PathTransition;
+import Profile.Game;
+import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -321,20 +322,27 @@ public class Room extends StackPane {
 
         }
         if(Valid){ //if the move was valid.
+            Game.mainmenu.getCurrentGame().setDelay(250);
             s = targetedSpace; //set s to targeted space.
             m = targetedTile; //set m to the original targeted tile.
-            Path playerpath = new Path();
-            playerpath.getElements().add(new MoveTo(playerIcon.getTranslateX() + 16, playerIcon.getTranslateY() + 16));
-            playerpath.getElements().add(new LineTo(playerIcon.getTranslateX() + 16 - 32 * (f - 3) * ((f + 1) % 2),
-                    playerIcon.getTranslateY() + 16 + 32 * (f - 2) * ((f) % 2)));
-
-            PathTransition playermotion = new PathTransition();
-            playermotion.setNode(playerIcon);
-            playermotion.setPath(playerpath);
-            playermotion.setDuration(Duration.millis(100));
-            playermotion.play(); //play the transition
+            final TranslateTransition transition = new TranslateTransition(Duration.millis(200), playerIcon);
+            transition.setFromX(playerIcon.getTranslateX());
+            transition.setFromY(playerIcon.getTranslateY());
+            transition.setToX(playerIcon.getTranslateX() + 32 * (-1 * (Direction - 3)) * ((Direction + 1) % 2));
+            transition.setToY(playerIcon.getTranslateY() + 32 * (Direction - 2) * (Direction % 2));
+            transition.playFromStart();
+            //TEST
+            Timeline continueWalk = new Timeline(new KeyFrame( //try to move again if we haven't been stopped
+                    Duration.millis(200),
+                    ae -> {
+                        if(playerInMotion)
+                            Move(Direction);
+                    }));
+            continueWalk.play();
+            //TEST
             return true;
         }
+        playerInMotion = false;
         return false; //return false if the player could not move.
     }
 
@@ -815,4 +823,16 @@ public class Room extends StackPane {
         return Loot;
     }
 
+    public void setPlayerInMotion(int dir, boolean x){
+        if(f == dir)
+            playerInMotion = x;
+    }
+
+    public void setPlayerInMotion(boolean x){
+        playerInMotion = x;
+    }
+
+    public boolean isPlayerInMotion(){
+        return playerInMotion;
+    }
 }

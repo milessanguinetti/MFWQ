@@ -63,7 +63,7 @@ public abstract class Map extends Tileset{
 
         //key released listening code
         sceneRoot.setOnKeyReleased(event1 -> {
-            if(Game.notification.handleInput())
+            if(!Rooms[currentRoom].isPlayerInMotion() && Game.notification.handleInput())
                 return;
             //ENTER CASE
             if (event1.getCode() == KeyCode.ENTER) {
@@ -153,6 +153,18 @@ public abstract class Map extends Tileset{
                     }
                 }
             }
+            else if (event1.getCode() == KeyCode.UP || event1.getCode() == KeyCode.W){
+                Rooms[currentRoom].setPlayerInMotion(1, false);
+            }
+            else if (event1.getCode() == KeyCode.RIGHT || event1.getCode() == KeyCode.D){
+                Rooms[currentRoom].setPlayerInMotion(2, false);
+            }
+            else if (event1.getCode() == KeyCode.DOWN || event1.getCode() == KeyCode.S){
+                Rooms[currentRoom].setPlayerInMotion(3, false);
+            }
+            else if (event1.getCode() == KeyCode.LEFT || event1.getCode() == KeyCode.A){
+                Rooms[currentRoom].setPlayerInMotion(4, false);
+            }
         });
 
         //key pressed listening code
@@ -161,7 +173,7 @@ public abstract class Map extends Tileset{
                 //UP CASE
                 if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
                     if (Rooms[currentRoom].Move(1)) {
-                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        Rooms[currentRoom].setPlayerInMotion(true);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
@@ -171,7 +183,7 @@ public abstract class Map extends Tileset{
                 //RIGHT CASE
                 else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                     if (Rooms[currentRoom].Move(2)) {
-                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        Rooms[currentRoom].setPlayerInMotion(true);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
@@ -181,7 +193,7 @@ public abstract class Map extends Tileset{
                 //DOWN CASE
                 else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                     if (Rooms[currentRoom].Move(3)) {
-                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        Rooms[currentRoom].setPlayerInMotion(true);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
@@ -191,7 +203,7 @@ public abstract class Map extends Tileset{
                 //LEFT CASE
                 else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                     if (Rooms[currentRoom].Move(4)) {
-                        Game.mainmenu.getCurrentGame().setDelay(100);
+                        Rooms[currentRoom].setPlayerInMotion(true);
                         if (Rand.nextInt(100) < encounterRate) {
                             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
                             Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
