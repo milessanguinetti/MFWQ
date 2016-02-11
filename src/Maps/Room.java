@@ -27,7 +27,10 @@ import java.util.Random;
  */
 public class Room extends StackPane {
     private static ImageView playerIcon;
-    private static boolean playerInMotion = false;
+    private static int mostRecentKeyPressed;
+    private static boolean [] directionalKeysPressed = new boolean[4];
+    private static boolean characterInMotion = false;
+    //array of boolean vars; [0] = north, [1] = east, etc
     public static Map currentMap; //the name of the current map; having a static variable
     private int roomType = 0; //denotes the format of the room's tiles.
     private short [] Tiles;
@@ -129,6 +132,8 @@ public class Room extends StackPane {
     }
 
     public int Interact(){
+        if(directionalKeysPressed[mostRecentKeyPressed])
+            return 0; //ignore interaction calls if the player is in motion.
         if(Tiles[m] > 4 && Tiles[m] < 10){ //possible exit case
             if(s == 5 && f == Tiles[m] - 4) { //if we're in the middle of the tile and facing the right way...
                 getChildren().remove(playerIcon); //exit, removing the player icon from the pane
@@ -163,7 +168,7 @@ public class Room extends StackPane {
         return 0; //0 denotes nothing happened.
     }
 
-    public boolean Move(int Direction) { //if possible, moves the player one space in the specified direction
+    public boolean Move(int Direction) { //if possible, moves the player at least one space in the specified direction
         //1 = north, 2 = east, 3 = south, 4 = west
         f = Direction; //set facing to chosen direction.
         int targetedTile = m; //set our targets to the player's current location for starts.
@@ -322,28 +327,62 @@ public class Room extends StackPane {
 
         }
         if(Valid){ //if the move was valid.
-            Game.mainmenu.getCurrentGame().setDelay(250);
+            //Game.mainmenu.getCurrentGame().setDelay(250);
             s = targetedSpace; //set s to targeted space.
             m = targetedTile; //set m to the original targeted tile.
-            final TranslateTransition transition = new TranslateTransition(Duration.millis(200), playerIcon);
+            characterInMotion = true;
+            final TranslateTransition transition = new TranslateTransition(Duration.millis(500), playerIcon);
             transition.setFromX(playerIcon.getTranslateX());
             transition.setFromY(playerIcon.getTranslateY());
             transition.setToX(playerIcon.getTranslateX() + 32 * (-1 * (Direction - 3)) * ((Direction + 1) % 2));
             transition.setToY(playerIcon.getTranslateY() + 32 * (Direction - 2) * (Direction % 2));
             transition.playFromStart();
             //TEST
-            Timeline continueWalk = new Timeline(new KeyFrame( //try to move again if we haven't been stopped
-                    Duration.millis(200),
+            Timeline continueWalk = new Timeline(new KeyFrame( //after the walking animation has played...
+                    Duration.millis(500),
                     ae -> {
-                        if(playerInMotion)
-                            Move(Direction);
+                        characterInMotion = false;
+                        if(currentMap.rollForEncounter()){
+                            for(int i = 0; i < 4; ++i)
+                                directionalKeysPressed[i] = false; //stop all movement if we encounter an enemy.
+                        }
+                        else { //otherwise try and move again if we haven't stopped.
+                            if (directionalKeysPressed[mostRecentKeyPressed])
+                                Move(mostRecentKeyPressed + 1);
+                        }
                     }));
             continueWalk.play();
             //TEST
             return true;
         }
-        playerInMotion = false;
+        for(int i = 0; i < 4; ++i){ //if we were forced to stop moving for one reason or another, reset key bools
+            directionalKeysPressed[i] = false;
+        }
+        characterInMotion = false;
         return false; //return false if the player could not move.
+    }
+
+    public void pressKey(int dir, boolean pressedOrReleased){
+        if(pressedOrReleased){ //if a key was pressed
+            if(!directionalKeysPressed[dir]) { //ignore input if the key was already pressed
+                if(!directionalKeysPressed[mostRecentKeyPressed]) {
+                    mostRecentKeyPressed = dir; //record the new key
+                    directionalKeysPressed[mostRecentKeyPressed] = true; //set its boolean to true
+                    if(!characterInMotion)
+                        Move(dir + 1); //begin motion if we were stationary
+                }
+                mostRecentKeyPressed = dir; //record the new key
+                directionalKeysPressed[mostRecentKeyPressed] = true; //set its boolean to true
+            }
+        }
+        else{ //if a key was released
+            directionalKeysPressed[dir] = false; //set the specified key's boolean to false
+            if(!directionalKeysPressed[mostRecentKeyPressed]){
+                for(int i = 0; i < 4; ++i){
+                    directionalKeysPressed[i] = false; //reset all keys if we're ceasing movement
+                }
+            }
+        }
     }
 
     public void generateTiles(int roomtype){ //generates tiles according to a passed room format:
@@ -821,18 +860,5 @@ public class Room extends StackPane {
 
     public Item getLoot(){
         return Loot;
-    }
-
-    public void setPlayerInMotion(int dir, boolean x){
-        if(f == dir)
-            playerInMotion = x;
-    }
-
-    public void setPlayerInMotion(boolean x){
-        playerInMotion = x;
-    }
-
-    public boolean isPlayerInMotion(){
-        return playerInMotion;
     }
 }
