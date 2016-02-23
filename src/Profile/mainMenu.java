@@ -31,7 +31,7 @@ public class mainMenu {
     private menuButton loadGame = new menuButton("LOAD GAME", 1);
     private menuButton Options = new menuButton("OPTIONS", 2);
     private menuButton Exit = new menuButton("EXIT", 3);
-    StackPane contentRoot;
+    private StackPane contentRoot;
     //create a scene endemic to the menu
 
     public mainMenu(){

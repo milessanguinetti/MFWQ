@@ -331,7 +331,7 @@ public class Room extends StackPane {
             s = targetedSpace; //set s to targeted space.
             m = targetedTile; //set m to the original targeted tile.
             characterInMotion = true;
-            final TranslateTransition transition = new TranslateTransition(Duration.millis(500), playerIcon);
+            final TranslateTransition transition = new TranslateTransition(Duration.millis(200), playerIcon);
             transition.setFromX(playerIcon.getTranslateX());
             transition.setFromY(playerIcon.getTranslateY());
             transition.setToX(playerIcon.getTranslateX() + 32 * (-1 * (Direction - 3)) * ((Direction + 1) % 2));
@@ -339,7 +339,7 @@ public class Room extends StackPane {
             transition.playFromStart();
             //TEST
             Timeline continueWalk = new Timeline(new KeyFrame( //after the walking animation has played...
-                    Duration.millis(500),
+                    Duration.millis(200),
                     ae -> {
                         characterInMotion = false;
                         if(currentMap.rollForEncounter()){

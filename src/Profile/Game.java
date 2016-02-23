@@ -7,13 +7,20 @@ import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
 import Maps.overWorld;
+import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -31,7 +38,7 @@ public class Game {
     public static overWorld overworld = new overWorld();
     public static Map currentMap;
     private Stage primaryStage;
-    private StackPane gameRoot = new StackPane();
+    private GridPane gameRoot = new GridPane();
     private long delayStartTime; //variable to track time at which a delay was requested.
     private int delayDuration; //variable to track requested delay
     private MediaPlayer mediaPlayer; //media player variable for playing music.
@@ -43,7 +50,18 @@ public class Game {
         primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        gameRoot.setAlignment(Pos.CENTER);
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        /*primarystage.setX(bounds.getWidth() - primarystage.getWidth()/2);
+        primarystage.setY(bounds.getHeight() - primarystage.getHeight()/2);
+        Scene gameScene = new Scene(gameRoot, bounds.getWidth(),
+                bounds.getHeight(), Color.BLACK);*/
         Scene gameScene = new Scene(gameRoot, Color.BLACK);
+        gameScene.setRoot(gameRoot);
+        Scale scale = new Scale((bounds.getHeight()/864), (bounds.getHeight()/864));
+        scale.setPivotX(bounds.getWidth()/2);
+        scale.setPivotY(bounds.getHeight()/2);
+        gameRoot.getTransforms().setAll(scale);
         primaryStage.setScene(gameScene);
         gameRoot.getChildren().add(notification);
         swapToMainMenu(null);
@@ -112,7 +130,6 @@ public class Game {
         mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-
     }
 
     public void swapToMainMenu(Node toRemove){

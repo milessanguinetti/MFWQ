@@ -12,7 +12,7 @@ import Profile.Game;
  */
 public class Valley01 extends Map{
     public Valley01(){
-        super("valley", 10, 10, 0, null, null, null, null);
+        super("valley", 10, 10, 5, null, null, null, null);
         //map name, xbound, ybound, encounter rate, north connection, east connection, south connection, west connection
         Difficulty = Game.Player.getAverageLevel(); //set difficulty modifier to the player's average level.
     }

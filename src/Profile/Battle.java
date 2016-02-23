@@ -46,9 +46,7 @@ public class Battle {
     public Battle() {
         contentRoot = new StackPane();
         contentRoot.setAlignment(Pos.CENTER);
-
         contentRoot.getChildren().add(Interface);
-
         contentRoot.setOnKeyReleased(event -> {
             if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 if(State == 6){
