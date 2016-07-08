@@ -21,7 +21,7 @@ public class generic1hBlunt extends Weapon {
 
     public generic1hBlunt(int damage){
         super("A standard one-handed blunted weapon with little remarkable about it.",
-                damage, "1h Blunt");
+                (damage/5)*5, "1h Blunt");
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -84,18 +84,19 @@ public class generic1hBlunt extends Weapon {
         }
         int subType = Roll % 6; //things like saber v.s. mace that are purely for flavor
         if(subType == 0)
-            itemName += "Mace +";
+            itemName += "Mace";
         else if(subType == 1)
-            itemName += "Hammer +";
+            itemName += "Hammer";
         else if(subType == 2)
-            itemName += "Morning Star +";
+            itemName += "Morning Star";
         else if(subType == 3)
-            itemName += "Flail +";
+            itemName += "Flail";
         else if(subType == 4)
-            itemName += "Club +";
+            itemName += "Club";
         else
-            itemName += "Cane +";
-        itemName += Damage/3; //to give us a damage-based qualifier to add
+            itemName += "Cane";
+        if(Damage/5 != 0)
+            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
     }
 

@@ -33,6 +33,7 @@ public class Battle {
     private battleUI Interface = new battleUI();
     private StackPane contentRoot;
     private battleData BTemp;
+    private float soundEffectVolume = 1;
     private int State = 0;
     /*
     The current state of the battle; values are as follows:
@@ -579,7 +580,12 @@ public class Battle {
     public void playMedia(String toPlay){
         MediaPlayer mediaPlayer = new MediaPlayer(
                 new Media((getClass().getResource("soundeffects/" + toPlay + ".mp3")).toString()));
+        mediaPlayer.setVolume(soundEffectVolume * Game.mainmenu.getCurrentGame().getMasterVolume());
         mediaPlayer.setCycleCount(1);
         mediaPlayer.play();
+    }
+
+    public void setSoundEffectVolume(float toSet){
+        soundEffectVolume = toSet;
     }
 }

@@ -21,7 +21,7 @@ public class genericGun extends Weapon{
 
     public genericGun(int damage){
         super("A standard gun with little remarkable about it.",
-                damage, "Gun");
+                3+(damage/5)*5, "Gun"); //ensure that damage is a multiple of 5.
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -84,18 +84,19 @@ public class genericGun extends Weapon{
         }
         int subType = Roll % 6; //things like saber v.s. mace that are purely for flavor
         if(subType == 0)
-            itemName += "Flintlock +";
+            itemName += "Flintlock";
         else if(subType == 1)
-            itemName += "Pistol +";
+            itemName += "Pistol";
         else if(subType == 2)
-            itemName += "Hand Cannon +";
+            itemName += "Hand Cannon";
         else if(subType == 3)
-            itemName += "Revolver +";
+            itemName += "Revolver";
         else if(subType == 4)
-            itemName += "Gun +";
+            itemName += "Gun";
         else
-            itemName += "Matchlock +";
-        itemName += Damage/3; //to give us a damage-based qualifier to add
+            itemName += "Matchlock";
+        if(Damage/5 != 0)
+            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
     }
 

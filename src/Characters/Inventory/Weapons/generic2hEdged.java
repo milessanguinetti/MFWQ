@@ -23,7 +23,7 @@ public class generic2hEdged extends Weapon{
 
     public generic2hEdged(int damage){
         super("A standard two-handed edged weapon with little remarkable about it.",
-                Math.round(damage * 1.5f), "2h Blunt");
+                Math.round(3+(damage/6)*9), "2h Blunt");
         //two handed weapons deal 150% damage
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -86,18 +86,19 @@ public class generic2hEdged extends Weapon{
         }
         int subType = Roll % 6; //things like saber v.s. mace that are purely for flavor
         if(subType == 0)
-            itemName += "Zweihander +";
+            itemName += "Zweihander";
         else if(subType == 1)
-            itemName += "Poleaxe +";
+            itemName += "Poleaxe";
         else if(subType == 2)
-            itemName += "Battle Axe +";
+            itemName += "Battle Axe";
         else if(subType == 3)
-            itemName += "Claymore +";
+            itemName += "Claymore";
         else if(subType == 4)
-            itemName += "Lance +";
+            itemName += "Lance";
         else
-            itemName += "Flamberge +";
-        itemName += Damage/3; //to give us a damage-based qualifier to add
+            itemName += "Flamberge";
+        if(Damage/5 != 0)
+            itemName += '+' + (Damage/5); //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
     }
 

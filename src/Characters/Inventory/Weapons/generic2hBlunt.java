@@ -21,7 +21,7 @@ public class generic2hBlunt extends Weapon{
 
     public generic2hBlunt(int damage){
         super("A standard two-handed blunted weapon with little remarkable about it.",
-                Math.round(1.5f * damage), "2h Blunt");
+                Math.round(3 + (damage/6)*9), "2h Blunt");
         //two-handed weapons deal 150% damage
 
         Random Rand = new Random();
@@ -85,18 +85,19 @@ public class generic2hBlunt extends Weapon{
         }
         int subType = Roll % 6; //things like saber v.s. mace that are purely for flavor
         if(subType == 0)
-            itemName += "Maul +";
+            itemName += "Maul";
         else if(subType == 1)
-            itemName += "War Hammer +";
+            itemName += "War Hammer";
         else if(subType == 2)
-            itemName += "Sledgehammer +";
+            itemName += "Sledgehammer";
         else if(subType == 3)
-            itemName += "Lucerne +";
+            itemName += "Lucerne";
         else if(subType == 4)
-            itemName += "Massive Club +";
+            itemName += "Massive Club";
         else
-            itemName += "Crusher +";
-        itemName += Damage/3; //to give us a damage-based qualifier to add
+            itemName += "Crusher";
+        if(Damage/5 != 0)
+            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
     }
 

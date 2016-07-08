@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,7 @@ public abstract class Map extends Tileset{
     public Map(String name, int xbound, int ybound, int encounterrate, Map North, Map East, Map South, Map West){
         encounterRate = encounterrate;
         contentRoot.setAlignment(Pos.CENTER);
+        //contentRoot.setTranslateX(-200);
         sceneRoot.setAlignment(Pos.CENTER);
         sceneRoot.getChildren().add(contentRoot);
         //sceneRoot.getChildren().add(Game.notification);
@@ -164,6 +167,10 @@ public abstract class Map extends Tileset{
             }
             else if (event1.getCode() == KeyCode.LEFT || event1.getCode() == KeyCode.A){
                 Rooms[currentRoom].pressKey(3, false);
+            }
+            //ESCAPE CASE
+            else if(event1.getCode() == KeyCode.ESCAPE){
+                Game.mainmenu.getCurrentGame().swapToInventory(sceneRoot);
             }
         });
 
@@ -428,6 +435,7 @@ public abstract class Map extends Tileset{
             }
             north = east = south = west = false; //reset booleans
         }
+        buildMiniMap();
     }
 
     //method that generates enemies based on the dungeon in question.
@@ -473,4 +481,23 @@ public abstract class Map extends Tileset{
 
     //lets us neatly enter a map from the overworld in a location that makes sense without storing data
     public abstract void enterFromOverworld();
+
+    public void buildMiniMap(){
+        StackPane minimap = new StackPane();
+        minimap.setAlignment(Pos.CENTER);
+        minimap.setTranslateX(600);
+        minimap.setTranslateY(-260);
+        Rectangle background = new Rectangle(xBound * Room.mapObjectDimension + Room.mapObjectDimension,
+                yBound * Room.mapObjectDimension + Room.mapObjectDimension);
+        background.setFill(Color.GRAY);
+        minimap.getChildren().add(background);
+        for(int i = 0; i < xBound*yBound; ++i){
+            if(Rooms[i] != null)
+                minimap.getChildren().add(Rooms[i].getMapObject((i%xBound)-xBound/2f + .5f, (i/yBound)-yBound/2f + .5f));
+            else{
+                minimap.getChildren().add(Room.getBlankMapObject((i%xBound)-xBound/2f + .5f, (i/yBound)-yBound/2f + .5f));
+            }
+        }
+        contentRoot.getChildren().add(minimap);
+    }
 }

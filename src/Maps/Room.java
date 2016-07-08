@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Created by Miles Sanguinetti on 5/20/2015.
@@ -32,8 +33,11 @@ public class Room extends StackPane {
     private static boolean characterInMotion = false;
     //array of boolean vars; [0] = north, [1] = east, etc
     public static Map currentMap; //the name of the current map; having a static variable
+    public static int mapObjectDimension = 24;
     private int roomType = 0; //denotes the format of the room's tiles.
     private short [] Tiles;
+    private boolean hasBeenEntered = false;
+    private StackPane mapObject;
     /*
     Each normal room contains 9 * 9 tiles; this is not a multidimensional array, but to the end of saving memory
     is rather a single lengthy block of contiguous shorts. To go up or down, one would simply add or subtract 9.
@@ -66,6 +70,10 @@ public class Room extends StackPane {
     }
 
     public void Enter(int Direction) { //enter the room from a cardinal direction
+        if(!hasBeenEntered){
+            hasBeenEntered = true;
+            drawMapObject(); //draw map object upon entering the room.
+        }
 
         if(playerIcon == null){ // load player icon
             try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/player.png"))){
@@ -502,27 +510,27 @@ public class Room extends StackPane {
             case 4: //left only
                 if(roll == 0){
                     Tiles = new short[]
-                                    {9, 1, 1, 1, 1, 1, 1, 1, 10,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    8, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    12, 3, 3, 3, 3, 3, 3, 3, 11};
+                                    {9, 1, 1, 1, 1, 1, 10, 0, 0,
+                                    4, 0, 0, 0, 0, 0, 2, 0, 0,
+                                    4, 0, 0, 0, 0, 0, 2, 17, 0,
+                                    4, 0, 0, 0, 0, 0, 2, 0, 0,
+                                    8, 0, 0, 0, 0, 0, 2, 0, 0,
+                                    4, 0, 0, 0, 0, 0, 2, 0, 0,
+                                    4, 0, 0, 18, 0, 0, 2, 0, 17,
+                                    4, 0, 0, 0, 0, 0, 2, 0, 0,
+                                    12, 3, 3, 3, 3, 3, 11, 0, 0};
                 }
                 else{
                     Tiles = new short[]
-                                    {9, 1, 1, 1, 1, 1, 1, 1, 10,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
+                                    {0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                    0, 0, 0, 9, 1, 1, 1, 1, 10,
+                                    17, 0, 0, 4, 0, 0, 18, 0, 2,
+                                    9, 1, 1, 11, 0, 0, 0, 0, 2,
                                     8, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    4, 0, 0, 0, 0, 0, 0, 0, 2,
-                                    12, 3, 3, 3, 3, 3, 3, 3, 11};
+                                    12, 3, 10, 0, 0, 0, 0, 0, 2,
+                                    0, 0, 4, 0, 0, 0, 0, 0, 2,
+                                    0, 0, 12, 3, 3, 3, 3, 3, 11,
+                                    0, 0, 19, 0, 0, 0, 0, 0, 0};
                 }
                 break;
             case 5: //up-down
@@ -860,5 +868,94 @@ public class Room extends StackPane {
 
     public Item getLoot(){
         return Loot;
+    }
+
+    public StackPane getMapObject(float x, float y){
+        if(mapObject == null){
+            mapObject = new StackPane();
+            mapObject.setOpacity(.9);
+            mapObject.setAlignment(Pos.CENTER);
+            Rectangle background = new Rectangle(mapObjectDimension, mapObjectDimension);
+            background.setFill(Color.GRAY);
+            mapObject.getChildren().add(background);
+            background = new Rectangle(mapObjectDimension-2, mapObjectDimension-2);
+            background.setFill(Color.BLACK);
+            mapObject.getChildren().add(background);
+            mapObject.setTranslateX(x*mapObjectDimension);
+            mapObject.setTranslateY(y*mapObjectDimension);
+        }
+        return mapObject;
+    }
+
+    public static StackPane getBlankMapObject(float translatex, float translatey){
+        StackPane toReturn = new StackPane();
+        toReturn.setAlignment(Pos.CENTER);
+        toReturn.setOpacity(.9);
+        toReturn.setTranslateX(translatex*mapObjectDimension);
+        toReturn.setTranslateY(translatey*mapObjectDimension);
+        Rectangle background = new Rectangle(mapObjectDimension, mapObjectDimension);
+        background.setFill(Color.GRAY);
+        toReturn.getChildren().add(background);
+        background = new Rectangle(mapObjectDimension-2, mapObjectDimension-2);
+        background.setFill(Color.BLACK);
+        toReturn.getChildren().add(background);
+        return toReturn;
+    }
+
+    public void drawMapObject(){ //fills in the mapobject pane with info on
+        mapObject.getChildren().add(getPathFill(0, 0));
+        /*
+        if(roomType < 5){ //single entrance
+            mapObject.getChildren().add(getPathFill(((roomType-2)%2)*mapObjectDimension/3,
+                    ((roomType-1)%2-2)*mapObjectDimension/3));
+        }
+        else if(roomType == 5 || roomType == 6){ //2 linear entrances
+            mapObject.getChildren().add(getPathFill(((roomType-1)%2)*mapObjectDimension/3,
+                    ((roomType)%2)*mapObjectDimension/3));
+            mapObject.getChildren().add(getPathFill((((roomType-1)*-1)%2)*mapObjectDimension/3,
+                    ((roomType*-1)%2)*mapObjectDimension/3));
+        }
+        else if(roomType == 15){
+            mapObject.getChildren().addAll(getPathFill(0, mapObjectDimension/3), getPathFill(0, mapObjectDimension/-3),
+                    getPathFill(mapObjectDimension/3, 0), getPathFill(mapObjectDimension/-3, 0));
+        }*/
+        if(Tiles[4] == 5){
+            mapObject.getChildren().add(getPathFill(0, mapObjectDimension/-3));
+        }
+
+        if(Tiles[36] == 8){
+            mapObject.getChildren().add(getPathFill(mapObjectDimension/-3, 0));
+        }
+        if(Tiles[44] == 6){
+            mapObject.getChildren().add(getPathFill(mapObjectDimension/3, 0));
+        }
+        if(Tiles[76] == 7){
+            mapObject.getChildren().add(getPathFill(0, mapObjectDimension/3));
+        }
+    }
+    /*
+        1 = ^ up only
+        2 = > right only
+        3 = \/ down only
+        4 = < left only
+        5 = ^ \/ up-down
+        6 = < > left-right
+        7 = < ^ left-up
+        8 = ^ > up-right
+        9 = > \/ right-down
+        10 = < \/ down-left
+        11 = < \/ > all but up
+        12 = < ^ \/ all but right
+        13 = < ^ > all but down
+        14 ^ > /\ all but left
+        15 = < ^ > \/ all directions
+         */
+
+    public Rectangle getPathFill(int translatex, int translatey){
+        Rectangle toReturn = new Rectangle(mapObjectDimension/3, mapObjectDimension/3);
+        toReturn.setFill(Color.WHITE);
+        toReturn.setTranslateX(translatex);
+        toReturn.setTranslateY(translatey);
+        return toReturn;
     }
 }

@@ -7,15 +7,12 @@ import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
 import Maps.overWorld;
-import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -42,6 +39,9 @@ public class Game {
     private long delayStartTime; //variable to track time at which a delay was requested.
     private int delayDuration; //variable to track requested delay
     private MediaPlayer mediaPlayer; //media player variable for playing music.
+    private float musicVolume = 1; //a floating point between 0.0 and 1.0 that denotes the volume of
+                               //any music that the game plays, with 0.0 == silent and 1.0 == full
+    private float masterVolume = 1; //see above, but impacts both music and sound effects.
 
     public Game(Stage primarystage){
         mainmenu.setGame(this);
@@ -96,7 +96,7 @@ public class Game {
             objectInput.close();
         }
         catch (IOException e){
-            System.err.println("Load unsuccessful; "+ e.getMessage() + " not serializable");
+            System.err.println("Load unsuccessful.");
         }
         catch (ClassNotFoundException e){
             System.err.println("Load unsuccessful.");
@@ -120,6 +120,22 @@ public class Game {
         }
     }
 
+    public void setMusicVolume(float toSet){
+        musicVolume = toSet;
+        if(mediaPlayer != null)
+            mediaPlayer.setVolume(masterVolume * toSet);
+    }
+
+    public void setMasterVolume(float toSet){
+        masterVolume = toSet;
+        if(mediaPlayer != null)
+            mediaPlayer.setVolume(musicVolume * toSet);
+    }
+
+    public float getMasterVolume(){
+        return masterVolume;
+    }
+
     public void swapToBattle(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
@@ -128,6 +144,7 @@ public class Game {
         if(mediaPlayer != null)
             mediaPlayer.stop();
         mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
+        mediaPlayer.setVolume(musicVolume);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
@@ -140,22 +157,27 @@ public class Game {
         if(mediaPlayer != null)
             mediaPlayer.stop();
         mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/titletheme.mp3")).toString()));
+        mediaPlayer.setVolume(musicVolume * masterVolume);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
 
 
     public void swapToMap(Node toRemove){
+        gameRoot.getChildren().remove(toRemove);
         if(currentMap != null){
-            if(toRemove != null)
-                gameRoot.getChildren().remove(toRemove);
             gameRoot.getChildren().add(currentMap.getPane());
             currentMap.getPane().requestFocus();
             if(mediaPlayer != null)
                 mediaPlayer.stop();
             mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/maptheme.mp3")).toString()));
+            mediaPlayer.setVolume(musicVolume * masterVolume);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.play();
+        }
+        else{
+            swapToOverworld(null);
+            overworld.getPane().requestFocus();
         }
     }
 
@@ -167,14 +189,26 @@ public class Game {
         swapToMainMenu(null);
     }
 
+    public void swapToInventory(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        gameRoot.getChildren().add(Player.getContentRoot());
+        Player.getContentRoot().requestFocus();
+        Player.setItemBox(0);
+    }
+
     public void setDelay(int Delay){
         delayStartTime = System.currentTimeMillis();
         delayDuration = Delay;
     }
 
     public boolean isDelayOver(){
-        if(System.currentTimeMillis() - delayDuration > delayStartTime)
+        if(delayDuration == 0)
             return true;
+        if(System.currentTimeMillis() - delayDuration > delayStartTime) {
+            delayDuration = 0;
+            return true;
+        }
         return false;
     }
 

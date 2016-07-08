@@ -1,23 +1,23 @@
 package Characters;
 
-import javafx.animation.*;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
+        import javafx.animation.*;
+        import javafx.geometry.Pos;
+        import javafx.geometry.Rectangle2D;
+        import javafx.scene.effect.ColorAdjust;
+        import javafx.scene.image.Image;
+        import javafx.scene.image.ImageView;
+        import javafx.scene.layout.StackPane;
+        import javafx.scene.paint.Color;
+        import javafx.scene.text.Font;
+        import javafx.scene.text.FontWeight;
+        import javafx.scene.text.Text;
+        import javafx.util.Duration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.Serializable;
+        import java.nio.file.Files;
+        import java.nio.file.Paths;
 
 /**
  * Created by Miles Sanguinetti on 7/29/2015.
