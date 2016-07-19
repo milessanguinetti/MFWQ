@@ -27,18 +27,19 @@ import java.util.Stack;
  * Created by Miles Sanguinetti on 3/22/15.
  */
 public class Inventory implements Serializable {
-    private orderedDLL[] Items = new orderedDLL[5];
+    private static orderedDLL[] Items = new orderedDLL[5];
     //0 = consumables
     //1 = weapons
     //2 = armor
     //3 = accessories
     //4 = quest items
-    private int currentCategory = 1; //the current category of item that the user is looking at.
+    private static int currentCategory = 1; //the current category of item that the user is looking at.
     private static categoryButton[] Categories = new categoryButton[5];
     private inventoryBox itemBox;
     private static StackPane contentRoot;
     private static GridPane buttonPane;
-    private ScrollPane itemBoxPane;
+    private static ItemUseBox usebox;
+    private static transient ScrollPane itemBoxPane;
 
     public Inventory() {
         contentRoot = new StackPane();
@@ -49,6 +50,17 @@ public class Inventory implements Serializable {
         buttonPane = new GridPane();
         buttonPane.setAlignment(Pos.CENTER);
         contentRoot.getChildren().add(buttonPane);
+        itemBoxPane = new ScrollPane();
+        itemBoxPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        itemBoxPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        itemBoxPane.setVmax(1);
+        itemBoxPane.setVmin(1);
+        itemBoxPane.setPrefSize(400, 450);
+        itemBoxPane.setStyle("-fx-font-size: 30px;");
+        //itemBoxPane.setTranslateX(0 - bounds.getWidth()/2);
+        itemBoxPane.setTranslateY(bounds.getHeight()/12);
+        buttonPane.getChildren().add(itemBoxPane);
 
         Categories[0] = new categoryButton(0, "Consumables", this);
         Categories[1] = new categoryButton(1, "Weapons", this);
@@ -63,27 +75,32 @@ public class Inventory implements Serializable {
             buttonPane.getChildren().add(Categories[i]);
         }
 
+        if(usebox == null) {
+            usebox = new ItemUseBox();
+            buttonPane.getChildren().add(usebox);
+        }
+
         //interfacing code:
-        contentRoot.setOnKeyReleased(event -> {
+        contentRoot.setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:{
                     itemBox.useCurrent();
                     break;
                 }
                 case UP: {
-                    itemBox.incrementCurrent(1);
+                    itemBox.incrementCurrent(-1);
                     break;
                 }
                 case W:{
-                    itemBox.incrementCurrent(1);
+                    itemBox.incrementCurrent(-1);
                     break;
                 }
                 case DOWN: {
-                    itemBox.incrementCurrent(-1);
+                    itemBox.incrementCurrent(1);
                     break;
                 }
                 case S: {
-                    itemBox.incrementCurrent(-1);
+                    itemBox.incrementCurrent(1);
                     break;
                 }
                 case RIGHT:{
@@ -102,10 +119,11 @@ public class Inventory implements Serializable {
                     setItemBox(currentCategory - 1);
                     break;
                 }
-                case ESCAPE:{
-                    Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
-                    break;
-                }
+            }
+        });
+        contentRoot.setOnKeyReleased(event -> {
+            if(event.getCode() == KeyCode.ESCAPE){
+                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
             }
         });
 
@@ -116,25 +134,13 @@ public class Inventory implements Serializable {
             Categories[currentCategory].setPlain();
             currentCategory = i;
             Categories[currentCategory].setBold();
-            contentRoot.getChildren().remove(itemBox);
             itemDisplay.Remove();
             itemBox = new inventoryBox(Items[i]);
+            itemBox.setCurrent(0);
             if(Items[i].getSize() != 0)
                 itemBox.setCurrent(0);
-            /*itemBoxPane = new ScrollPane();
-            itemBoxPane.setVisible(false);
-            contentRoot.getChildren().remove(itemBoxPane);
             itemBoxPane.setContent(itemBox);
-            Rectangle2D bounds = Screen.getPrimary().getBounds();
-            itemBoxPane.setVmax(bounds.getHeight()/1.5);
-            itemBoxPane.setPrefSize(bounds.getHeight()/1.5, 500);
-            itemBoxPane.setStyle("-fx-font-size: 30px;");
             itemBox.setVgrow(itemBoxPane, Priority.ALWAYS);
-            itemBoxPane.setTranslateX(0 - bounds.getWidth()/4);
-            itemBoxPane.setTranslateY(bounds.getHeight()/4);
-            contentRoot.getChildren().add(itemBoxPane);
-            */
-            contentRoot.getChildren().add(itemBox);
         }
     }
 
@@ -164,6 +170,10 @@ public class Inventory implements Serializable {
         itemType.Insert(new orderedDLLNode(toInsert));
     }
 
+    public StackPane getContentRoot(){
+        return contentRoot;
+    }
+
     private static class itemDisplay extends StackPane{
         private static itemDisplay currentDisplay;
 
@@ -185,6 +195,8 @@ public class Inventory implements Serializable {
                 addText(toDisplay.getDescription(), 100, 20);
                 addText("Quantity: " + toDisplay.getQuantity(), 200, 20);
                 Inventory.contentRoot.getChildren().add(currentDisplay);
+                Inventory.buttonPane.toFront();
+
             }
         }
 
@@ -224,11 +236,13 @@ public class Inventory implements Serializable {
         }
 
         public void setPlain(){
-            buttonShape.setOpacity(.4);
+            buttonShape.setOpacity(.5);
+            buttonShape.setFill(Color.GRAY);
         }
 
         public void setBold(){
-            buttonShape.setOpacity(.7);
+            buttonShape.setOpacity(.8);
+            buttonShape.setFill(Color.DARKGRAY);
         }
     }
 
@@ -261,32 +275,49 @@ public class Inventory implements Serializable {
             });
 
             setOnMouseReleased(event -> {
-                item.Use();
+                //item.Use();
             });
     }
 
         public void setPlain() {
-            buttonShape.setOpacity(.6);
+            buttonShape.setFill(Color.LIGHTGRAY);
+            buttonShape.setOpacity(.5);
         }
 
         public void setBold() {
-            buttonShape.setOpacity(.4);
+            buttonShape.setOpacity(.8);
+            buttonShape.setFill(Color.DARKGRAY);
             new itemDisplay(item);
         }
 
         public void Use(){
-            item.Use();
+            System.out.println("Using " + item.returnKey() + ".");
+            item.Use(Game.Player.getParty()[0]);
+        }
+
+        public String getKey(){
+            return item.returnKey();
         }
 }
 
     private static class inventoryBox extends VBox {
-        private static int currentItem = 0;
+        private static int currentItem;
         private static inventoryButton [] itemArray;
         private static int sumItems;
 
         public inventoryBox(orderedDLL toadd) {
+            currentItem = 0;
             this.setAlignment(Pos.CENTER);
             sumItems = toadd.getSize();
+            if(sumItems == 0){
+                Inventory.itemBoxPane.setVmin(1);
+                Inventory.itemBoxPane.setVmax(1);
+            }
+            else {
+                Inventory.itemBoxPane.setVmin(0);
+                Inventory.itemBoxPane.setVmax(1);
+                Inventory.itemBoxPane.setVvalue(0);
+            }
             itemArray = new inventoryButton[sumItems];
             orderedDLLNode current = toadd.getHead();
             //for all buttons that we will be adding...
@@ -307,28 +338,114 @@ public class Inventory implements Serializable {
                 itemArray[currentItem].setBold();
             }
         }
-
         public static void incrementCurrent(int toIncrement){
+            System.out.println(1.0/((sumItems-1)-itemBoxPane.getHeight()/46));
+            System.out.println(1.0/((sumItems-1)*((itemBoxPane.getHeight()/46)/(sumItems-1))));
             if(currentItem + toIncrement >= 0 && currentItem + toIncrement < sumItems && sumItems != 0) {
                 itemArray[currentItem].setPlain();
                 currentItem += toIncrement;
                 itemArray[currentItem].setBold();
             }
+            if(toIncrement > 0 && (currentItem+1) > (sumItems*itemBoxPane.getVvalue() + itemBoxPane.getHeight()*(1-itemBoxPane.getVvalue())/46)) {
+                itemBoxPane.setVvalue(itemBoxPane.getVvalue() + 1.0/((sumItems-1)-itemBoxPane.getHeight()/46));
+            }
+            else if(toIncrement < 0 && currentItem < (sumItems*itemBoxPane.getVvalue() - itemBoxPane.getHeight()*(itemBoxPane.getVvalue())/46)) {
+                itemBoxPane.setVvalue(itemBoxPane.getVvalue() - 1.0/((sumItems-1)-itemBoxPane.getHeight()/46));
+            }
+            //System.out.println();
         }
 
         public static void useCurrent(){
             itemArray[currentItem].Use();
+            Items[currentCategory].Remove(itemArray[currentItem].getKey());
+
         }
 
         private Line generateLine() {
             Line line = new Line();
-            line.setEndX(630);
+            line.setEndX(400);
             line.setStroke(Color.WHITE);
             return line;
         }
+
+        public void dropCurrent(){
+            Items[currentCategory].Remove(itemArray[currentItem].getKey());
+        }
     }
 
-    public StackPane getContentRoot(){
-        return contentRoot;
+    private static class ItemUseBox extends StackPane{
+        public ItemUseBox(){
+            Text texttoadd;
+            setAlignment(Pos.CENTER);
+            setTranslateX(-450);
+            setTranslateY(75);
+            Rectangle background = new Rectangle(300, 500);
+            background.setFill(Color.GRAY);
+            getChildren().add(background);
+            GridPane buttonpane = new GridPane();
+            buttonpane.setAlignment(Pos.CENTER);
+            getChildren().add(buttonpane);
+            //USE BUTTON
+            Rectangle use = new Rectangle(250, 50);
+            use.setFill(Color.LIGHTGRAY);
+            use.setTranslateY(-100);
+            use.setOnMouseClicked(event ->{
+                inventoryBox.useCurrent();
+            });
+            use.setOnMouseEntered(event1 -> {
+                use.setFill(Color.DARKGRAY);
+            });
+            use.setOnMouseExited(event ->{
+                use.setFill(Color.LIGHTGRAY);
+            });
+            buttonpane.getChildren().add(use);
+            texttoadd = new Text("Use");
+            texttoadd.setTranslateY(-100);
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setOnMouseClicked(event -> {
+                inventoryBox.useCurrent();
+            });
+            //getChildren().add(texttoadd);
+            //DROP BUTTON
+            Rectangle drop = new Rectangle(250, 50);
+            drop.setFill(Color.LIGHTGRAY);
+            drop.setOnMouseClicked(event ->{
+                inventoryBox.useCurrent();
+            });
+            drop.setOnMouseEntered(event1 -> {
+                drop.setFill(Color.DARKGRAY);
+            });
+            drop.setOnMouseExited(event ->{
+                drop.setFill(Color.LIGHTGRAY);
+            });
+            buttonpane.getChildren().add(drop);
+            texttoadd = new Text("Drop");
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setOnMouseClicked(event -> {
+                inventoryBox.useCurrent();
+            });
+            //getChildren().add(texttoadd);
+            //BACK BUTTON
+            Rectangle back = new Rectangle(250, 50);
+            back.setFill(Color.LIGHTGRAY);
+            back.setTranslateY(100);
+            back.setOnMouseClicked(event ->{
+
+            });
+            back.setOnMouseEntered(event1 -> {
+                back.setFill(Color.DARKGRAY);
+            });
+            back.setOnMouseExited(event ->{
+                back.setFill(Color.LIGHTGRAY);
+            });
+            buttonpane.getChildren().add(back);
+            texttoadd = new Text("Back");
+            texttoadd.setTranslateY(100);
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setOnMouseClicked(event -> {
+
+            });
+            //getChildren().add(texttoadd);
+        }
     }
 }

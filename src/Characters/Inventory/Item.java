@@ -109,5 +109,4 @@ public abstract class Item implements incrementableData, Serializable {
     public int compareTo(Data toCompare) {
         return itemName.toLowerCase().compareTo(toCompare.returnKey().toLowerCase());
     }
-
 }

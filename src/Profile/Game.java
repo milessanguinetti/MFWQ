@@ -3,6 +3,7 @@ package Profile;
 import Characters.Classes.*;
 import Characters.Inventory.Weapons.Nodachi;
 import Characters.Inventory.Weapons.genericGun;
+import Characters.Inventory.Weapons.koboldSlayingSword;
 import Characters.playerCharacter;
 import Maps.Map;
 import Maps.Valley01;
@@ -13,9 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -35,7 +38,7 @@ public class Game {
     public static overWorld overworld = new overWorld();
     public static Map currentMap;
     private Stage primaryStage;
-    private GridPane gameRoot = new GridPane();
+    private StackPane gameRoot = new StackPane();
     private long delayStartTime; //variable to track time at which a delay was requested.
     private int delayDuration; //variable to track requested delay
     private MediaPlayer mediaPlayer; //media player variable for playing music.
@@ -63,6 +66,9 @@ public class Game {
         scale.setPivotY(bounds.getHeight()/2);
         gameRoot.getTransforms().setAll(scale);
         primaryStage.setScene(gameScene);
+        Rectangle background = new Rectangle(bounds.getWidth(), bounds.getHeight());
+        background.setFill(Color.BLACK);
+        gameRoot.getChildren().add(background);
         gameRoot.getChildren().add(notification);
         swapToMainMenu(null);
         primaryStage.show();
@@ -70,9 +76,24 @@ public class Game {
 
     public void newPlayer(){
         Player = new userProfile();
-        playerCharacter bob = new playerCharacter("Sergeant Pepper", "Faithful",
+        playerCharacter bob = new playerCharacter("Spaghetti", "Faithful",
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(bob);
+        Player.Insert(new Nodachi(5));
+        Player.Insert(new koboldSlayingSword(5));
+        Player.Insert(new koboldSlayingSword(15));
+        Player.Insert(new koboldSlayingSword(25));
+        Player.Insert(new koboldSlayingSword(35));
+        Player.Insert(new koboldSlayingSword(45));
+        Player.Insert(new koboldSlayingSword(55));
+        Player.Insert(new koboldSlayingSword(65));
+        Player.Insert(new koboldSlayingSword(75));
+        Player.Insert(new koboldSlayingSword(85));
+        Player.Insert(new koboldSlayingSword(95));
+        Player.Insert(new koboldSlayingSword(105));
+        Player.Insert(new koboldSlayingSword(115));
+        Player.Insert(new koboldSlayingSword(125));
+
         new genericGun(6).Use(bob);
         new Nodachi().Use(bob); //equip the good sergeant with a motherfucking nodachi
         bob.addClass(new Soldier());

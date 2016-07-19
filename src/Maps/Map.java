@@ -322,6 +322,35 @@ public abstract class Map extends Tileset{
             }
         }
         //by this point, we've ensured that all rooms can potentially be traversible.
+        //now remove a few unnecessary rooms.
+        for(int j = xBound; j < xBound*(yBound-1); ++j){
+            if(Rooms[j] != null) {
+                if (j % yBound != 0 && j % yBound != xBound - 1 && Rooms[j].getLoot() == null) {
+                    int surroundingrooms = 0;
+                    if (Rooms[j - 1] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j + 1] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j + xBound] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j - xBound] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j + xBound + 1] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j - xBound + 1] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j + xBound - 1] != null)
+                        ++surroundingrooms;
+                    if (Rooms[j - xBound - 1] != null)
+                        ++surroundingrooms;
+                    if (surroundingrooms >= 7) {
+                        //System.out.println("Removing room (" + j%xBound + ", "
+                        // + j/yBound + ") due to " + surroundingrooms + " surrounding rooms.");
+                        Rooms[j] = null;
+                    }
+                }
+            }
+        }
         boolean north = false, east = false, south = false, west = false;
         //we start by adding connection rooms, since they have exits leading beyond the map.
         for(int j = 0; j < 4; ++j){
@@ -385,52 +414,52 @@ public abstract class Map extends Tileset{
         }
         //with those handled, we tackle the rest of the map.
         for(int j = 0; j < xBound * yBound; ++j){
-            if(Rooms[j] != null){
-                if(j >= xBound){ //case for checking north connection
-                    if(Rooms[j - xBound] != null)
+            if(Rooms[j] != null) {
+                if (j >= xBound) { //case for checking north connection
+                    if (Rooms[j - xBound] != null)
                         north = true;
                 }
-                if(j%xBound != xBound - 1){ //case for checking east connection
-                    if(Rooms[j + 1] != null)
+                if (j % xBound != xBound - 1) { //case for checking east connection
+                    if (Rooms[j + 1] != null)
                         east = true;
                 }
-                if(j + xBound < xBound * yBound){ //case for checking south connection
-                    if(Rooms[j + xBound] != null)
+                if (j + xBound < xBound * yBound) { //case for checking south connection
+                    if (Rooms[j + xBound] != null)
                         south = true;
                 }
-                if(j%xBound != 0){ //case for checking west connection
-                    if(Rooms[j - 1] != null)
+                if (j % xBound != 0) { //case for checking west connection
+                    if (Rooms[j - 1] != null)
                         west = true;
                 }
-                if(north && !east && !south && !west)
+                if (north && !east && !south && !west)
                     Rooms[j].generateTiles(1);
-                else if(!north && east && !south && !west)
+                else if (!north && east && !south && !west)
                     Rooms[j].generateTiles(2);
-                else if(!north && !east && south && !west)
+                else if (!north && !east && south && !west)
                     Rooms[j].generateTiles(3);
-                else if(!north && !east && !south && west)
+                else if (!north && !east && !south && west)
                     Rooms[j].generateTiles(4);
-                else if(north && !east && south && !west)
+                else if (north && !east && south && !west)
                     Rooms[j].generateTiles(5);
-                else if(!north && east && !south && west)
+                else if (!north && east && !south && west)
                     Rooms[j].generateTiles(6);
-                else if(north && !east && !south && west)
+                else if (north && !east && !south && west)
                     Rooms[j].generateTiles(7);
-                else if(north && east && !south && !west)
+                else if (north && east && !south && !west)
                     Rooms[j].generateTiles(8);
-                else if(!north && east && south && !west)
+                else if (!north && east && south && !west)
                     Rooms[j].generateTiles(9);
-                else if(!north && !east && south && west)
+                else if (!north && !east && south && west)
                     Rooms[j].generateTiles(10);
-                else if(!north && east && south && west)
+                else if (!north && east && south && west)
                     Rooms[j].generateTiles(11);
-                else if(north && !east && south && west)
+                else if (north && !east && south && west)
                     Rooms[j].generateTiles(12);
-                else if(north && east && !south && west)
+                else if (north && east && !south && west)
                     Rooms[j].generateTiles(13);
-                else if(north && east && south && !west)
+                else if (north && east && south && !west)
                     Rooms[j].generateTiles(14);
-                else if(north && east && south && west)
+                else if (north && east && south && west)
                     Rooms[j].generateTiles(15);
             }
             north = east = south = west = false; //reset booleans

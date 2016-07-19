@@ -883,6 +883,9 @@ public class Room extends StackPane {
             mapObject.getChildren().add(background);
             mapObject.setTranslateX(x*mapObjectDimension);
             mapObject.setTranslateY(y*mapObjectDimension);
+            //TEST FOR MAP PLAY VALUE
+            drawMapObject();
+            //TEST FOR MAP PLAY VALUE
         }
         return mapObject;
     }
@@ -898,6 +901,7 @@ public class Room extends StackPane {
         toReturn.getChildren().add(background);
         background = new Rectangle(mapObjectDimension-2, mapObjectDimension-2);
         background.setFill(Color.BLACK);
+
         toReturn.getChildren().add(background);
         return toReturn;
     }
@@ -919,18 +923,19 @@ public class Room extends StackPane {
             mapObject.getChildren().addAll(getPathFill(0, mapObjectDimension/3), getPathFill(0, mapObjectDimension/-3),
                     getPathFill(mapObjectDimension/3, 0), getPathFill(mapObjectDimension/-3, 0));
         }*/
-        if(Tiles[4] == 5){
-            mapObject.getChildren().add(getPathFill(0, mapObjectDimension/-3));
-        }
-
-        if(Tiles[36] == 8){
-            mapObject.getChildren().add(getPathFill(mapObjectDimension/-3, 0));
-        }
-        if(Tiles[44] == 6){
-            mapObject.getChildren().add(getPathFill(mapObjectDimension/3, 0));
-        }
-        if(Tiles[76] == 7){
-            mapObject.getChildren().add(getPathFill(0, mapObjectDimension/3));
+        if(Tiles!= null) {
+            if (Tiles[4] == 5) {
+                mapObject.getChildren().add(getPathFill(0, mapObjectDimension / -3));
+            }
+            if (Tiles[36] == 8) {
+                mapObject.getChildren().add(getPathFill(mapObjectDimension / -3, 0));
+            }
+            if (Tiles[44] == 6) {
+                mapObject.getChildren().add(getPathFill(mapObjectDimension / 3, 0));
+            }
+            if (Tiles[76] == 7) {
+                mapObject.getChildren().add(getPathFill(0, mapObjectDimension / 3));
+            }
         }
     }
     /*
@@ -952,7 +957,7 @@ public class Room extends StackPane {
          */
 
     public Rectangle getPathFill(int translatex, int translatey){
-        Rectangle toReturn = new Rectangle(mapObjectDimension/3, mapObjectDimension/3);
+        Rectangle toReturn = new Rectangle(mapObjectDimension/3+1, mapObjectDimension/3+1);
         toReturn.setFill(Color.WHITE);
         toReturn.setTranslateX(translatex);
         toReturn.setTranslateY(translatey);
