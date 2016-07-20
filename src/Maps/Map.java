@@ -322,11 +322,12 @@ public abstract class Map extends Tileset{
             }
         }
         //by this point, we've ensured that all rooms can potentially be traversible.
-        //now remove a few unnecessary rooms.
+        //now we remove a few unnecessary rooms with enough surrounding rooms for the map to remain traversible.
+        int surroundingrooms;
         for(int j = xBound; j < xBound*(yBound-1); ++j){
             if(Rooms[j] != null) {
                 if (j % yBound != 0 && j % yBound != xBound - 1 && Rooms[j].getLoot() == null) {
-                    int surroundingrooms = 0;
+                    surroundingrooms = 0;
                     if (Rooms[j - 1] != null)
                         ++surroundingrooms;
                     if (Rooms[j + 1] != null)
@@ -347,6 +348,20 @@ public abstract class Map extends Tileset{
                         //System.out.println("Removing room (" + j%xBound + ", "
                         // + j/yBound + ") due to " + surroundingrooms + " surrounding rooms.");
                         Rooms[j] = null;
+                    }
+                    else if(surroundingrooms >= 5){
+                        if(Rooms[j+xBound] != null && Rooms[j+xBound-1] != null &&
+                                Rooms[j+xBound + 1] != null && Rooms[j-xBound] == null)
+                            Rooms[j] = null;
+                        else if(Rooms[j-xBound] != null && Rooms[j-xBound-1] != null &&
+                                Rooms[j-xBound + 1] != null && Rooms[j+xBound] == null)
+                            Rooms[j] = null;
+                        else if(Rooms[j-1] != null && Rooms[j+xBound-1] != null &&
+                                Rooms[j-xBound-1] != null && Rooms[j+1] == null)
+                            Rooms[j] = null;
+                        else if(Rooms[j+1] != null && Rooms[j+xBound+1] != null &&
+                                Rooms[j-xBound+1] != null && Rooms[j-1] == null)
+                            Rooms[j] = null;
                     }
                 }
             }

@@ -27,11 +27,13 @@ import java.util.Stack;
  * Created by Miles Sanguinetti on 5/20/2015.
  */
 public class Room extends StackPane {
+    private static Rectangle playerMapMarker;
     private static ImageView playerIcon;
     private static int mostRecentKeyPressed;
     private static boolean [] directionalKeysPressed = new boolean[4];
     private static boolean characterInMotion = false;
     //array of boolean vars; [0] = north, [1] = east, etc
+    private static Room currentRoom;
     public static Map currentMap; //the name of the current map; having a static variable
     public static int mapObjectDimension = 24;
     private int roomType = 0; //denotes the format of the room's tiles.
@@ -74,6 +76,15 @@ public class Room extends StackPane {
             hasBeenEntered = true;
             drawMapObject(); //draw map object upon entering the room.
         }
+
+        //create map marker to show player's location on minimap
+        if(playerMapMarker == null){
+            playerMapMarker = getPlayerMarker();
+        }
+        if(currentRoom != null)
+            currentRoom.removePlayerMarker();
+        mapObject.getChildren().add(playerMapMarker);
+        currentRoom = this;
 
         if(playerIcon == null){ // load player icon
             try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/player.png"))){
@@ -962,5 +973,15 @@ public class Room extends StackPane {
         toReturn.setTranslateX(translatex);
         toReturn.setTranslateY(translatey);
         return toReturn;
+    }
+
+    public Rectangle getPlayerMarker(){
+        Rectangle toReturn = new Rectangle(mapObjectDimension/3+1, mapObjectDimension/3+1);
+        toReturn.setFill(Color.RED);
+        return toReturn;
+    }
+
+    public void removePlayerMarker(){
+        mapObject.getChildren().remove(playerMapMarker);
     }
 }
