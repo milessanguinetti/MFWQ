@@ -9,6 +9,7 @@ import Characters.Skills.Wait;
 import Characters.Skills.Passive.passiveSkill;
 import Profile.Game;
 import Profile.battleUI;
+import Profile.experienceNotification;
 import Structures.LLLnode;
 import Structures.orderedDLLNode;
 import Structures.orderedLLL;
@@ -665,7 +666,8 @@ public class playerCharacter extends gameCharacter {
 
     public void Ding(int exp, int jexp){
         if((Exp + exp) >= expCap){ //if we've received enough exp to level...
-            System.out.println(Name + " gained a level! " + Name + "'s stats increased!");
+            experienceNotification.queueExpEvent(Name + " gained a level! " + Name + "'s stats increased!",
+                    (1f*Exp)/expCap, 1f, true);
             exp -= (expCap - exp);
             ++Level;
             expCap += Math.round(expCap*1.2); //exp cap goes up by 20%
@@ -675,8 +677,11 @@ public class playerCharacter extends gameCharacter {
                 primaryClass.baseDing(this, Level); //gain auxilary class stat boosts
             Ding(exp, 0); //recursive call; jexp == 0 so that we don't gain it twice.
         }
-        else
+        else if(exp > 0){
+            experienceNotification.queueExpEvent(Name + " gained " + exp + " exp!",
+                    (1f*Exp)/expCap, (1f*exp + Exp)/expCap, true);
             Exp += exp; //otherwise, we just add it to our exp.
+        }
         if(primaryClass != null) { //level the character's class with jexp
             primaryClass.gainJexp(jexp, this);
         }

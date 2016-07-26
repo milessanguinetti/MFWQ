@@ -32,6 +32,7 @@ public class Game {
     //the player's user profile; public and static because only one will be used at a time;
     //it would be nonsensical to pass it around into virtually every function I call
     public static Notification notification = new Notification();
+    public static experienceNotification  experiencenotification = new experienceNotification();
     public static userProfile Player; //the game's player.
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
@@ -69,7 +70,8 @@ public class Game {
         Rectangle background = new Rectangle(bounds.getWidth(), bounds.getHeight());
         background.setFill(Color.BLACK);
         gameRoot.getChildren().add(background);
-        gameRoot.getChildren().add(notification);
+        //gameRoot.getChildren().add(notification);
+        //gameRoot.getChildren().add(experiencenotification);
         swapToMainMenu(null);
         primaryStage.show();
     }
@@ -233,8 +235,23 @@ public class Game {
         return false;
     }
 
-    public void notificationToFront(){
+    public void lootNotificationToFront(){
+        gameRoot.getChildren().remove(experiencenotification);
+        notification.Animate();
+        if(notification.isActive()) {
+            gameRoot.getChildren().remove(notification);
+            gameRoot.getChildren().add(notification);
+        }
+    }
+
+    public void expNotificationToFront(){
+        experiencenotification.updateAndAnimate();
+        gameRoot.getChildren().remove(experiencenotification);
+        gameRoot.getChildren().add(experiencenotification);
+    }
+
+    public void removeNotifications(){
+        gameRoot.getChildren().remove(experiencenotification);
         gameRoot.getChildren().remove(notification);
-        gameRoot.getChildren().add(notification);
     }
 }

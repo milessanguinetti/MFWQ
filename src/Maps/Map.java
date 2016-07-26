@@ -66,6 +66,8 @@ public abstract class Map extends Tileset{
 
         //key released listening code
         sceneRoot.setOnKeyReleased(event1 -> {
+            if(Game.experiencenotification.handleInput())
+                return;
             if(Game.notification.handleInput())
                 return;
             //ENTER CASE
@@ -144,6 +146,7 @@ public abstract class Map extends Tileset{
                     case 5: { //treasure case
                         if (Rooms[currentRoom].getLoot() != null) {
                             Game.notification.lootNotification(Rooms[currentRoom].getLoot()); //add in the item
+                            Game.mainmenu.getCurrentGame().lootNotificationToFront();
                         }
                         break;
                     }
@@ -176,6 +179,8 @@ public abstract class Map extends Tileset{
 
         //key pressed listening code
         sceneRoot.setOnKeyPressed(event -> {
+            if(Game.notification.isActive() || Game.experiencenotification.isActive())
+                return;
             if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 //UP CASE
                 if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {

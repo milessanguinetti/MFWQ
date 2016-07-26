@@ -27,6 +27,8 @@ public class Notification extends StackPane implements Serializable{
     private static Text Title = new Text();
     private static Text Description = new Text();
     private lootContainer lootcontainer;
+    private boolean active = false;
+    private Item [] loot;
 
     public Notification(){
         Title.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 100));
@@ -36,7 +38,7 @@ public class Notification extends StackPane implements Serializable{
         Description.setFill(Color.GOLD);
         Description.setTranslateY(200);
         Description.setWrappingWidth(600); //wrap text if need be
-        setVisible(false); //initialize object as invisible
+        //setVisible(false); //initialize object as invisible
         javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(3000, 3000);
         Background.setFill(Color.BLACK);
         Background.setOpacity(.3);
@@ -48,44 +50,47 @@ public class Notification extends StackPane implements Serializable{
 
     //loot notification for an array (SIZE 4) of items
     public void lootNotification(Item[]toAdd){
-        lootcontainer = new lootContainer();
-        getChildren().add(lootcontainer);
-        int count = 0;
-        for(int i = 0; i < 4; ++i){
-            if(toAdd[i] != null){
-                Game.Player.Insert(toAdd[i]);
-                lootcontainer.addItem(toAdd[i]);
-                ++count;
-            }
-        }
-        if(count != 0) { //if at least one item dropped...
-            Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
-            setVisible(true); //set the notification pane to visible
-        }
-
-
+        loot = toAdd;
     }
 
     //loot notification for a single items
     public void lootNotification(Item toAdd){
+        loot = new Item[4];
+        loot[0] = toAdd;
+    }
+
+    public void Animate(){
         lootcontainer = new lootContainer();
         getChildren().add(lootcontainer);
-        lootcontainer.addItem(toAdd);
-        Game.Player.Insert(toAdd);
-        Game.mainmenu.getCurrentGame().setDelay(1000); //set a delay on any processed user input
-        Game.mainmenu.getCurrentGame().notificationToFront(); //move this to the front of game's stackpane
-        setVisible(true); //set the notification pane to visible
+        int count = 0;
+        for(int i = 0; i < 4; ++i){
+            if(loot[i] != null){
+                Game.Player.Insert(loot[i]);
+                lootcontainer.addItem(loot[i]);
+                loot[i] = null;
+                ++count;
+            }
+        }
+        if(count != 0) { //if at least one item dropped...
+            active = true;
+            Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
+        }
+    }
+
+    public boolean isActive(){
+        return active;
     }
 
     public boolean handleInput(){
+        if(!active)
+            return false;
         if(Game.mainmenu.getCurrentGame().isDelayOver()) {
-            if (isVisible()) {
+            if (active) {
                 getChildren().removeAll(lootcontainer); //remove any extant elements for next usage.
-                Description.setVisible(false);
-                setVisible(false);
-                return true; //denote that this erased a notification or ran into the delay.
+                //Description.setVisible(false);
+                Game.mainmenu.getCurrentGame().removeNotifications();
+                active = false;
             }
-            return false; //denote that this didn't do anything.
         }
         return true; //denote that this erased a notification or ran into the delay.
     }

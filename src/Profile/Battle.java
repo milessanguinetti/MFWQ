@@ -57,7 +57,7 @@ public class Battle {
                     }
                     else {
                         Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
-                        Game.mainmenu.getCurrentGame().notificationToFront();
+                        Game.mainmenu.getCurrentGame().expNotificationToFront();
                     }
                     return; //nothing else to be done.
                 }

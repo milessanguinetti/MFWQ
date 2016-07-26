@@ -1,6 +1,7 @@
 package Characters.Classes;
 
 import Characters.playerCharacter;
+import Profile.experienceNotification;
 import Structures.Data;
 import Structures.orderedDLL;
 import Structures.orderedDLLNode;
@@ -42,9 +43,14 @@ public abstract class characterClass implements Data, Serializable {
 
     //add job experience to the character's class.
     public void gainJexp(int Gains, playerCharacter toLevel){
-        if(jlevel == 20 || jexpCap > 60000)
+        if(jlevel == 20 || jexpCap > 60000) {
+            experienceNotification.queueExpEvent(toLevel.getName() + " is at level cap for " + className + ".",
+                    1f, 1f, false);
             return; //no leveling past 20 for first classes or 10 for second classes
+        }
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
+            experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!",
+                    (1f*jexp)/jexpCap, 1f, false);
             Gains -= (jexpCap - jexp);
             ++jlevel;
             jexpCap += Math.round(jexpCap*1.2); //jexp cap goes up by 20%
@@ -53,8 +59,12 @@ public abstract class characterClass implements Data, Serializable {
             gainJexp(Gains, toLevel); //recursive call to add the rest of the jexp
                                       //onto the next level.
         }
-        else
+        else if(Gains > 0){
+            experienceNotification.queueExpEvent(toLevel.getName()
+                    + " gained " + Gains + " experience as a " + className + "!",
+                    (1f*jexp)/jexpCap, (1f*jexp+Gains)/jexpCap, false);
             jexp += Gains; //otherwise, we just add it to our exp.
+        }
     }
 
     //adds stat bonuses to a character according to the class in question
