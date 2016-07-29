@@ -24,7 +24,8 @@ public class Kobold extends Monster{
     @Override
     public Item Loot() {
         Random Rand = new Random();
-        if(Rand.nextInt(5) == 0) {
+        //if(Rand.nextInt(5) == 0) {
+        if(true){
             return new Potion();
         }
         return null;

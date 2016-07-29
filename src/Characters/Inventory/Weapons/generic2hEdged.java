@@ -23,7 +23,7 @@ public class generic2hEdged extends Weapon{
 
     public generic2hEdged(int damage){
         super("A standard two-handed edged weapon with little remarkable about it.",
-                Math.round(3+(damage/6)*9), "2h Blunt");
+                5+(damage/4)*5, "2h Edged");
         //two handed weapons deal 150% damage
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -97,9 +97,19 @@ public class generic2hEdged extends Weapon{
             itemName += "Lance";
         else
             itemName += "Flamberge";
-        if(Damage/5 != 0)
-            itemName += '+' + (Damage/5); //to give us a damage-based qualifier to add
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return true;
     }
 
     //combat effect methods

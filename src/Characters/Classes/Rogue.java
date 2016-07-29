@@ -25,55 +25,47 @@ public class Rogue extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
             Skills.Insert(new orderedDLLNode(new rogueSteal()));
-            toLevel.printName();
-            System.out.println(" learned Steal!");
+            return (toLevel.getName() +" learned Steal!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new rogueKnifeBarrage()));
-            toLevel.printName();
-            System.out.println(" learned Knife Barrage!");
+            return (toLevel.getName() +" learned Knife Barrage!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new rogueAmplifyPoison()));
-            toLevel.printName();
-            System.out.println(" learned Amplify Poison!");
+            return (toLevel.getName() +" learned Amplify Poison!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new roguePilferDefenses()));
-            toLevel.printName();
-            System.out.println(" learned Pilfer Defenses!");
+            return (toLevel.getName() +" learned Pilfer Defenses!");
         }
         if(jlevel == 10){ //level 10 passive skill
             toLevel.addPassive(new Alertness());
-            toLevel.printName();
-            System.out.println(" learned the passive skill Alertness!");
+            return (toLevel.getName() +" learned the passive skill Alertness!");
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new rogueQuickenReflexes()));
-            toLevel.printName();
-            System.out.println(" learned Quicken Reflexes!");
+            return (toLevel.getName() +" learned Quicken Reflexes!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new rogueRapidStriking()));
-            toLevel.printName();
-            System.out.println(" learned Rapid Striking!");
+            return (toLevel.getName() +" learned Rapid Striking!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new rogueDisorientingSmokeBomb()));
-            toLevel.printName();
-            System.out.println(" learned Disorienting Smoke Bomb!");
+            return (toLevel.getName() +" learned Disorienting Smoke Bomb!");
         }
         if(jlevel == 18){ //level 18 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
+        return "";
     }
 
     @Override

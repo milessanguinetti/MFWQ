@@ -20,7 +20,7 @@ public abstract class Consumable extends Item implements combatEffect {
 
     @Override
     public void spLoss(gameCharacter Caster) {
-         //items unilaterally have no SP loss.
+         //items unilaterally have no SP cost
     }
 
     @Override

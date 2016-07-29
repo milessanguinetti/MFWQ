@@ -27,32 +27,28 @@ public class Berserker extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new berserkerGoBerserk()));
-            toLevel.printName();
-            System.out.println(" learned Go Berserk!");
+            return (toLevel.getName() +" learned Go Berserk!");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new berserkerIronHurricane()));
-            toLevel.printName();
-            System.out.println(" learned Iron Hurricane!");
+            return (toLevel.getName() +" learned Iron Hurricane!");
         }
         /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
-            toLevel.printName();
-            System.out.println(" learned the passive skill !");
+            return (toLevel.getName() +" learned the passive skill !");
         }*/
+        return "";
     }
 
     @Override

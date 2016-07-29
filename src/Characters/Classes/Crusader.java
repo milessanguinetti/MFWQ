@@ -25,32 +25,28 @@ public class Crusader extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new crusaderDeusVult()));
-            toLevel.printName();
-            System.out.println(" learned Deus Vult!");
+            return (toLevel.getName() +" learned Deus Vult!");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new crusaderCallArtillery()));
-            toLevel.printName();
-            System.out.println(" learned Call Artillery!");
+            return (toLevel.getName() +" learned Call Artillery!");
         }
         if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new orderedDLLNode(new crusaderLayingOnofHands()));
-            toLevel.printName();
-            System.out.println(" learned Laying On of Hands!");
+            return (toLevel.getName() +" learned Laying On of Hands!");
         }
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new orderedDLLNode(new crusaderMartyrsBurningBlade()));
-            toLevel.printName();
-            System.out.println(" learned Martyr's Burning Blade!");
+            return (toLevel.getName() +" learned Martyr's Burning Blade!");
         }
         /*if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
-            toLevel.printName();
-            System.out.println(" learned the passive skill !");
+            return (toLevel.getName() +" learned the passive skill !");
         }*/
+        return "";
     }
 
     @Override

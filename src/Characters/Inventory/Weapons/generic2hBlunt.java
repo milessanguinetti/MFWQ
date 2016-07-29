@@ -21,8 +21,8 @@ public class generic2hBlunt extends Weapon{
 
     public generic2hBlunt(int damage){
         super("A standard two-handed blunted weapon with little remarkable about it.",
-                Math.round(3 + (damage/6)*9), "2h Blunt");
-        //two-handed weapons deal 150% damage
+                5 + (damage/4)*5, "2h Blunt");
+        //two-handed weapons deal extra damage
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -96,8 +96,8 @@ public class generic2hBlunt extends Weapon{
             itemName += "Massive Club";
         else
             itemName += "Crusher";
-        if(Damage/5 != 0)
-            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
     }
 
@@ -123,6 +123,16 @@ public class generic2hBlunt extends Weapon{
         else{ //but most of the time it just does 75% of strength plus damage
             Defender.takeDamage(Math.round(.75f*(Damage + Caster.getTempStr())), Property);
         }
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return true;
     }
 
     @Override

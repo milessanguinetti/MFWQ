@@ -2,6 +2,8 @@ package Characters.Monsters;
 
 import Characters.Inventory.Consumables.Potion;
 import Characters.Inventory.Item;
+import Characters.Inventory.Weapons.Nodachi;
+import Characters.Inventory.Weapons.generic2hEdged;
 import Characters.Monster;
 import Characters.Properties.Neutral;
 import Characters.Skills.Monster.genericMonsterAttack;
@@ -23,8 +25,10 @@ public class babyKobold extends Monster{
     @Override
     public Item Loot() {
         Random Rand = new Random();
-        if(Rand.nextInt(5) == 0) {
-            return new Potion();
+        //if(Rand.nextInt(5) == 0) {
+        if(true){
+            //return new Potion();
+            return new generic2hEdged(5);
         }
         return null;
     }

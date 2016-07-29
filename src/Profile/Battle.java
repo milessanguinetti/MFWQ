@@ -205,8 +205,11 @@ public class Battle {
 
         Game.notification.lootNotification(Drops);
 
-        Interface.printLeftAtNextAvailable("Your party gained " + totalexp + " experience and " + totaljexp +
-                " job experience.");
+        /*Interface.printLeftAtNextAvailable("Your party gained " + totalexp + " experience and " + totaljexp +
+                " job experience.");*/
+
+        experienceNotification.setText("Your party gained " + totalexp + " experience and " + totaljexp
+                + " job experience.");
 
         for (int i = 0; i < 4; ++i) {
             if (playerParty[i] != null) {

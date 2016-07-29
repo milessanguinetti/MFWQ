@@ -24,55 +24,54 @@ public class Inquisitor extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
             Skills.Insert(new orderedDLLNode(new inquisitorArdensLux()));
-            toLevel.printName();
-            System.out.println(" learned Ardens Lux!");
+            return (toLevel.getName() + " learned Ardens Lux!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorHymnOfHealing()));
             toLevel.printName();
-            System.out.println(" learned Hymn of Healing!");
+            return (toLevel.getName() +" learned Hymn of Healing!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorAbsolution()));
             toLevel.printName();
-            System.out.println(" learned Absolve!");
+            return (toLevel.getName() +" learned Absolve!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorExpellereSpiritusImmundus()));
             toLevel.printName();
-            System.out.println(" learned Expellere Spiritus Immundus!");
+            return (toLevel.getName() +" learned Expellere Spiritus Immundus!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
             toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorCorpusBenedictus()));
             toLevel.printName();
-            System.out.println(" learned Corpus Benedictus!");
+            return (toLevel.getName() +" learned Corpus Benedictus!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorAnimusBenedictus()));
             toLevel.printName();
-            System.out.println(" learned Animus Benedictus!");
+            return (toLevel.getName() +" learned Animus Benedictus!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorDecretum()));
             toLevel.printName();
-            System.out.println(" learned Decretum!");
+            return (toLevel.getName() +" learned Decretum!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
             toLevel.printName();
-            System.out.println(" learned !");
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
+        return (toLevel.getName() + "");
     }
 
     @Override

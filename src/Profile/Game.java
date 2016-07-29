@@ -81,6 +81,7 @@ public class Game {
         playerCharacter bob = new playerCharacter("Spaghetti", "Faithful",
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(bob);
+        /*
         Player.Insert(new Nodachi(5));
         Player.Insert(new koboldSlayingSword(5));
         Player.Insert(new koboldSlayingSword(15));
@@ -95,6 +96,7 @@ public class Game {
         Player.Insert(new koboldSlayingSword(105));
         Player.Insert(new koboldSlayingSword(115));
         Player.Insert(new koboldSlayingSword(125));
+        */
 
         new genericGun(6).Use(bob);
         new Nodachi().Use(bob); //equip the good sergeant with a motherfucking nodachi

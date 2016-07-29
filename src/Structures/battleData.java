@@ -1,5 +1,6 @@
 package Structures;
 
+import Characters.Inventory.Consumable;
 import Characters.Inventory.Item;
 import Characters.Skills.Skill;
 import Characters.Skills.fleeObject;
@@ -94,6 +95,10 @@ public class battleData implements Data, Serializable {
 
     //set the battledata's target
     public int setTarget(int toTarget){
+        if(toTarget != 0 && toCast instanceof Consumable){
+            System.out.println("REMOVING DIS");
+            Game.Player.Remove((Item)toCast);
+        }
         targetIndex = toTarget;
         return targetIndex; //if this value is 0, a user cancelled the target decision and will
                             //need to select different skill in Battle class's interface.
@@ -150,7 +155,9 @@ public class battleData implements Data, Serializable {
 
             return false; //if we got here, the attacker is alive.
         }
-        return true; //if the attacker is dead, return false.
+        if(toCast instanceof Consumable)
+            Game.Player.Insert((Item)toCast);
+        return true; //if the attacker is dead, return true and refund any items that were used as combat effects..
     }
 
     //returns the number of characters that the used skill's aoe will rebound through

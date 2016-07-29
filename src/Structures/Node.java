@@ -67,7 +67,7 @@ public class Node implements Serializable{
     //decrementation wrapper function for incrementable data
     public int Decrement(int toDecrement){
         if(Data instanceof incrementableData){
-            return ((incrementableData)Data).Increment(toDecrement);
+            return ((incrementableData)Data).Decrement(toDecrement);
         }
         return 0;
     }

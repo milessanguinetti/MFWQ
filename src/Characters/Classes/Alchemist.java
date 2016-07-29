@@ -23,55 +23,47 @@ public class Alchemist extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if(jlevel == 2){ //level 2 active skill
             Skills.Insert(new orderedDLLNode(new alchemistIncendiaryBullet()));
-            toLevel.printName();
-            System.out.println(" learned Incendiary Bullet!");
+            return (toLevel.getName() +" learned Incendiary Bullet!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new alchemistPotionMixing()));
-            toLevel.printName();
-            System.out.println(" learned Potion Mixing!");
+            return (toLevel.getName() +" learned Potion Mixing!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new alchemistTransmuteGoldenBullet()));
-            toLevel.printName();
-            System.out.println(" learned Transmute: Golden Bullet!");
+            return (toLevel.getName() +" learned Transmute: Golden Bullet!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new alchemistAlchemicalTreatment()));
-            toLevel.printName();
-            System.out.println(" learned Alchemical Treatment!");
+            return (toLevel.getName() +" learned Alchemical Treatment!");
         }
         if(jlevel == 10){ //level 10 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new alchemistCorrosiveVial()));
-            toLevel.printName();
-            System.out.println(" learned Corrosive Vial!");
+            return (toLevel.getName() +" learned Corrosive Vial!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new alchemistUnpredictablePotion()));
-            toLevel.printName();
-            System.out.println(" learned Unpredictable Potion!");
+            return (toLevel.getName() +" learned Unpredictable Potion!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new alchemistTransmutePStone()));
-            toLevel.printName();
-            System.out.println(" learned Transmute: Philosopher's Stone!");
+            return (toLevel.getName() +" learned Transmute: Philosopher's Stone!");
         }
         if(jlevel == 18){ //level 18 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
+        return "";
     }
 
     @Override

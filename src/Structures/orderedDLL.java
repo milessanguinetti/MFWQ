@@ -60,7 +60,7 @@ public class orderedDLL extends Structure{
         orderedDLLNode current = head; //current reference for traverse
         while(current != null){
             if(current.isEqual(toRemove)) {
-                if (current.Decrement(1) <= 0) { //if we decrement to 0 or the data is non-decrementable
+                if (current.Decrement(-1) <= 0) { //if we decrement to 0 or the data is non-decrementable
                     --size; //decrement size.
                     if (current == head) { //if current is head
                         head = head.getNext();
@@ -68,9 +68,9 @@ public class orderedDLL extends Structure{
                             head.setPrev(null);
                     }
                     else {
-                        if(head.getNext() != null)
-                            head.getNext().setPrev(head.getPrev());
-                        head.getPrev().setNext(head.getNext());
+                        if(current.getNext() != null)
+                            current.getNext().setPrev(current.getPrev());
+                        current.getPrev().setNext(current.getNext());
                     }
                 }
                 return 1; //if this is indeed the node we're looking for, remove & return 1.
@@ -120,7 +120,12 @@ public class orderedDLL extends Structure{
                 }
                 if (!toInsert.goesToRight(current.getNext())) {
                     if(current.getNext() != null) {
-                        current.getNext().setPrev(toInsert);
+                        if(current.getNext().Data.compareTo(toInsert.Data) == 0){
+                            current.getNext().Increment(1);
+                            return 1;
+                        }
+                        else
+                            current.getNext().setPrev(toInsert);
                     }
                     toInsert.setNext(current.getNext()); //toinsert's next ref gets current's next
                     current.setNext(toInsert); //current's next ref gets toinsert

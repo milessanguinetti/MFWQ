@@ -11,8 +11,6 @@ import Profile.Game;
 public abstract class Weapon extends Item implements equipableItem, combatEffect {
     protected int Damage; //the weapon's damage value (a shield's equals its armor bonus)
     private String weaponType; //the class of the weapon in question
-    private boolean isRightHand; //boolean value denotes which hand the weapon goes in
-    private boolean isTwoHand; //denotes whether or not the weapon requires two hands
     protected String Property; //the weapon's property
 
     //default constructor
@@ -24,44 +22,6 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         Damage = damage;
         weaponType = weapontype;
         Property = property;
-        //beyond setting those, we set the righthand/twohand variables based on
-        //the type that we are looking at.
-        if(weapontype.equals("1h Edged")){
-            isRightHand = true;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("2h Edged")){
-            isRightHand = true;
-            isTwoHand = true;
-        }
-        else if(weapontype.equals("1h Blunt")){
-            isRightHand = true;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("2h Blunt")){
-            isRightHand = true;
-            isTwoHand = true;
-        }
-        else if(weapontype.equals("1h Staff")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("2h Staff")){
-            isRightHand = false;
-            isTwoHand = true;
-        }
-        else if(weapontype.equals("Shield")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("Gun")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("Bow")){
-            isRightHand = true;
-            isTwoHand = true;
-        }
     }
 
     //constructor that handles all data except name and property. Principally used to
@@ -71,41 +31,13 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         super(Description);
         Damage = damage;
         weaponType = weapontype;
-        //beyond setting those, we set the righthand/twohand variables based on
-        //the type that we are looking at.
-        if(weapontype.equals("Knife")){
-            isRightHand = true;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("1h Melee")){
-            isRightHand = true;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("2h Melee")){
-            isRightHand = true;
-            isTwoHand = true;
-        }
-        else if(weapontype.equals("1h Staff")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("2h Staff")){
-            isRightHand = false;
-            isTwoHand = true;
-        }
-        else if(weapontype.equals("Shield")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("Gun")){
-            isRightHand = false;
-            isTwoHand = false;
-        }
-        else if(weapontype.equals("Bow")){
-            isRightHand = true;
-            isTwoHand = true;
-        }
     }
+
+    //returns whether or not this weapon goes in the right hand.
+    public abstract boolean isRightHand();
+
+    //returns whether or not this weapon is two-handed.
+    public abstract boolean isTwoHand();
 
     @Override
     public String getDescription(){
@@ -154,17 +86,21 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         playerCharacter useOn = ((playerCharacter) toUseOn);
         Weapon rightTemp = useOn.getRight();
         Weapon leftTemp = useOn.getLeft();
-        if(isTwoHand){ //unequip both weapons
-            if(rightTemp != null)
+        if(isTwoHand()){ //unequip both weapons
+            if(rightTemp != null) {
                 rightTemp.Unequip(useOn);
-            else if(leftTemp != null)
+                if (!rightTemp.isTwoHand()  && leftTemp != null) //separate case to ensure we don't add two of the left
+                    leftTemp.Unequip(useOn);                     //handed weapon to our inventory
+            }
+            else if(leftTemp != null){
                 leftTemp.Unequip(useOn);
+            }
             useOn.setRight(this);
             useOn.setLeft(this);
         }
-        else if(isRightHand){ //unequip just the right hand weapon
+        else if(isRightHand()){ //unequip just the right hand weapon
             if(rightTemp != null)
-                leftTemp.Unequip(useOn);
+                rightTemp.Unequip(useOn);
             useOn.setRight(this);
         }
         else{ //unequip just the left hand weapon
@@ -178,11 +114,11 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
 
     @Override //unequip the item from the passed character
     public void Unequip(playerCharacter toEquipTo) {
-        if(isTwoHand){
+        if(isTwoHand()){
             toEquipTo.setRight(null);
             toEquipTo.setLeft(null);
         }
-        else if(isRightHand){
+        else if(isRightHand()){
             toEquipTo.setRight(null);
         }
         else{

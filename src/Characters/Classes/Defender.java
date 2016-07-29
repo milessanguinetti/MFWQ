@@ -28,11 +28,10 @@ public class Defender extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new defenderShieldSmash()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new defenderUnbreakableShield()));
@@ -54,6 +53,7 @@ public class Defender extends characterClass{
             toLevel.printName();
             System.out.println(" learned the passive skill !");
         }*/
+        return "";
     }
 
     @Override

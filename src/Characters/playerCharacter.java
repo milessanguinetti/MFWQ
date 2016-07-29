@@ -93,8 +93,7 @@ public class playerCharacter extends gameCharacter {
     @Override
     public void handleInput(KeyEvent toHandle){
         int Input; //variable for storing what amounts to a translated keyevent.
-        if(toHandle.getCode() == KeyCode.ENTER || toHandle.getCode() == KeyCode.RIGHT
-                || toHandle.getCode() == KeyCode.D) //enter case; input = 3
+        if(toHandle.getCode() == KeyCode.ENTER || toHandle.getCode() == KeyCode.D) //enter case; input = 3
             Input = 3;
         else if(toHandle.getCode() == KeyCode.UP || toHandle.getCode() == KeyCode.W) //up case; input = 1
             Input = 1;

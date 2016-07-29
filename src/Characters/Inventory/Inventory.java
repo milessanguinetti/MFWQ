@@ -35,7 +35,7 @@ public class Inventory implements Serializable {
     //4 = quest items
     private static int currentCategory = 1; //the current category of item that the user is looking at.
     private static categoryButton[] Categories = new categoryButton[5];
-    private inventoryBox itemBox;
+    private static inventoryBox itemBox;
     private static StackPane contentRoot;
     private static GridPane buttonPane;
     private static ItemUseBox usebox;
@@ -130,7 +130,7 @@ public class Inventory implements Serializable {
 
     }
 
-    public void setItemBox(int i){
+    public static void setItemBox(int i){
         if(i >= 0 && i < 5){
             Categories[currentCategory].setPlain();
             currentCategory = i;
@@ -171,6 +171,23 @@ public class Inventory implements Serializable {
         itemType.Insert(new orderedDLLNode(toInsert));
     }
 
+    public void Remove(Item toRemove){
+        orderedDLL itemType = null;
+        if (toRemove instanceof Consumable)
+            itemType = Items[0];
+        else if (toRemove instanceof Weapon)
+            itemType = Items[1];
+        else if (toRemove instanceof Armor)
+            itemType = Items[2];
+        else if (toRemove instanceof Accessory)
+            itemType = Items[3];
+        else if (toRemove instanceof questItem)
+            itemType = Items[4];
+        if (itemType == null) //if this isn't actually an item, we can't insert it safely.
+            return;
+        itemType.Remove(toRemove.returnKey());
+    }
+
     public StackPane getContentRoot(){
         return contentRoot;
     }
@@ -186,7 +203,7 @@ public class Inventory implements Serializable {
                 currentDisplay = this;
                 setTranslateX(450);
                 setTranslateY(100);
-                Rectangle displayBackground = new Rectangle(300, 500);
+                Rectangle displayBackground = new Rectangle(300, 550);
                 displayBackground.setFill(Color.LIGHTGRAY);
                 getChildren().add(displayBackground);
                 addText(toDisplay.returnKey(), -200, 35);
@@ -291,9 +308,8 @@ public class Inventory implements Serializable {
             new itemDisplay(item);
         }
 
-        public void Use(){
-            System.out.println("Using " + item.returnKey() + ".");
-            item.Use(Game.Player.getParty()[0]);
+        public boolean Use(){
+            return item.Use(Game.Player.getParty()[0]);
         }
 
         public String getKey(){
@@ -359,8 +375,10 @@ public class Inventory implements Serializable {
 
         public static void useCurrent(){
             if(itemArray != null){
-                itemArray[currentItem].Use();
-                Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                if(itemArray[currentItem].Use()) {
+                    Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                    setItemBox(currentCategory);
+                }
             }
 
         }
@@ -372,7 +390,7 @@ public class Inventory implements Serializable {
             return line;
         }
 
-        public void dropCurrent(){
+        public static void dropCurrent(){
             if(itemArray != null)
                 Items[currentCategory].Remove(itemArray[currentItem].getKey());
         }
@@ -406,7 +424,7 @@ public class Inventory implements Serializable {
             buttonpane.getChildren().add(use);
             texttoadd = new Text("Use");
             texttoadd.setTranslateY(-75);
-            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
                 inventoryBox.useCurrent();
             });
@@ -429,9 +447,9 @@ public class Inventory implements Serializable {
             });
             buttonpane.getChildren().add(drop);
             texttoadd = new Text("Drop");
-            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
-                inventoryBox.useCurrent();
+                inventoryBox.dropCurrent();
             });
             texttoadd.setOnMouseEntered(event1 -> {
                 drop.setFill(Color.DARKGRAY);
@@ -453,7 +471,7 @@ public class Inventory implements Serializable {
             buttonpane.getChildren().add(back);
             texttoadd = new Text("Back");
             texttoadd.setTranslateY(75);
-            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 12));
+            texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
                 Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
             });

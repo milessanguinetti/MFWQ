@@ -20,13 +20,25 @@ public class koboldSlayingSword extends Weapon{
     public koboldSlayingSword(){
         super("Kobold Slaying Sword",
                 "A battle-worn sword that has slain countless kobolds throughout its years.",
-                6, "1h Melee", "Fire");
+                6, "1h Edged", "Fire");
     }
 
     public koboldSlayingSword(int Damage){
         super("Kobold Slaying Sword",
                 "A battle-worn sword that has slain countless kobolds throughout its years.",
-                Damage, "1h Melee", "Fire");
+                5+(Damage/5)*5, "1h Edged", "Fire");
+        if(Math.round(Math.floor((Damage*5)/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return false;
     }
 
     //combat effect methods

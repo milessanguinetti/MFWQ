@@ -21,12 +21,26 @@ public class Nodachi extends Weapon {
         super("Blazing Nodachi",
                 "An unspeakably powerful weapon from a foreign land.",
                 100, "1h Edged", "Fire");
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
     }
 
     public Nodachi(int Damage){
         super("Blazing Nodachi",
                 "An unspeakably powerful weapon from a foreign land.",
-                100 + Damage, "1h Edged", "Fire");
+                5+(Damage/5)*5, "1h Edged", "Fire");
+        if(Math.floor(Damage/5f) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return false;
     }
 
     //combat effect methods

@@ -49,13 +49,12 @@ public abstract class characterClass implements Data, Serializable {
             return; //no leveling past 20 for first classes or 10 for second classes
         }
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
-            experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!",
-                    (1f*jexp)/jexpCap, 1f, false);
+            experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!"
+                    + '\n' + jobDing(toLevel), (1f*jexp)/jexpCap, 1f, false);
             Gains -= (jexpCap - jexp);
             ++jlevel;
             jexpCap += Math.round(jexpCap*1.2); //jexp cap goes up by 20%
             jexp = 0; //reset jexp to 0 now that we've leveled.
-            jobDing(toLevel);
             gainJexp(Gains, toLevel); //recursive call to add the rest of the jexp
                                       //onto the next level.
         }
@@ -72,7 +71,7 @@ public abstract class characterClass implements Data, Serializable {
 
     //adds skills according to the class in question. Character is included
     //to the end of adding passive skills to their passive skill list.
-    public abstract void jobDing(playerCharacter toLevel);
+    public abstract String jobDing(playerCharacter toLevel);
 
     public void displaySkills(){
         Skills.Display();

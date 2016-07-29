@@ -25,74 +25,65 @@ public class Soldier extends characterClass {
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
             Skills.Insert(new orderedDLLNode(new soldierGloriousExecution()));
-            toLevel.printName();
-            System.out.println(" learned Glorious Execution!");
+            return (toLevel.getName() +" learned Glorious Execution!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new soldierWideSlash()));
-            toLevel.printName();
-            System.out.println(" learned Wide Slash!");
+            return (toLevel.getName() +" learned Wide Slash!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new soldierRend()));
-            toLevel.printName();
-            System.out.println(" learned Rend!");
+            return (toLevel.getName() +" learned Rend!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new soldierDefend()));
-            toLevel.printName();
-            System.out.println(" learned Defend!");
+            return (toLevel.getName() +" learned Defend!");
         }
         if(jlevel == 10){ //level 10 passive skill/second classes
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
             if(toLevel.isOfRace("Faithful")){
                 toLevel.addClass(new Crusader()); //add crusader class
                 toLevel.addClass(new Defender()); //add defender class
-                System.out.println("The Crusader and Defender classes are now available!");
+                return("The Crusader and Defender classes are now available!");
             }
             else if(toLevel.isOfRace("Heretic")){
                 toLevel.addClass(new Berserker()); //add berserker class
                 toLevel.addClass(new Idolator()); //add idolator class
-                System.out.println("The Berserker and Idolator classes are now available!");
+                return("The Berserker and Idolator classes are now available!");
             }
             else if(toLevel.isOfRace("Alraune")){
                 toLevel.addClass(new Berserker()); //add berserker class
                 toLevel.addClass(new Defender()); //add defender class
-                System.out.println("The Berserker and Defender classes are now available!");
+                return("The Berserker and Defender classes are now available!");
             }
             else{//homunculus case
                 toLevel.addClass(new Titan()); //add titan class
-                System.out.println("The Titan class is now available!");
+                return("The Titan class is now available!");
             }
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new soldierMaintainWeapon()));
-            toLevel.printName();
-            System.out.println(" learned Maintain Weapon!");
+            return (toLevel.getName() +" learned Maintain Weapon!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new soldierMaintainArmor()));
-            toLevel.printName();
-            System.out.println(" learned Maintain Armor!");
+            return (toLevel.getName() +" learned Maintain Armor!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new soldierSeverHamstring()));
-            toLevel.printName();
-            System.out.println(" learned Sever Hamstring!");
+            return (toLevel.getName() +" learned Sever Hamstring!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
+        return "";
     }
 
     @Override

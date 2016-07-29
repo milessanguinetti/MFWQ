@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -15,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import org.w3c.dom.css.Rect;
+
+import java.util.Random;
 
 /**
  * Created by Spaghetti on 7/20/2016.
@@ -36,14 +39,14 @@ public class experienceNotification extends StackPane{
         Rectangle background = new Rectangle(800, 500);
         background.setFill(Color.BLACK);
         expBar = new expBar(true);
-        expBar.setTranslateX(-150);
+        expBar.setTranslateX(-200);
         expBar.setTranslateY(-35);
         jexpBar = new expBar(false);
-        jexpBar.setTranslateX(150);
+        jexpBar.setTranslateX(200);
         jexpBar.setTranslateY(-35);
         expText = new expText();
         expText.setTranslateY(130);
-        getChildren().addAll(backdrop, background, expBar, jexpBar, expText);
+        getChildren().addAll(backdrop, background, expText, jexpBar, expBar);
     }
 
     public boolean isActive(){
@@ -57,10 +60,14 @@ public class experienceNotification extends StackPane{
             if(gainEventQueueNode.RecursivePop()) {
                 active = false;
                 Game.mainmenu.getCurrentGame().lootNotificationToFront();
-                Game.mainmenu.getCurrentGame().setDelay(1000); //set a delay on any processed user input
+                //Game.mainmenu.getCurrentGame().setDelay(1000); //set a delay on any processed user input
             }
         }
         return true;
+    }
+
+    public static void setText(String toset){
+        expText.setText(toset);
     }
 
     public void updateAndAnimate(){
@@ -68,8 +75,11 @@ public class experienceNotification extends StackPane{
         if(characters != null)
             getChildren().remove(characters);
         characters = new characterViewWindow(Game.Player.getParty());
+        //getChildren().removeAll(expBar, jexpBar); //ensure that these remain on top.
         getChildren().add(characters);
-        expText.setText("");
+        jexpBar.toFront();
+        expBar.toFront();
+        //expText.setText("");
     }
 
     public static void queueExpEvent(String message, float start, float end, boolean isBaseExp){
@@ -120,41 +130,85 @@ public class experienceNotification extends StackPane{
         private Rectangle bar;
         private Rectangle barClip;
         private boolean isBaseExp;
+        private int [] dingrandomizer = new int[30]; //randomizes the level up animation
+        private int current = 0; //current integer index in dingrandomizer
 
         public expBar(boolean isbaseexp){
             isBaseExp = isbaseexp;
+            Random rand = new Random();
+            for(int i = 0; i < 30; ++i)
+                dingrandomizer[i] = 5 + rand.nextInt(10);
             setAlignment(Pos.CENTER_LEFT);
-            setMaxSize(200, 50);
-            Rectangle background = new Rectangle(200, 50);
+            setMaxSize(300, 50);
+            Rectangle background = new Rectangle(300, 50);
             background.setFill(Color.DARKGRAY);
-            Rectangle barBackground = new Rectangle(180, 40);
+            Rectangle barBackground = new Rectangle(280, 40);
             barBackground.setFill(Color.BLACK);
             barBackground.setTranslateX(10);
-            bar = new Rectangle(180, 40);
+            bar = new Rectangle(280, 40);
             if(isBaseExp)
                 bar.setFill(Color.ORANGE);
             else
                 bar.setFill(Color.BLUE);
             bar.setTranslateX(10);
             bar.setVisible(false);
-            barClip = new Rectangle(180, 40);
+            barClip = new Rectangle(280, 40);
             bar.setClip(barClip);
-            barClip.setWidth(180);
+            barClip.setWidth(280);
             getChildren().addAll(background, barBackground, bar);
+        }
+
+        public void animateDingStar(){
+            ++current;
+            Polygon star = new Polygon();
+            star.setTranslateX(270);
+            star.setTranslateY(-55+dingrandomizer[current%30]*5);
+            star.getPoints().addAll(new Double[]{10.0, 0.0, 12.5, 8.0, 20.0, 8.0, 13.8, 12.5, 16.0, 20.0, 10.0, 15.5,
+            4.0, 20.0, 6.2, 12.5, 0.0, 8.0, 9.5, 8.0}); //draw a star
+            if(isBaseExp)
+                star.setFill(Color.ORANGE);
+            else
+                star.setFill(Color.BLUE);
+            star.setRotate(dingrandomizer[current%30]*.1f-.3f);
+            final Timeline timeline = new Timeline();
+            timeline.setCycleCount(1);
+            final KeyValue kv1 = new KeyValue(star.translateYProperty(), -215 + dingrandomizer[(current)%30]*23,
+                    Interpolator.EASE_OUT); //y property
+            /*final KeyValue kv2 = new KeyValue(star.translateYProperty(),  -50 + dingrandomizer[current%10]*6,
+                    Interpolator.EASE_IN);*/
+            final KeyValue kv3 = new KeyValue(star.translateXProperty(), 170 +dingrandomizer[(current+10)%30]*17,
+                    Interpolator.EASE_IN); //x property
+            final KeyValue kv4 = new KeyValue(star.opacityProperty(), 0.35, Interpolator.EASE_IN); //opacity
+            final KeyFrame kf1 = new KeyFrame(Duration.millis(700), kv1, kv3);
+            final KeyFrame kf2 = new KeyFrame(Duration.millis(700), e ->{
+                getChildren().remove(star);
+            });
+            final KeyFrame kf3 = new KeyFrame(Duration.millis(700), kv4);
+            timeline.getKeyFrames().add(kf1);
+            timeline.getKeyFrames().add(kf2);
+            timeline.getKeyFrames().add(kf3);
+            getChildren().add(star);
+            timeline.play();
+
         }
 
         public void animateExpGain(float start, float end, String message){
             bar.setVisible(true);
             animated = true;
-            barClip.setWidth(180*start);
+            barClip.setWidth(280*start);
             final Timeline timeline = new Timeline();
             timeline.setCycleCount(1);
-            final KeyValue kv1 = new KeyValue(barClip.widthProperty(), 180*end, Interpolator.EASE_IN); //width property
+            final KeyValue kv1 = new KeyValue(barClip.widthProperty(), 280*end, Interpolator.EASE_IN); //width property
             final KeyFrame kf1 = new KeyFrame(Duration.millis(200 + 400*(end-start)), kv1);
             final KeyFrame kf2 = new KeyFrame(Duration.millis(200 + 400*(end-start)), e ->{
                 experienceNotification.expText.setText(message);
-                if(end == 1.0)
+                if(end == 1.0) {
+                    if(start != 1.0){
+                        for(int i = dingrandomizer[current%30]/4 + 6; i > 0; --i)
+                            animateDingStar();
+                    }
                     barClip.setWidth(0);
+                }
                 animated = false;
             });
             timeline.getKeyFrames().add(kf1);
@@ -168,8 +222,8 @@ public class experienceNotification extends StackPane{
 
         public expText(){
             setAlignment(Pos.TOP_LEFT);
-            setMaxSize(600, 220);
-            Rectangle background = new Rectangle(600, 220);
+            setMaxSize(600, 150);
+            Rectangle background = new Rectangle(600, 150);
             background.setFill(Color.GRAY);
             messagetext = new Text();
             messagetext.setTranslateY(20);

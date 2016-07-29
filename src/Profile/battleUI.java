@@ -112,8 +112,8 @@ public class battleUI extends StackPane {
         }
 
         public void setBold(){
-            buttonShape.setOpacity(.4);
-            buttonText.setFill(Color.WHITE);
+            buttonShape.setOpacity(.8);
+            buttonText.setFill(Color.GOLDENROD);
         }
 
         public void setText(String toset){
@@ -172,7 +172,12 @@ public class battleUI extends StackPane {
     public void printLeftAtNextAvailable(String S1){
         for(int i = 0; i < 4; ++i) {
             if (Left[i] != null) {
+                Left[i].setPlain(); //ensure that info printed in this method is not highlit, as it
+                                    //is not selectable
                 if (Left[i].getText().equals("")) {
+                    if(i != 0)
+                        if(Left[i-1].getText().matches(S1)) //ensure that we aren't printing a repeat.
+                            break;
                     Left[i].setText(S1);
                     break;
                 }

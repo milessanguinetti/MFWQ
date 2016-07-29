@@ -21,7 +21,7 @@ public class generic1hBlunt extends Weapon {
 
     public generic1hBlunt(int damage){
         super("A standard one-handed blunted weapon with little remarkable about it.",
-                (damage/5)*5, "1h Blunt");
+                5+(damage/5)*5, "1h Blunt");
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -95,9 +95,19 @@ public class generic1hBlunt extends Weapon {
             itemName += "Club";
         else
             itemName += "Cane";
-        if(Damage/5 != 0)
-            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return false;
     }
 
     //combat effect methods

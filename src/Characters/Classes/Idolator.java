@@ -28,32 +28,28 @@ public class Idolator extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new idolatorGruesomeTransformation()));
-            toLevel.printName();
-            System.out.println(" learned Gruesome Transformation!");
+            return (toLevel.getName() +" learned Gruesome Transformation!");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new idolatorThunderHammer()));
-            toLevel.printName();
-            System.out.println(" learned Thunder Hammer!");
+            return (toLevel.getName() +" learned Thunder Hammer!");
         }
         /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }*/
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new orderedDLLNode(new idolatorConvert()));
-            toLevel.printName();
-            System.out.println(" learned Convert!");
+            return (toLevel.getName() +" learned Convert!");
         }
         /*if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
-            toLevel.printName();
-            System.out.println(" learned the passive skill !");
+            return (toLevel.getName() +" learned the passive skill !");
         }*/
+        return "";
     }
 
     @Override

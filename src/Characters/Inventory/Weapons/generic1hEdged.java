@@ -23,7 +23,7 @@ public class generic1hEdged extends Weapon{
 
     public generic1hEdged(int damage){
         super("A standard one-handed edged weapon with little remarkable about it.",
-                (damage/5)*5, "1h Edged");
+                5+(damage/5)*5, "1h Edged");
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -97,9 +97,18 @@ public class generic1hEdged extends Weapon{
             itemName += "Saber";
         else
             itemName += "Short Spear";
-        if(Damage/5 != 0)
-            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
-                              //more insight into the weapon's strength.
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return true;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return false;
     }
 
     //combat effect methods

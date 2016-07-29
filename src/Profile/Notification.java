@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -26,17 +27,19 @@ import java.nio.file.Paths;
 public class Notification extends StackPane implements Serializable{
     private static Text Title = new Text();
     private static Text Description = new Text();
-    private lootContainer lootcontainer;
+    private static lootContainer lootcontainer;
     private boolean active = false;
+    private static boolean Animating = false;
     private Item [] loot;
 
     public Notification(){
         Title.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 100));
         Title.setFill(Color.GOLD);
-        Title.setTranslateY(-200);
+        Title.setTranslateY(-250);
+        Title.setText("Loot");
         Description.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
         Description.setFill(Color.GOLD);
-        Description.setTranslateY(200);
+        Description.setTranslateY(150);
         Description.setWrappingWidth(600); //wrap text if need be
         //setVisible(false); //initialize object as invisible
         javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(3000, 3000);
@@ -73,7 +76,8 @@ public class Notification extends StackPane implements Serializable{
         }
         if(count != 0) { //if at least one item dropped...
             active = true;
-            Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
+            Animating = true;
+            //Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
         }
     }
 
@@ -84,13 +88,12 @@ public class Notification extends StackPane implements Serializable{
     public boolean handleInput(){
         if(!active)
             return false;
-        if(Game.mainmenu.getCurrentGame().isDelayOver()) {
-            if (active) {
+        if(!Animating) {
                 getChildren().removeAll(lootcontainer); //remove any extant elements for next usage.
-                //Description.setVisible(false);
+
+                Description.setVisible(false);
                 Game.mainmenu.getCurrentGame().removeNotifications();
                 active = false;
-            }
         }
         return true; //denote that this erased a notification or ran into the delay.
     }
@@ -98,16 +101,30 @@ public class Notification extends StackPane implements Serializable{
     //subclasses for notifications
     //class for displaying loot graphics.
     private static class lootContainer extends HBox {
-        private int itemSum = 0;
+        private static int itemSum;
+
         public lootContainer() {
-            Title.setText("Loot");
+            itemSum = 0;
             setAlignment(Pos.CENTER);
             setSpacing(10);
         }
 
         public void addItem(Item toAdd){
-            getChildren().add(new itemBox(toAdd, itemSum));
+            itemBox toadd = new itemBox(toAdd, itemSum);
+            getChildren().add(toadd);
+            if(itemSum == 0) {
+                Description.setVisible(true);
+                toadd.setHighLit();
+            }
             ++itemSum;
+        }
+
+        public static int getItemSum(){
+            return itemSum;
+        }
+
+        public itemBox getCurrent(int index){
+            return (itemBox) this.getChildren().get(index);
         }
     }
 
@@ -119,10 +136,13 @@ public class Notification extends StackPane implements Serializable{
         private Text itemName = new Text();
 
         public itemBox(Item Contents, int itemNumber){
+            this.setMaxSize(110, 110);
             contents = Contents;
             itemName.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
             itemName.setFill(Color.GRAY);
-            itemName.setTranslateY(-100);
+            itemName.setTranslateY(-130);
+            itemName.setWrappingWidth(170);
+            itemName.setTextAlignment(TextAlignment.CENTER);
             itemName.setText(contents.returnKey());
             itemName.setOpacity(0);
             Icon = contents.getIcon();
@@ -150,10 +170,12 @@ public class Notification extends StackPane implements Serializable{
             ftI.setToValue(.9);
             SequentialTransition stN = new SequentialTransition(itemName, ptN, ftN); //sequential transition for name
             SequentialTransition stI = new SequentialTransition(Icon, ptI, ftI); //sequential transition for icon
+
             Timeline lootSound = new Timeline(new KeyFrame( //loot sound effects
-                    Duration.seconds(itemNumber + 1),
+                    Duration.seconds(itemNumber+1),
                     ae -> {
                         Game.battle.playMedia("loot");
+                        //Description.setText(Contents.getDescription());
                         Rectangle lootGlow = new Rectangle(110, 110);
                         lootGlow.setFill(Color.DARKGOLDENROD);
                         lootGlow.setOpacity(0);
@@ -168,25 +190,26 @@ public class Notification extends StackPane implements Serializable{
             lootSound.play(); //play all transitions and timelines
             stN.play();
             stI.play();
+            stI.setOnFinished(event1 -> {
+                if(lootContainer.getItemSum() == itemNumber+1)
+                    Animating = false; //if this is the last item, denote that we are no longer playing an animation.
+                else{
+                    setPlain();
+                    lootcontainer.getCurrent(itemNumber+1).setHighLit();
+                }
+            });
 
 
             //if the user enters any component of the image, set to highlit; set to plain if they leave.
-            backGround.setOnMouseEntered(event -> {
-                if(Game.mainmenu.getCurrentGame().isDelayOver())
+            this.setOnMouseEntered(event -> {
+                if(!Animating) {
+                    lootcontainer.getCurrent(lootContainer.getItemSum()-1).setPlain();
                     setHighLit();
+                }
             });
 
-            backGround.setOnMouseExited(event -> {
-                if(Game.mainmenu.getCurrentGame().isDelayOver())
-                    setPlain();
-            });
-            Icon.setOnMouseEntered(event -> {
-                if(Game.mainmenu.getCurrentGame().isDelayOver())
-                    setHighLit();
-            });
-
-            Icon.setOnMouseExited(event -> {
-                if(Game.mainmenu.getCurrentGame().isDelayOver())
+            this.setOnMouseExited(event -> {
+                if(!Animating)
                     setPlain();
             });
         }

@@ -27,32 +27,28 @@ public class Titan extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new titanRampage()));
-            toLevel.printName();
-            System.out.println(" learned Rampage!");
+            return (toLevel.getName() + " learned Rampage!");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new titanAmplifyMetabolism()));
-            toLevel.printName();
-            System.out.println(" learned Amplify Metabolism!");
+            return (toLevel.getName() + " learned Amplify Metabolism!");
         }
-/*        if (jlevel == 6) { //level 6 active skill
+        /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() + " learned !");
         }
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() + " learned !");
         }
         if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
-            toLevel.printName();
-            System.out.println(" learned the passive skill !");
+            return (toLevel.getName() + " learned the passive skill !");
         }*/
+        return "";
     }
 
     @Override

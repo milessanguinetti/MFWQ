@@ -35,11 +35,6 @@ public abstract class Item implements incrementableData, Serializable {
     //returns an imageview corresponding to the item in question
     public abstract ImageView getIcon();
 
-    public boolean Use(){
-        //INTERFACING METHOD FOR CHARACTERS
-        return true;
-    }
-
     public abstract boolean Use(gameCharacter toUseOn);
 
     public String getDescription(){
@@ -54,9 +49,9 @@ public abstract class Item implements incrementableData, Serializable {
 
     @Override
     public int Decrement(int toDecrement) {
-        Quantity -= toDecrement;
-        if(Quantity < 0)
-            Quantity = 0;
+        if(Quantity+toDecrement <= 0) //lowering this to 0 will bug out equipment in this case; other items
+            return 0;                 //are discarded, so not decrementing quantity is irrelevent for them.
+        Quantity += toDecrement;
         return Quantity;
     }
 

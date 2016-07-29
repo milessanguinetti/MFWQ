@@ -23,55 +23,47 @@ public class Primalist extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if(jlevel == 2){
             Skills.Insert(new orderedDLLNode(new primalistCallStorm()));
-            toLevel.printName();
-            System.out.println(" learned Call Storm!");
+            return (toLevel.getName() +" learned Call Storm!");
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new primalistEarthenWard()));
-            toLevel.printName();
-            System.out.println(" learned Earthern Ward!");
+            return (toLevel.getName() +" learned Earthern Ward!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new primalistAnimalisticStrike()));
-            toLevel.printName();
-            System.out.println(" learned Animalistic Strike!");
+            return (toLevel.getName() +" learned Animalistic Strike!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new primalistRejuvenatingBreeze()));
-            toLevel.printName();
-            System.out.println(" learned Rejuvenating Breeze!");
+            return (toLevel.getName() +" learned Rejuvenating Breeze!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new primalistSeedOfHealing()));
-            toLevel.printName();
-            System.out.println(" learned Seed Of Healing!");
+            return (toLevel.getName() +" learned Seed Of Healing!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new primalistDevouringGrowth()));
-            toLevel.printName();
-            System.out.println(" learned Devouring Growth!");
+            return (toLevel.getName() +" learned Devouring Growth!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new primalistDevouringBloom()));
-            toLevel.printName();
-            System.out.println(" learned Devouring Bloom!");
+            return (toLevel.getName() +" learned Devouring Bloom!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
+        return "";
     }
 
     @Override

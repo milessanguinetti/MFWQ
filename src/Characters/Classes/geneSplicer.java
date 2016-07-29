@@ -27,33 +27,30 @@ public class geneSplicer extends characterClass{
     }
 
     @Override
-    public void jobDing(playerCharacter toLevel) {
+    public String jobDing(playerCharacter toLevel) {
         if (jlevel == 2) { //level 2 active skill
             Skills.Insert(new orderedDLLNode(new geneSplicerSphaeraeEversioSui()));
-            toLevel.printName();
-            System.out.println(" learned Create Sphaerae Eversio Sui!");
+            return (toLevel.getName() +" learned Create Sphaerae Eversio Sui!");
         }
         if (jlevel == 4) { //level 4 active skill
             Skills.Insert(new orderedDLLNode(new geneSplicerCaperEmissarius()));
-            toLevel.printName();
-            System.out.println(" learned Create Caper Emissarius!");
+            return (toLevel.getName() +" learned Create Caper Emissarius!");
         }
         /*if (jlevel == 6) { //level 6 active skill
             Skills.Insert(new orderedDLLNode(new ()));
-            toLevel.printName();
-            System.out.println(" learned !");
+            return (toLevel.getName() +" learned !");
         }*/
         if (jlevel == 8) { //level 8 active skill
             Skills.Insert(new orderedDLLNode(new geneSplicerGenomeBinding()));
-            toLevel.printName();
-            System.out.println(" learned Genome Binding!");
+            return (toLevel.getName() +" learned Genome Binding!");
         }
         /*if (jlevel == 10) { //level 10 passive skill
             toLevel.addPassive(new ());
-            toLevel.printName();
-            System.out.println(" learned the passive skill !");
+            return (toLevel.getName() +" learned the passive skill !");
         }*/
+        return "";
     }
+
 
     @Override
     public boolean canUseHeavyArmor() {

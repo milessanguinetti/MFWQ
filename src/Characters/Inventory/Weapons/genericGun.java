@@ -21,7 +21,7 @@ public class genericGun extends Weapon{
 
     public genericGun(int damage){
         super("A standard gun with little remarkable about it.",
-                3+(damage/5)*5, "Gun"); //ensure that damage is a multiple of 5.
+                5+(damage/5)*5, "Gun"); //ensure that damage is a multiple of 5.
 
         Random Rand = new Random();
         int Roll = Rand.nextInt(18); //a roll to determine a number of variables
@@ -95,9 +95,19 @@ public class genericGun extends Weapon{
             itemName += "Gun";
         else
             itemName += "Matchlock";
-        if(Damage/5 != 0)
-            itemName += '+' + Damage/5; //to give us a damage-based qualifier to add
+        if(Math.round(Math.floor(Damage/5f)) != 0)
+            itemName += ("+" + (Math.round(Math.floor(Damage/5f)))); //to give us a damage-based qualifier to add
         //more insight into the weapon's strength.
+    }
+
+    @Override
+    public boolean isRightHand(){
+        return false;
+    }
+
+    @Override
+    public boolean isTwoHand(){
+        return false;
     }
 
     //combat effect methods
