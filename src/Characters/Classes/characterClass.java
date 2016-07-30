@@ -16,7 +16,7 @@ public abstract class characterClass implements Data, Serializable {
     private String className; //the name of the class
     protected int jlevel = 1;
     private int jexp = 0; //job experience and job experience need to reach next level.
-    private int jexpCap = 1000;
+    private int jexpCap = 800;
     protected orderedDLL Skills = new orderedDLL(); //skills for this class
 
     //default constructor
@@ -37,6 +37,10 @@ public abstract class characterClass implements Data, Serializable {
         return className;
     }
 
+    public int getJlevel(){
+        return jlevel;
+    }
+
     public int getNumSkills(){
         return Skills.getSize();
     }
@@ -45,15 +49,15 @@ public abstract class characterClass implements Data, Serializable {
     public void gainJexp(int Gains, playerCharacter toLevel){
         if(jlevel == 20 || jexpCap > 60000) {
             experienceNotification.queueExpEvent(toLevel.getName() + " is at level cap for " + className + ".",
-                    1f, 1f, false);
+                    1f, 1f, false, jlevel, 0);
             return; //no leveling past 20 for first classes or 10 for second classes
         }
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
             experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!"
-                    + '\n' + jobDing(toLevel), (1f*jexp)/jexpCap, 1f, false);
+                    + '\n' + jobDing(toLevel), (1f*jexp)/jexpCap, 1f, false, jlevel, 0);
             Gains -= (jexpCap - jexp);
             ++jlevel;
-            jexpCap += Math.round(jexpCap*1.2); //jexp cap goes up by 20%
+            jexpCap += Math.round(jexpCap*0.2); //jexp cap goes up by 20%
             jexp = 0; //reset jexp to 0 now that we've leveled.
             gainJexp(Gains, toLevel); //recursive call to add the rest of the jexp
                                       //onto the next level.
@@ -61,7 +65,7 @@ public abstract class characterClass implements Data, Serializable {
         else if(Gains > 0){
             experienceNotification.queueExpEvent(toLevel.getName()
                     + " gained " + Gains + " experience as a " + className + "!",
-                    (1f*jexp)/jexpCap, (1f*jexp+Gains)/jexpCap, false);
+                    (1f*jexp)/jexpCap, (1f*jexp+Gains)/jexpCap, false, jlevel, 0);
             jexp += Gains; //otherwise, we just add it to our exp.
         }
     }

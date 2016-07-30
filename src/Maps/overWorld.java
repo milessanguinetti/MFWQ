@@ -17,17 +17,16 @@ import java.nio.file.Paths;
 /**
  * Created by Miles on 8/4/2015.
  */
-public class overWorld implements Serializable{
-    private StackPane contentRoot = new StackPane();
+public class overWorld extends StackPane implements Serializable{
     private mapIcon currentZone; //the current zone (map or city) that the player is in.
 
     public overWorld(){
-        contentRoot.setAlignment(Pos.CENTER);
+        setAlignment(Pos.CENTER);
         try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/worldmap.jpg"))){
             ImageView worldMap = new ImageView(new Image(imginput));
             worldMap.setFitWidth(864);
             worldMap.setFitHeight(864); //preserve aspect ratio
-            contentRoot.getChildren().add(worldMap);
+            getChildren().add(worldMap);
         }
 
         catch (IOException e){
@@ -102,6 +101,6 @@ public class overWorld implements Serializable{
     }
 
     public Pane getPane(){
-        return contentRoot;
+        return this;
     }
 }

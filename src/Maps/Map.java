@@ -173,7 +173,7 @@ public abstract class Map extends Tileset{
             }
             //ESCAPE CASE
             else if(event1.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().swapToInventory(sceneRoot);
+                Game.mainmenu.getCurrentGame().addOptionsOverlay();
             }
         });
 

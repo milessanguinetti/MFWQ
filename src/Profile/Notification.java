@@ -39,13 +39,13 @@ public class Notification extends StackPane implements Serializable{
         Title.setText("Loot");
         Description.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
         Description.setFill(Color.GOLD);
-        Description.setTranslateY(150);
+        Description.setTranslateY(170);
         Description.setWrappingWidth(600); //wrap text if need be
         //setVisible(false); //initialize object as invisible
         javafx.scene.shape.Rectangle Background = new javafx.scene.shape.Rectangle(3000, 3000);
         Background.setFill(Color.BLACK);
         Background.setOpacity(.3);
-        javafx.scene.shape.Rectangle Background2 = new javafx.scene.shape.Rectangle(800, 600);
+        javafx.scene.shape.Rectangle Background2 = new javafx.scene.shape.Rectangle(800, 650);
         Background2.setFill(Color.BLACK);
         setAlignment(Pos.CENTER);
         getChildren().addAll(Background, Background2, Title, Description);
@@ -141,7 +141,7 @@ public class Notification extends StackPane implements Serializable{
             itemName.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
             itemName.setFill(Color.GRAY);
             itemName.setTranslateY(-130);
-            itemName.setWrappingWidth(170);
+            itemName.setWrappingWidth(185);
             itemName.setTextAlignment(TextAlignment.CENTER);
             itemName.setText(contents.returnKey());
             itemName.setOpacity(0);

@@ -37,7 +37,9 @@ public class Game {
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
     public static overWorld overworld = new overWorld();
+    public static settingsScreen settings = new settingsScreen();
     public static Map currentMap;
+    private optionsOverlay options = new optionsOverlay();
     private Stage primaryStage;
     private StackPane gameRoot = new StackPane();
     private long delayStartTime; //variable to track time at which a delay was requested.
@@ -169,7 +171,7 @@ public class Game {
         if(mediaPlayer != null)
             mediaPlayer.stop();
         mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
-        mediaPlayer.setVolume(musicVolume);
+        mediaPlayer.setVolume(musicVolume * masterVolume);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
@@ -178,6 +180,7 @@ public class Game {
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(mainmenu.getPane());
+        mainmenu.Reset();
         mainmenu.getPane().requestFocus();
         if(mediaPlayer != null)
             mediaPlayer.stop();
@@ -208,6 +211,7 @@ public class Game {
 
     public void swapToOverworld(Node toRemove){
         //NOT YET IMPLEMENTED
+        currentMap = null;
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         writeToDisk();
@@ -220,6 +224,13 @@ public class Game {
         gameRoot.getChildren().add(Player.getContentRoot());
         Player.getContentRoot().requestFocus();
         Player.setItemBox(0);
+    }
+
+    public void swapToSettings(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        gameRoot.getChildren().add(settings);
+        settings.requestFocus();
     }
 
     public void setDelay(int Delay){
@@ -255,5 +266,20 @@ public class Game {
     public void removeNotifications(){
         gameRoot.getChildren().remove(experiencenotification);
         gameRoot.getChildren().remove(notification);
+    }
+
+    public void addOptionsOverlay(){
+        options.Reset();
+        gameRoot.getChildren().add(options);
+        options.requestFocus();
+    }
+
+    public void removeOptionsOverylay(){
+        gameRoot.getChildren().remove(options);
+        if(currentMap != null) {
+            currentMap.getPane().requestFocus();
+        }
+        else
+            overworld.requestFocus();
     }
 }

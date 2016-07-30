@@ -39,10 +39,10 @@ public class experienceNotification extends StackPane{
         Rectangle background = new Rectangle(800, 500);
         background.setFill(Color.BLACK);
         expBar = new expBar(true);
-        expBar.setTranslateX(-200);
+        expBar.setTranslateX(-170);
         expBar.setTranslateY(-35);
         jexpBar = new expBar(false);
-        jexpBar.setTranslateX(200);
+        jexpBar.setTranslateX(230);
         jexpBar.setTranslateY(-35);
         expText = new expText();
         expText.setTranslateY(130);
@@ -82,8 +82,8 @@ public class experienceNotification extends StackPane{
         //expText.setText("");
     }
 
-    public static void queueExpEvent(String message, float start, float end, boolean isBaseExp){
-        new gainEventQueueNode(message, start, end, isBaseExp);
+    public static void queueExpEvent(String message, float start, float end, boolean isBaseExp, int level, int jlevel){
+        new gainEventQueueNode(message, start, end, isBaseExp, level, jlevel);
     }
 
     private class characterViewWindow extends StackPane{
@@ -127,6 +127,7 @@ public class experienceNotification extends StackPane{
     }
 
     private class expBar extends StackPane{
+        private Text levelText;
         private Rectangle bar;
         private Rectangle barClip;
         private boolean isBaseExp;
@@ -135,6 +136,7 @@ public class experienceNotification extends StackPane{
 
         public expBar(boolean isbaseexp){
             isBaseExp = isbaseexp;
+
             Random rand = new Random();
             for(int i = 0; i < 30; ++i)
                 dingrandomizer[i] = 5 + rand.nextInt(10);
@@ -146,10 +148,19 @@ public class experienceNotification extends StackPane{
             barBackground.setFill(Color.BLACK);
             barBackground.setTranslateX(10);
             bar = new Rectangle(280, 40);
-            if(isBaseExp)
+
+            levelText = new Text();
+            levelText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.BOLD, 30));
+            levelText.setTranslateX(-50);
+            getChildren().add(levelText);
+            if(isBaseExp) {
                 bar.setFill(Color.ORANGE);
-            else
+                levelText.setFill(Color.ORANGE);
+            }
+            else {
                 bar.setFill(Color.BLUE);
+                levelText.setFill(Color.BLUE);
+            }
             bar.setTranslateX(10);
             bar.setVisible(false);
             barClip = new Rectangle(280, 40);
@@ -192,8 +203,9 @@ public class experienceNotification extends StackPane{
 
         }
 
-        public void animateExpGain(float start, float end, String message){
+        public void animateExpGain(float start, float end, String message, int level){
             bar.setVisible(true);
+            levelText.setText(level + "");
             animated = true;
             barClip.setWidth(280*start);
             final Timeline timeline = new Timeline();
@@ -204,6 +216,7 @@ public class experienceNotification extends StackPane{
                 experienceNotification.expText.setText(message);
                 if(end == 1.0) {
                     if(start != 1.0){
+                        levelText.setText((level+1) +"");
                         for(int i = dingrandomizer[current%30]/4 + 6; i > 0; --i)
                             animateDingStar();
                     }
@@ -214,6 +227,10 @@ public class experienceNotification extends StackPane{
             timeline.getKeyFrames().add(kf1);
             timeline.getKeyFrames().add(kf2);
             timeline.play();
+        }
+
+        public void setText(String toset){
+            levelText.setText(toset);
         }
     }
 
@@ -246,11 +263,13 @@ public class experienceNotification extends StackPane{
         private float Start;
         private float End;
         private expBar toSend;
+        private int Level;
+        private int jobLevel;
         private gainEventQueueNode Next;
         private static gainEventQueueNode head;
         private static gainEventQueueNode tail;
 
-        public gainEventQueueNode(String message, float start, float end, boolean isBaseExp){
+        public gainEventQueueNode(String message, float start, float end, boolean isBaseExp, int level, int joblevel){
             //System.out.println("initializing experience event node");
             if(head == null) {
                 head = this;
@@ -264,8 +283,11 @@ public class experienceNotification extends StackPane{
             Message = message;
             Start = start;
             End = end;
-            if(isBaseExp)
+            Level = level;
+            if(isBaseExp) {
                 toSend = expBar;
+                jobLevel = joblevel;
+            }
             else
                 toSend = jexpBar;
         }
@@ -280,7 +302,9 @@ public class experienceNotification extends StackPane{
             }
             System.out.println(size + " experience events queued.");*/
             if(head != null){
-                head.toSend.animateExpGain(head.Start, head.End, head.Message);
+                if(head.toSend == expBar)
+                    jexpBar.setText(head.jobLevel + "");
+                head.toSend.animateExpGain(head.Start, head.End, head.Message, head.Level);
                 head = head.Next;
                 return false;
             }

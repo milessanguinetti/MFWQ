@@ -32,6 +32,7 @@ public class mainMenu {
     private menuButton Options = new menuButton("OPTIONS", 2);
     private menuButton Exit = new menuButton("EXIT", 3);
     private StackPane contentRoot;
+    private boolean isMostRecentPane;
     //create a scene endemic to the menu
 
     public mainMenu(){
@@ -72,7 +73,7 @@ public class mainMenu {
                 intToButton(Selection).setHighLit();
             }
             //UP CASE
-            else if (event.getCode() == KeyCode.UP && Selection > 0 || event.getCode() == KeyCode.W && Selection < 3) {
+            else if (event.getCode() == KeyCode.UP && Selection > 0 || event.getCode() == KeyCode.W && Selection > 0) {
                 intToButton(Selection).setPlain();
                 --Selection;
                 intToButton(Selection).setHighLit();
@@ -83,6 +84,17 @@ public class mainMenu {
                 intToAction(Selection);
             }
         });
+    }
+
+    public boolean isMostRecentPane(){
+        return isMostRecentPane;
+    }
+
+    //resets selection and other variables such that they're like they are at startup.
+    public void Reset(){
+        intToButton(Selection).setPlain();
+        Selection = 0;
+        intToButton(Selection).setHighLit();
     }
 
     public Pane getPane(){
@@ -137,6 +149,7 @@ public class mainMenu {
             buttonText = new Text(buttonname); //initialize our text to the button's name
             buttonText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 40));
 
+            setMaxSize(300, 50);
             setAlignment(Pos.CENTER); //center the button's sub-components.
             getChildren().addAll(buttonShape, buttonText); //add the shape and text to the button.
 
@@ -192,14 +205,17 @@ public class mainMenu {
 
     //performs an action based on an integer value
     public void intToAction(int toConvert){
+        isMostRecentPane = false;
         intToButton(toConvert).setUnselected();
         if(toConvert == 0) {
             currentGame.newPlayer(); //new game
         }
         else if(toConvert == 1)
             currentGame.loadPlayer(); //load game
-        else if(toConvert == 2)
-            return; //options (NYI)
+        else if(toConvert == 2) {
+            isMostRecentPane = true;
+            currentGame.swapToSettings(contentRoot);
+        }
         else
             System.exit(0); //exit
     }

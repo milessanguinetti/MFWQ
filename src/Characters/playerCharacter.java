@@ -24,7 +24,7 @@ import java.util.Scanner;
 public class playerCharacter extends gameCharacter {
     //Data for game logistics
     private String Race;
-    private int Level;
+    private int Level = 1;
     private int Exp;
     private int expCap;
     private Weapon Left; //weapons for each hand
@@ -666,19 +666,21 @@ public class playerCharacter extends gameCharacter {
     public void Ding(int exp, int jexp){
         if((Exp + exp) >= expCap){ //if we've received enough exp to level...
             experienceNotification.queueExpEvent(Name + " gained a level! " + Name + "'s stats increased!",
-                    (1f*Exp)/expCap, 1f, true);
-            exp -= (expCap - exp);
+                    (1f*Exp)/expCap, 1f, true, Level, primaryClass.getJlevel());
+            exp -= (expCap - Exp);
             ++Level;
-            expCap += Math.round(expCap*1.2); //exp cap goes up by 20%
+            expCap += Math.round(expCap*0.2); //exp cap goes up by 20%
             Exp = 0; //reset Exp to 0 now that we've leveled.
             baseStatGains(); //increase base stats.
             if(primaryClass != null)
                 primaryClass.baseDing(this, Level); //gain auxilary class stat boosts
+            HP = MHP; //set health and sp to full following levelup.
+            SP = MSP;
             Ding(exp, 0); //recursive call; jexp == 0 so that we don't gain it twice.
         }
         else if(exp > 0){
             experienceNotification.queueExpEvent(Name + " gained " + exp + " exp!",
-                    (1f*Exp)/expCap, (1f*exp + Exp)/expCap, true);
+                    (1f*Exp)/expCap, (1f*exp + Exp)/expCap, true, Level, primaryClass.getJlevel());
             Exp += exp; //otherwise, we just add it to our exp.
         }
         if(primaryClass != null) { //level the character's class with jexp
