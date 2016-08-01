@@ -73,6 +73,14 @@ public abstract class gameCharacter extends Stats {
         return Name;
     }
 
+    public void setCurrentPassive(passiveSkill toset){
+        currentPassive = toset;
+    }
+
+    public passiveSkill getCurrentPassive(){
+        return currentPassive;
+    }
+
     public void setCounter(Counter counter){
         charCounter = counter;
     }

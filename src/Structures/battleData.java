@@ -96,7 +96,6 @@ public class battleData implements Data, Serializable {
     //set the battledata's target
     public int setTarget(int toTarget){
         if(toTarget != 0 && toCast instanceof Consumable){
-            System.out.println("REMOVING DIS");
             Game.Player.Remove((Item)toCast);
         }
         targetIndex = toTarget;

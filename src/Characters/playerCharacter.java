@@ -73,6 +73,36 @@ public class playerCharacter extends gameCharacter {
         charProperty = new Neutral();
     }
 
+    public String getRace(){
+        return Race;
+    }
+
+    public String getCurrentClassName(){
+        if(primaryClass != null)
+            return primaryClass.getClassName();
+        else
+            return "";
+    }
+
+    public String getSecondaryClassName(){
+        return secondaryClass.getClassName();
+    }
+
+    public String getPassiveName(){
+        if(currentPassive != null)
+            return currentPassive.getSkillName();
+        else
+            return "None";
+    }
+
+    public orderedLLL getClasses(){
+        return Classes;
+    }
+
+    public orderedLLL getPassives(){
+        return Passives;
+    }
+
     //initializes combat data; resetting state information for player characters.
     @Override
     public void initializeCombatData(){
@@ -814,5 +844,28 @@ public class playerCharacter extends gameCharacter {
 
     public int getLevel(){
         return Level;
+    }
+
+    public String getArmorName(){
+        if(Armor1 == null)
+            return "None";
+        else
+            return Armor1.returnKey();
+    }
+
+    public String getAccessoryName(int which){
+        if(which == 1){
+            if(Accessory1 == null)
+                return "None";
+            else
+                return Accessory1.returnKey();
+        }
+        else if(which == 2){
+            if(Accessory2 == null)
+                return "None";
+            else
+                return Accessory2.returnKey();
+        }
+        return "";
     }
 }

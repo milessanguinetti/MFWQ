@@ -2,6 +2,7 @@ package Characters.Skills.Passive;
 
 import Characters.gameCharacter;
 import Structures.Data;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -23,6 +24,14 @@ public abstract class passiveSkill implements Data, Serializable{
     }
 
     public abstract void passiveEffect(gameCharacter toEffect);
+
+    public String getSkillName(){
+        return skillName;
+    }
+
+    public String getDescription(){
+        return Description;
+    }
 
     @Override
     public void Display() {

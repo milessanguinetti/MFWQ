@@ -122,6 +122,32 @@ public class Stats extends spritePane{
 
     public int getHPCap(){ return MHP; }
 
+    public int getArmor(){ return Armor; }
+
+    public int getVit(){
+        return Vit;
+    }
+
+    public int getStr(){
+        return Str;
+    }
+
+    public int getDex(){
+        return Dex;
+    }
+
+    public int getInt(){
+        return Int;
+    }
+
+    public int getFth(){
+        return Fth;
+    }
+
+    public int getSpd(){
+        return Spd;
+    }
+
     public int getTempArmor(){ return tempArmor; }
 
     //temp setters

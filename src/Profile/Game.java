@@ -38,6 +38,7 @@ public class Game {
     public static Battle battle = new Battle();
     public static overWorld overworld = new overWorld();
     public static settingsScreen settings = new settingsScreen();
+    public static characterScreen characterscreen;
     public static Map currentMap;
     private optionsOverlay options = new optionsOverlay();
     private Stage primaryStage;
@@ -231,6 +232,15 @@ public class Game {
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(settings);
         settings.requestFocus();
+    }
+
+    public void swapToCharacterScreen(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        if(characterscreen == null)
+            characterscreen = new characterScreen();
+        gameRoot.getChildren().add(characterScreen.getContentRoot());
+        characterScreen.swapToMainPane();
     }
 
     public void setDelay(int Delay){
