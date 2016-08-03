@@ -236,10 +236,12 @@ public class optionsOverlay extends StackPane{
         public void performAction(){
             setUnselected();
             Game.mainmenu.getCurrentGame().removeOptionsOverylay();
-            if(Game.currentMap == null)
+            if(Game.currentMap == null) {
                 Game.mainmenu.getCurrentGame().swapToCharacterScreen(Game.overworld);
-            else
-                Game.mainmenu.getCurrentGame().swapToCharacterScreen(Game.currentMap);
+            }
+            else {
+                Game.mainmenu.getCurrentGame().swapToCharacterScreen(Game.currentMap.getPane());
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package Profile;
 
+import Characters.Inventory.Inventory;
 import Characters.playerCharacter;
 import Structures.Structure;
 import Structures.orderedLLL;
@@ -8,13 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -44,7 +46,7 @@ public class characterScreen {
 
     public static void swapToMainPane(){
         if(!mainPaneIsActive){
-            contentRoot.getChildren().removeAll(selectionPane);
+            contentRoot.getChildren().remove(selectionPane);
             contentRoot.getChildren().add(mainPane);
         }
         mainPane.initializeDisplay();
@@ -61,40 +63,52 @@ public class characterScreen {
         }
     }
 
-    public static ObservableList<Node> getMainPaneChildren(){
-        return mainPane.getChildren();
-    }
-
     public static StackPane getContentRoot(){
         return contentRoot;
     }
 
-    private class MainPane extends GridPane{
-        private playerCharacter Current;
-        private playerCharacter leftOfCurrent;
-        private playerCharacter rightOfCurrent;
-        private selectableStatViewObject primaryClass;
-        private selectableStatViewObject secondaryClass;
-        private selectableStatViewObject passive;
-        private selectableStatViewObject rightweap;
-        private selectableStatViewObject leftweap;
-        private selectableStatViewObject equippedarmor;
-        private selectableStatViewObject accessory1;
-        private selectableStatViewObject accessory2;
-        private unselectableStatViewObject hp;
-        private unselectableStatViewObject sp;
-        private unselectableStatViewObject armor;
-        private unselectableStatViewObject vit;
-        private unselectableStatViewObject str;
-        private unselectableStatViewObject dex;
-        private unselectableStatViewObject inte;
-        private unselectableStatViewObject fth;
-        private unselectableStatViewObject spd;
+    public static playerCharacter getCurrentCharacter(){
+        return currentParty[currentCharacter];
+    }
 
-
+    private static class MainPane extends GridPane{
+        private static playerCharacter Current;
+        private static playerCharacter leftOfCurrent;
+        private static playerCharacter rightOfCurrent;
+        private static Text nameText;
+        private static Text levelRaceExpText;
+        private static selectableStatViewObject primaryClass;
+        private static selectableStatViewObject secondaryClass;
+        private static selectableStatViewObject passive;
+        private static selectableStatViewObject rightweap;
+        private static selectableStatViewObject leftweap;
+        private static selectableStatViewObject equippedarmor;
+        private static selectableStatViewObject accessory1;
+        private static selectableStatViewObject accessory2;
+        private static unselectableStatViewObject hp;
+        private static unselectableStatViewObject sp;
+        private static unselectableStatViewObject armor;
+        private static unselectableStatViewObject vit;
+        private static unselectableStatViewObject str;
+        private static unselectableStatViewObject dex;
+        private static unselectableStatViewObject inte;
+        private static unselectableStatViewObject fth;
+        private static unselectableStatViewObject spd;
 
         public MainPane(){
             setAlignment(Pos.CENTER);
+            nameText = new Text();
+            nameText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 36));
+            nameText.setFill(Color.GOLDENROD);
+            nameText.setTextAlignment(TextAlignment.CENTER);
+            //nameText.setTranslateY(-350);
+            //nameText.setTranslateX(0);
+            levelRaceExpText = new Text();
+            levelRaceExpText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 24));
+            levelRaceExpText.setFill(Color.WHITE);
+            levelRaceExpText.setTextAlignment(TextAlignment.CENTER);
+            //levelRaceExpText.setTranslateY(-300);
+
             for(int i = 0; i < 4; ++i) { //ensure that we have a current player character so we don't cause segfaults
                 if (Game.Player.getParty()[i] != null) { //in the following lines of code.
                     Current = Game.Player.getParty()[i];
@@ -114,6 +128,7 @@ public class characterScreen {
                                 || currentStatViewObject == passive){
                             currentStatViewObject.setPlain();
                             currentStatViewObject = null;
+                            spritesPane.highLightChar(true);
                         }
                         else{
                             currentStatViewObject.setCurrentToAdjacent(0);
@@ -125,11 +140,10 @@ public class characterScreen {
                         currentStatViewObject.setCurrentToAdjacent(3);
                     }
                     else if(leftOfCurrent != null){
-                        Current = leftOfCurrent;
                         for(int i = 0; i < 4; ++i)
-                            if(currentParty[i] == Current)
+                            if(currentParty[i] == leftOfCurrent)
                                 currentCharacter = i;
-                        initializeDisplay(Current);
+                        changeCharacter(false);
                     }
                 }
                 else if(event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN){
@@ -137,8 +151,9 @@ public class characterScreen {
                         currentStatViewObject.setCurrentToAdjacent(2);
                     }
                     else{
-                        currentStatViewObject = primaryClass;
-                        primaryClass.setHighLit();
+                        currentStatViewObject = secondaryClass;
+                        secondaryClass.setHighLit();
+                        spritesPane.highLightChar(false);
                     }
                 }
                 else if(event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT){
@@ -146,14 +161,14 @@ public class characterScreen {
                         currentStatViewObject.setCurrentToAdjacent(1);
                     }
                     else if (rightOfCurrent != null){
-                        Current = rightOfCurrent;
                         for(int i = 0; i < 4; ++i)
-                            if(currentParty[i] == Current)
+                            if(currentParty[i] == rightOfCurrent)
                                 currentCharacter = i;
-                        initializeDisplay(Current);
+                        changeCharacter(true);
                     }
                 }
                 else if(event.getCode() == KeyCode.ESCAPE){
+
                     if(Game.currentMap != null)
                         Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
                     else
@@ -163,19 +178,12 @@ public class characterScreen {
             });
         }
 
-        public void addDisplays(){
+        public static void addDisplays(){
             try {
-                Method test = Current.getClass().getMethod("getClasses");
-                Object testOutput = test.invoke(Current);
-                ((orderedLLL)testOutput).Display();
-
                 primaryClass = new selectableStatViewObject(null, null, Current.getClass().getMethod("getClasses"), Current);
-                primaryClass.setTranslateX(-450);
                 secondaryClass = new selectableStatViewObject(null, primaryClass, Current.getClass().getMethod("getClasses"), Current);
                 passive = new selectableStatViewObject(null, secondaryClass, Current.getClass().getMethod("getPassives"), Current);
                 hp = new unselectableStatViewObject(null, null);
-                hp.setTranslateX(-450);
-                hp.setTranslateY(150);
                 sp = new unselectableStatViewObject(null, hp);
                 armor = new unselectableStatViewObject(null, sp);
                 vit = new unselectableStatViewObject(hp, null);
@@ -184,43 +192,77 @@ public class characterScreen {
                 inte = new unselectableStatViewObject(vit, null);
                 fth = new unselectableStatViewObject(str, inte);
                 spd = new unselectableStatViewObject(dex, fth);
-                rightweap = new selectableStatViewObject(null, null, Game.Player.getClass().getMethod("getConsumables"), Game.Player);
-                rightweap.setTranslateX(-450);
-                rightweap.setTranslateY(600);
-                leftweap = new selectableStatViewObject(null, rightweap, Game.Player.getClass().getMethod("getConsumables"), Game.Player);
-                equippedarmor = new selectableStatViewObject(null, leftweap, Game.Player.getClass().getMethod("getConsumables"), Game.Player);
-                accessory1 = new selectableStatViewObject(rightweap, null, Game.Player.getClass().getMethod("getConsumables"), Game.Player);
-                accessory2 = new selectableStatViewObject(equippedarmor, accessory1, Game.Player.getClass().getMethod("getConsumables"), Game.Player);
+                rightweap = new selectableStatViewObject(null, null, Game.Player.getClass().getMethod("getItemBoxPane", int.class), Game.Player);
+                leftweap = new selectableStatViewObject(null, rightweap, Game.Player.getClass().getMethod("getItemBoxPane", int.class), Game.Player);
+                equippedarmor = new selectableStatViewObject(null, leftweap, Game.Player.getClass().getMethod("getItemBoxPane", int.class), Game.Player);
+                accessory1 = new selectableStatViewObject(leftweap, null, Game.Player.getClass().getMethod("getItemBoxPane", int.class), Game.Player);
+                accessory2 = new selectableStatViewObject(leftweap, accessory1, Game.Player.getClass().getMethod("getItemBoxPane", int.class), Game.Player);
 
+                rightweap.setAdjacent(accessory1, 2);
                 leftweap.setAdjacent(accessory1, 2);
+                equippedarmor.setAdjacent(accessory2, 2);
                 hp.setTwoWayAdjacent(primaryClass, 0);
                 sp.setTwoWayAdjacent(secondaryClass, 0);
                 armor.setTwoWayAdjacent(passive, 0);
                 inte.setTwoWayAdjacent(rightweap, 2);
-                fth.setAdjacent(leftweap, 2);
+                fth.setTwoWayAdjacent(leftweap, 2);
                 spd.setTwoWayAdjacent(equippedarmor, 2);
+
+                VBox vbox = new VBox();
+                vbox.setAlignment(Pos.CENTER);
+                vbox.setTranslateY(0);
+                vbox.setSpacing(10);
+                vbox.getChildren().add(nameText);
+                vbox.getChildren().add(levelRaceExpText);
+                vbox.getChildren().add(new spritesPane());
+                //vbox.getChildren().addAll();
+                HBox [] hboxs = new HBox[6];
+                for(int i = 0; i < 6; ++i){
+                    hboxs[i] = new HBox();
+                    hboxs[i].setAlignment(Pos.CENTER);
+                    hboxs[i].setSpacing(10);
+                    //hboxs[i].setSpacing();
+                    vbox.getChildren().add(hboxs[i]);
+                }
+                hboxs[0].getChildren().addAll(primaryClass, secondaryClass, passive);
+                hboxs[1].getChildren().addAll(hp, sp, armor);
+                hboxs[2].getChildren().addAll(vit, str, dex);
+                hboxs[3].getChildren().addAll(inte, fth, spd);
+                hboxs[4].getChildren().addAll(rightweap, leftweap, equippedarmor);
+                hboxs[5].getChildren().addAll(accessory1, accessory2);
+                mainPane.getChildren().add(vbox);
             }
             catch (Exception e){
                 System.out.println(e.getMessage());
+                System.out.println(e.getClass());
             }
             initializeDisplay(Current);
         }
 
-        public void initializeDisplay(){
+        public static void initializeDisplay(){
             currentParty = Game.Player.getParty();
+            if(currentStatViewObject != null)
+                currentStatViewObject.setPlain();
+            currentStatViewObject = null;
+            spritesPane.highLightChar(true);
             for(int i = 0; i < 4; ++i)
                 if(currentParty[i] != null)
                     currentCharacter = i;
             initializeDisplay(currentParty[currentCharacter]);
         }
 
-        public void initializeDisplay(playerCharacter current) {
+        public static void initializeDisplay(playerCharacter current) {
+            nameText.setText(current.getName());
+            levelRaceExpText.setText("Level: " + current.getLevel() + "          Race: " + current.getRace()
+                    + current.getExp());
             currentParty = Game.Player.getParty();
-            currentStatViewObject = primaryClass;
-            primaryClass.setHighLit();
+            currentStatViewObject = null;
             Current = current;
-            decideLeftOfCurrent();
-            decideRightOfCurrent();
+            spritesPane.setCenter(Current, Current);
+            mainPane.decideLeftOfCurrent();
+            mainPane.decideRightOfCurrent();
+            spritesPane.setLeft(leftOfCurrent, leftOfCurrent);
+            spritesPane.setRight(rightOfCurrent, rightOfCurrent);
             //updates all stat view objects with the current character.
             primaryClass.setText("Primary Class: " + Current.getCurrentClassName());
             secondaryClass.setText("Secondary Class: " + Current.getSecondaryClassName());
@@ -259,9 +301,6 @@ public class characterScreen {
         }
 
         private void decideRightOfCurrent(){
-            System.out.println(currentCharacter);
-            if(currentParty == null)
-                System.out.println("Literally no party lol");
             for(int i = currentCharacter+1; i < 4; ++i){
                 if(currentParty[i] != null){
                     rightOfCurrent = currentParty[i];
@@ -269,19 +308,222 @@ public class characterScreen {
                 }
             }
         }
+
+        private static void changeCharacter(boolean isRight){
+            if(isRight){
+                if(rightOfCurrent != null){
+                    spritesPane.setLeft(leftOfCurrent, Current);
+                    spritesPane.setCenter(Current, rightOfCurrent);
+                    initializeDisplay(rightOfCurrent);
+                    spritesPane.setRight(Current, rightOfCurrent);
+                }
+            }
+            else{
+                if(leftOfCurrent != null){
+                    spritesPane.setRight(rightOfCurrent, Current);
+                    spritesPane.setCenter(Current, leftOfCurrent);
+                    initializeDisplay(leftOfCurrent);
+                    spritesPane.setLeft(Current, leftOfCurrent);
+                }
+            }
+        }
+
+        public static int decideCurrentItemCategory(){
+            if(currentStatViewObject == rightweap || currentStatViewObject == leftweap)
+                return 1; //weapons are category 1
+            if(currentStatViewObject == equippedarmor)
+                return 2; //armor is category 3
+            else
+                return 3; //accessories are category 4 and are the only other case where this would be called
+        }
+    }
+
+    private static class spritesPane extends HBox{
+        private static StackPane center;
+        private static StackPane left;
+        private static StackPane right;
+        private static Rectangle centerHighlit;
+        private static Polygon leftButton;
+        private static Polygon rightButton;
+
+        public spritesPane(){
+            setAlignment(Pos.CENTER);
+            setSpacing(300);
+            Rectangle Darken;
+            //Initialize left pane.
+            left = new StackPane();
+            Darken = new Rectangle(500, 250);
+            Darken.setFill(Color.BLACK);
+            Darken.setOpacity(.4);
+            leftButton = new Polygon(0,0, -60, 60, 0, 120);
+            leftButton.setFill(Color.GRAY);
+            left.setAlignment(Pos.CENTER_RIGHT);
+            left.getChildren().addAll(Darken, leftButton);
+            left.setMaxSize(500, 250);
+            left.setOnMouseClicked(event -> {
+                MainPane.changeCharacter(false);
+            });
+            //Initialize center pane.
+            center = new StackPane();
+            Darken = new Rectangle(150, 150);
+            Darken.setFill(Color.BLACK);
+            centerHighlit = new Rectangle(155, 155);
+            centerHighlit.setFill(Color.GOLDENROD);
+            center.setAlignment(Pos.CENTER);
+            center.getChildren().addAll(centerHighlit, Darken);
+            //Initialize right pane;
+            right = new StackPane();
+            Darken = new Rectangle(500, 250);
+            Darken.setFill(Color.BLACK);
+            Darken.setOpacity(.4);
+            rightButton = new Polygon(0,0, 50, 50, 0, 100);
+            rightButton.setFill(Color.GRAY);
+            right.setAlignment(Pos.CENTER_LEFT);
+            right.getChildren().addAll(Darken, rightButton);
+            right.setMaxSize(500, 250);
+            right.setOnMouseClicked(event -> {
+                MainPane.changeCharacter(true);
+            });
+
+            getChildren().addAll(left, center, right);
+        }
+
+        public static void setCenter(playerCharacter toremove, playerCharacter toadd){
+            if(toremove != null) {
+                center.getChildren().remove(toremove);
+                toremove.Animate(false);
+            }
+            if(toadd != null) {
+                toadd.setTranslateX(0);
+                toadd.setTranslateY(0);
+                center.getChildren().add(toadd);
+                toadd.Animate(true);
+                toadd.toFront();
+                centerHighlit.setOpacity(1);
+            }
+        }
+
+        public static void setLeft(playerCharacter toremove, playerCharacter toadd){
+            if(toremove != null) {
+                left.getChildren().remove(toremove);
+                toremove.Animate(false);
+            }
+            if(toadd != null) {
+                toadd.setTranslateX(0);
+                toadd.setTranslateY(0);
+                left.getChildren().add(toadd);
+                toadd.toBack();
+                leftButton.setFill(Color.GOLDENROD);
+            }
+            else{
+                leftButton.setFill(Color.GRAY);
+            }
+        }
+
+        public static void setRight(playerCharacter toremove, playerCharacter toadd){
+            if(toremove != null) {
+                right.getChildren().remove(toremove);
+                toremove.Animate(false);
+            }
+            if(toadd != null) {
+                toadd.setTranslateX(0);
+                toadd.setTranslateY(0);
+                right.getChildren().add(toadd);
+                toadd.toBack();
+                rightButton.setFill(Color.GOLDENROD);
+            }
+            else{
+                rightButton.setFill(Color.GRAY);
+            }
+        }
+
+        public static void highLightChar(boolean isHighlit){
+            if(isHighlit)
+                centerHighlit.setVisible(true);
+            else{
+                centerHighlit.setVisible(false);
+            }
+        }
     }
 
     private static class SelectionPane extends GridPane{
-        public SelectionPane(){
+        private static int mode;
+        private static Node primaryObject;
+        private static Node secondaryObject;
+        private static Text title;
 
+        public SelectionPane(){
+            setAlignment(Pos.CENTER);
+            title = new Text();
+            title.setTranslateY(-350);
+            //title.setTextAlignment(TextAlignment.CENTER);
+            title.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 40));
+            title.setFill(Color.WHITE);
+            getChildren().add(title);
+
+            setOnKeyReleased(event -> {
+                if(event.getCode() == KeyCode.ESCAPE){
+                    getChildren().removeAll(primaryObject, secondaryObject);
+                    MainPane.initializeDisplay();
+                    if(mode == 1){
+                        Inventory.returnItemBoxPane();
+                    }
+                    swapToMainPane();
+                }
+                else{
+                    if(mode == 1){
+                        getChildren().remove(secondaryObject);
+                        secondaryObject = Inventory.getItemDisplay();
+                        if(secondaryObject != null) {
+                            secondaryObject.setTranslateX(500);
+                            secondaryObject.setTranslateY(0);
+                            selectionPane.getChildren().add(secondaryObject);
+                        }
+                    }
+                }
+            });
         }
 
-        public static void setMode(Object toCallFrom, Method toCall){
-
+        public static void setMode(Object toCallFrom, Method toCall) {
+            try {
+                swapToSelectionPane();
+                if(toCallFrom instanceof Inventory){
+                    mode = 1;
+                    primaryObject = (Node) toCall.invoke(toCallFrom, MainPane.decideCurrentItemCategory());
+                    selectionPane.getChildren().add(primaryObject);
+                    primaryObject.requestFocus();
+                    secondaryObject = Inventory.getItemDisplay();
+                    if(secondaryObject != null) {
+                        secondaryObject.setTranslateX(500);
+                        secondaryObject.setTranslateY(0);
+                        selectionPane.getChildren().add(secondaryObject);
+                        switch (MainPane.decideCurrentItemCategory()){
+                            case 1:{
+                                title.setText("Select a new weapon for " + getCurrentCharacter().getName());
+                                break;
+                            }
+                            case 2:{
+                                title.setText("Select new armor for " + getCurrentCharacter().getName());
+                                break;
+                            }
+                            case 3:{
+                                title.setText("Select a new accessory for " + getCurrentCharacter().getName());
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        title.setText("No other items available!");
+                    }
+                }
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    private abstract class statViewObject extends StackPane{
+    private static abstract class statViewObject extends StackPane{
         private statViewObject [] Adjacent = new statViewObject[4];
         private Rectangle highLit;
         private Text displayText;
@@ -289,6 +531,7 @@ public class characterScreen {
         public statViewObject(int xsize, int ysize, statViewObject above, statViewObject toleft){
             setAlignment(Pos.CENTER);
             setMaxSize(xsize, ysize);
+            setMinSize(xsize, ysize);
             highLit = new Rectangle(xsize+3, ysize+3);
             highLit.setFill(Color.GOLDENROD);
             highLit.setVisible(false);
@@ -301,16 +544,12 @@ public class characterScreen {
 
             if(above != null){ //add possible above object and set y orientation accordingly
                 Adjacent[0] = above;
-                setTranslateY(Adjacent[0].getTranslateY() + ysize + 10);
                 Adjacent[0].setAdjacent(this, 2);
             }
             if(toleft != null){ //add possible left object and set x orientation accordingly
                 Adjacent[3] = toleft;
-                setTranslateX(Adjacent[3].getTranslateX() + xsize + 10 );
                 Adjacent[3].setAdjacent(this, 1);
             }
-
-            getMainPaneChildren().add(this);
         }
 
         public void setAdjacent(statViewObject toSet, int index){
@@ -322,16 +561,19 @@ public class characterScreen {
             switch (index){
                 case 0:{
                     toSet.setAdjacent(this, 2);
+                    break;
                 }
                 case 1:{
                     toSet.setAdjacent(this, 3);
+                    break;
                 }
                 case 2:{
                     toSet.setAdjacent(this, 0);
+                    break;
                 }
                 case 3:{
                     toSet.setAdjacent(this, 1);
-
+                    break;
                 }
             }
         }
@@ -345,6 +587,11 @@ public class characterScreen {
         }
 
         public void setHighLit(){
+            /*System.out.println(displayText.getText() + " selected.");
+            System.out.println(getTranslateX());
+            System.out.println(highLit.getX());*/
+            /*setAlignment(Pos.CENTER);
+            getChildren().add(new Rectangle(20, 20, Color.ALICEBLUE));*/
             highLit.setVisible(true);
         }
 
@@ -353,16 +600,21 @@ public class characterScreen {
         }
 
         public void setText(String text){
+            if(text.length() >= 30) {
+                text = text.substring(0, 30);
+                text += "...";
+            }
             displayText.setText(text);
+            //displayText.resize(highLit.getWidth()-30, highLit.getHeight()-3); //ensure that text fits inside the box.
         }
 
         public abstract void performAction(); //either does nothing or performs an action. Called when the user hits the
         //return key with this display object selected. Generally makes a call to the selection pane.
     }
 
-    private class unselectableStatViewObject extends statViewObject{
+    private static class unselectableStatViewObject extends statViewObject{
         public unselectableStatViewObject(statViewObject above, statViewObject below){
-            super(200, 100, above, below);
+            super(200, 60, above, below);
         }
 
         @Override
@@ -371,20 +623,23 @@ public class characterScreen {
         }
     }
 
-    private class selectableStatViewObject extends statViewObject{
+    private static class selectableStatViewObject extends statViewObject{
         private Method toCall;
         private Object toCallFrom;
 
         public selectableStatViewObject(statViewObject above, statViewObject below
                 , Method tocall, Object tocallfrom){
-            super(200, 100, above, below);
+            super(300, 60, above, below);
             toCall = tocall;
             toCallFrom = tocallfrom;
         }
 
         @Override
         public void performAction(){
-            //SelectionPane.setMode(toCallFrom, toCall);
+            if(toCallFrom instanceof playerCharacter){
+                toCallFrom = currentParty[currentCharacter]; //ensure that we are calling from the current character.
+            }
+            SelectionPane.setMode(toCallFrom, toCall);
         }
     }
 }

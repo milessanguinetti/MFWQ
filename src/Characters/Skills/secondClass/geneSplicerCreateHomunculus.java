@@ -37,7 +37,7 @@ public class geneSplicerCreateHomunculus extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        return toCheck.getSP() >= 50;
+        return toCheck.getSP() >= 40;
     }
 
     @Override //adds a basal homunculus minion that defends whoever this spell was cast on.

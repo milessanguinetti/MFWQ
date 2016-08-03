@@ -1,6 +1,7 @@
 package Characters.Inventory;
 
 import Profile.Game;
+import Profile.characterScreen;
 import Structures.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -58,8 +59,8 @@ public class Inventory implements Serializable {
         itemBoxPane.setVmax(1);
         itemBoxPane.setVmin(1);
         itemBoxPane.setPrefSize(400, 450);
+        itemBoxPane.setMaxSize(400, 450);
         itemBoxPane.setStyle("-fx-font-size: 30px;");
-        //itemBoxPane.setTranslateX(0 - bounds.getWidth()/2);
         itemBoxPane.setTranslateY(bounds.getHeight()/12);
         buttonPane.getChildren().add(itemBoxPane);
 
@@ -82,7 +83,7 @@ public class Inventory implements Serializable {
         }
 
         //interfacing code:
-        contentRoot.setOnKeyPressed(event -> {
+        itemBoxPane.setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:{
                     itemBox.useCurrent();
@@ -105,19 +106,23 @@ public class Inventory implements Serializable {
                     break;
                 }
                 case RIGHT:{
-                    setItemBox(currentCategory + 1);
+                    if(itemBoxPane.getParent() == buttonPane)
+                        setItemBox(currentCategory + 1);
                     break;
                 }
                 case D:{
-                    setItemBox(currentCategory + 1);
+                    if(itemBoxPane.getParent() == buttonPane)
+                        setItemBox(currentCategory + 1);
                     break;
                 }
                 case LEFT:{
-                    setItemBox(currentCategory - 1);
+                    if(itemBoxPane.getParent() == buttonPane)
+                        setItemBox(currentCategory - 1);
                     break;
                 }
                 case A:{
-                    setItemBox(currentCategory - 1);
+                    if(itemBoxPane.getParent() == buttonPane)
+                        setItemBox(currentCategory - 1);
                     break;
                 }
             }
@@ -132,6 +137,7 @@ public class Inventory implements Serializable {
 
     public static void setItemBox(int i){
         if(i >= 0 && i < 5){
+            itemBoxPane.requestFocus();
             Categories[currentCategory].setPlain();
             currentCategory = i;
             Categories[currentCategory].setBold();
@@ -230,6 +236,10 @@ public class Inventory implements Serializable {
         public static void Remove(){
             Inventory.contentRoot.getChildren().remove(currentDisplay);
         }
+
+        public static itemDisplay getCurrentDisplay(){
+            return currentDisplay;
+        }
     }
 
     private class categoryButton extends StackPane{
@@ -293,7 +303,7 @@ public class Inventory implements Serializable {
             });
 
             setOnMouseReleased(event -> {
-                Use();
+                inventoryBox.useCurrent();
             });
     }
 
@@ -309,7 +319,7 @@ public class Inventory implements Serializable {
         }
 
         public boolean Use(){
-            return item.Use(Game.Player.getParty()[0]);
+            return item.Use(characterScreen.getCurrentCharacter());
         }
 
         public String getKey(){
@@ -353,6 +363,7 @@ public class Inventory implements Serializable {
 
         public static void setCurrent(int which){
             if(which >= 0 && which < sumItems && sumItems != 0) {
+                itemBoxPane.requestFocus();
                 itemArray[currentItem].setPlain();
                 currentItem = which;
                 itemArray[currentItem].setBold();
@@ -481,4 +492,20 @@ public class Inventory implements Serializable {
             getChildren().add(texttoadd);
         }
     }
+
+    public static ScrollPane getItemBoxPane(int category){
+        setItemBox(category);
+        //.getChildren().remove(itemBoxPane);
+        return itemBoxPane;
+    }
+
+    public static itemDisplay getItemDisplay() {
+        return itemDisplay.getCurrentDisplay();
+    }
+
+    public static void returnItemBoxPane(){
+        buttonPane.getChildren().add(itemBoxPane);
+    }
+
+
 }

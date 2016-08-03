@@ -193,7 +193,8 @@ public class Game {
 
 
     public void swapToMap(Node toRemove){
-        gameRoot.getChildren().remove(toRemove);
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
         if(currentMap != null){
             gameRoot.getChildren().add(currentMap.getPane());
             currentMap.getPane().requestFocus();

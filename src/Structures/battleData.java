@@ -131,8 +131,8 @@ public class battleData implements Data, Serializable {
                                 Defender.executeCounter(Attacker);
                         } else {
                             Game.battle.getInterface().printLeft(Attacker.getName() +
-                                    " cast " + Defender.getName() + " on " +
-                                    ((Data) toCast).returnKey() + "!!");
+                                    " cast " + ((Data) toCast).returnKey() + " on " +
+                                    Defender.getName() + "!!");
                             if(toCast.getAoE() > 0)
                                 Game.battle.getInterface().printLeftAtNextAvailable("Their teammates were affected as well!");
                         }

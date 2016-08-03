@@ -181,7 +181,7 @@ public abstract class Map extends Tileset{
         sceneRoot.setOnKeyPressed(event -> {
             if(Game.notification.isActive() || Game.experiencenotification.isActive())
                 return;
-            if(Game.mainmenu.getCurrentGame().isDelayOver()) {
+            //if(Game.mainmenu.getCurrentGame().isDelayOver()) {
                 //UP CASE
                 if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
                     Rooms[currentRoom].pressKey(0, true);
@@ -198,7 +198,7 @@ public abstract class Map extends Tileset{
                 else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                     Rooms[currentRoom].pressKey(3, true);
                 }
-            }
+            //}
         });
     }
 

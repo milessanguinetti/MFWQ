@@ -38,10 +38,11 @@ public class playerCharacter extends gameCharacter {
     private orderedLLL Passives = new orderedLLL();
 
     //Data for interfacing states
-    int Selection = 0; //the user's current selection
-    int uSelectionView = 0; //upper selection view
-    int lSelectionView = 3; //lower selection view
-    int lowerBound; //the upper bound of whatever menu we're in
+    private boolean displayingError; //true if the player is displaying an error.
+    private int Selection = 0; //the user's current selection
+    private int uSelectionView = 0; //upper selection view
+    private int lSelectionView = 3; //lower selection view
+    private int lowerBound; //the upper bound of whatever menu we're in
     orderedDLLNode selectedNode = null; //a node that we presently have selected; used for return info and keeping
                                         //track of where "selected" exists in a given data structure.
     int State = 0;
@@ -75,6 +76,10 @@ public class playerCharacter extends gameCharacter {
 
     public String getRace(){
         return Race;
+    }
+
+    public String getExp(){
+        return "          Experience: " + Exp + "/" + expCap;
     }
 
     public String getCurrentClassName(){
@@ -122,6 +127,8 @@ public class playerCharacter extends gameCharacter {
     //handles a piece of input entered during a battle.
     @Override
     public void handleInput(KeyEvent toHandle){
+        if(displayingError)
+            displayingError = false;
         int Input; //variable for storing what amounts to a translated keyevent.
         if(toHandle.getCode() == KeyCode.ENTER || toHandle.getCode() == KeyCode.D) //enter case; input = 3
             Input = 3;
@@ -145,7 +152,7 @@ public class playerCharacter extends gameCharacter {
                 lowerBound = 0;
                 uSelectionView = 0;
                 lSelectionView = 3;
-                if(currentlyTargeting != 0) { //assuming we actually need to print anything...
+                if(currentlyTargeting != 0 && !displayingError) { //assuming we actually need to print anything...
                     boolean whichSide = currentlyTargeting > 0;
                     chooseTarget(Game.battle.getParty(whichSide), Game.battle.getMinions(whichSide), 1);
                     //utilize the choosetarget method to just print possible targets, as an up command will do
@@ -250,11 +257,12 @@ public class playerCharacter extends gameCharacter {
                 }
             }
         }
-        if(Input != 3 && Input != 0){
+        if(Input != 3 && Input != 0 && !displayingError){
             //we print the targets currently within view. there are multiple cases
             //because realistically, there can be anywhere between 1 and 8 possible targets
             if(lowerBound == -1){
                 Interface.printLeft("This ability has no viable targets!");
+                displayingError = true;
                 Interface.setTextFocus(0);
             }
             else if (lowerBound == 0) { //case for a single target
@@ -372,16 +380,20 @@ public class playerCharacter extends gameCharacter {
                         Selection = 0; //reset selection
                         chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
                     }
-                    else
+                    else {
+                        displayingError = true;
                         Interface.printRight("No primary class selected.");
+                    }
                 } else if (Selection == 1) { //Secondary class case
                     if (secondaryClass != null) {
                         State = 3; //select secondary class skill
                         Selection = 0; //reset selection
                         chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
                     }
-                    else
+                    else {
                         Interface.printRight("No secondary class selected.");
+                        displayingError = true;
+                    }
                 }
             } else if (Input == 0) { //cancel case
                 State = 0; //base selection case
@@ -415,7 +427,12 @@ public class playerCharacter extends gameCharacter {
                     ++uSelectionView;
                 }
             } else if (Input == 3) { //enter case
-                return ((combatEffect)selectedNode.returnData()); //return the selected skill
+                if(((combatEffect)selectedNode.returnData()).canUse(this))
+                    return ((combatEffect) selectedNode.returnData()); //return the selected skill
+                else {
+                    Interface.printRight(Name + " does not have enough mana to use this skill!");
+                    displayingError = true;
+                }
             } else if (Input == 0) { //cancel case
                 State = 1; //class selection case
                 uSelectionView = 0; //set views to 0 and 3 so we're at the
@@ -424,7 +441,7 @@ public class playerCharacter extends gameCharacter {
                 selectedNode = null;
                 chooseSkill(1); //call chooseskill with input value 1 to reprint whatever we've cancelled back to.
             }
-            if(Input != 0){
+            if(Input != 0 && !displayingError){
                 if (lowerBound == 0) { //case for a single skill
                     Interface.printLeft(selectedNode.returnData().returnKey());
                 } else if (lowerBound == 1) { //case for 2 skills
@@ -476,7 +493,12 @@ public class playerCharacter extends gameCharacter {
                     ++uSelectionView;
                 }
             } else if (Input == 3) { //enter case
-                return ((combatEffect) selectedNode.returnData()); //return the selected skill
+                if(((combatEffect)selectedNode.returnData()).canUse(this))
+                    return ((combatEffect) selectedNode.returnData()); //return the selected skill
+                else {
+                    Interface.printRight(Name + " does not have enough mana to use this skill!");
+                    displayingError = true;
+                }
             } else if (Input == 0) { //cancel case
                 State = 1; //class selection case
                 uSelectionView = 0; //set views to 0 and 3 so we're at the
@@ -485,7 +507,7 @@ public class playerCharacter extends gameCharacter {
                 selectedNode = null;
                 chooseSkill(1); //call chooseskill with input value 1 to reprint whatever we've cancelled back to.
             }
-            if(Input != 0){
+            if(Input != 0 && !displayingError){
                 if (lowerBound == 0) { //case for a single skill
                     Interface.printLeft(selectedNode.returnData().returnKey());
                 } else if (lowerBound == 1) { //case for 2 skills
@@ -549,7 +571,7 @@ public class playerCharacter extends gameCharacter {
                 Selection = 0; //reset selection as we change menus
                 chooseSkill(1); //'up' input will only display available items in this case, which is what we want.
             }
-            if(Input != 0 && Input != 3){
+            if(Input != 0 && Input != 3 && !displayingError){
                 if (lowerBound == 0) { //case for a single item
                     Interface.printLeft(selectedNode.returnData().returnKey());
                 } else if (lowerBound == 1) { //case for 2 items
