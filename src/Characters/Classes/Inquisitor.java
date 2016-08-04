@@ -31,47 +31,39 @@ public class Inquisitor extends characterClass{
         }
         if(jlevel == 4){ //level 4 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorHymnOfHealing()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Hymn of Healing!");
         }
         if(jlevel == 6){ //level 6 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorAbsolution()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Absolve!");
         }
         if(jlevel == 8){ //level 8 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorExpellereSpiritusImmundus()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Expellere Spiritus Immundus!");
         }
         if(jlevel == 10){ //level 10 passive skill NYI
             toLevel.addPassive(null);
-            toLevel.printName();
             return (toLevel.getName() +" learned !");
         }
         if(jlevel == 12){ //level 12 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorCorpusBenedictus()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Corpus Benedictus!");
         }
         if(jlevel == 14){ //level 14 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorAnimusBenedictus()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Animus Benedictus!");
         }
         if(jlevel == 16){ //level 16 active skill
             Skills.Insert(new orderedDLLNode(new inquisitorDecretum()));
-            toLevel.printName();
             return (toLevel.getName() +" learned Decretum!");
         }
         if(jlevel == 18) { //level 18 passive skill
             toLevel.addPassive(null);
-            toLevel.printName();
         }
         if(jlevel == 20){ //level 20 stat boost
             toLevel.incrementAll(); //increment every stat
         }
-        return (toLevel.getName() + "");
+        return ("");
     }
 
     @Override

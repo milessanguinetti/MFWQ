@@ -2,6 +2,8 @@ package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
+import Profile.Battle;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/7/15.
@@ -44,9 +46,12 @@ public class soldierGloriousExecution extends Skill{
     @Override //deals 75% weapon damage + str. Heals for caster's strength if target dies.
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         if(Defender.takeDamage(Math.round(.75f * (Caster.getWeaponDamage(true) +
-                    Caster.getTempStr())), Caster.getWeaponProperty(true)) == 0)
+                    Caster.getTempStr())), Caster.getWeaponProperty(true)) == 0) {
             Caster.takeAbsoluteDamage(-Caster.getTempStr());
             //if the target des, heal for the caster's temp strength.
+            Game.battle.getInterface().printLeftAtNextAvailable(Defender.getName() + " was reinvigorated by "
+            + Defender.getName() + "'s gruesome death!");
+        }
 
     }
 }

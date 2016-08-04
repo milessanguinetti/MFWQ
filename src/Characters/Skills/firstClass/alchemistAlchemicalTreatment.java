@@ -34,7 +34,7 @@ public class alchemistAlchemicalTreatment extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(!(toCheck.getSP() >= 10))
+        if(!(toCheck.getSP() <= 10))
             return false; //doesn't have SP for this
         return false;
     }

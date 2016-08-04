@@ -38,7 +38,7 @@ public class alchemistIncendiaryBullet extends Skill{
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(toCheck.getSP() >= 15)
+        if(toCheck.getSP() <= 15)
             return false; //SP requirements
         if(!toCheck.hasWeaponType("Gun", false))
             return false; //skill can only be used with a gun.

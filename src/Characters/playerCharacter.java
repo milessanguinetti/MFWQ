@@ -15,6 +15,7 @@ import Structures.orderedDLLNode;
 import Structures.orderedLLL;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 
 import java.util.Scanner;
 
@@ -90,7 +91,9 @@ public class playerCharacter extends gameCharacter {
     }
 
     public String getSecondaryClassName(){
-        return secondaryClass.getClassName();
+        if(secondaryClass != null)
+            return secondaryClass.getClassName();
+        return "None";
     }
 
     public String getPassiveName(){
@@ -666,53 +669,16 @@ public class playerCharacter extends gameCharacter {
 
     //add a class to the ordered LLL
     public void addClass(characterClass toAdd){
-        Classes.Insert(new LLLnode(toAdd));
+        if(toAdd != null)
+            Classes.Insert(new LLLnode(toAdd));
     }
 
     //add a passive skill to the ordered LLL
     public void addPassive(passiveSkill toAdd){
-        LLLnode temp = new LLLnode(toAdd);
-        Passives.Insert(temp);
-    }
-
-    //chooses a class, be it a primary or secondary class.
-    public void chooseClass(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Would you like to adjust this character's primary or secondary class?");
-        System.out.println("Enter '1' for primary, '2' for secondary or '0' to cancel.");
-        int whichClass = scanner.nextInt();
-        scanner.nextLine();
-        if(whichClass == 0)
-            return;
-        System.out.println("Choose a class.");
-        Classes.displayNumbered();
-        int toGet = scanner.nextInt();
-        scanner.nextLine();
-        LLLnode Retrieved = Classes.retrieveInt(toGet);
-        if(Retrieved == null){
-            System.out.println("Invalid class.");
+        if(toAdd != null) {
+            LLLnode temp = new LLLnode(toAdd);
+            Passives.Insert(temp);
         }
-        else {
-            if(whichClass == 2) //set secondary class to retrieved.
-                secondaryClass = ((characterClass)Retrieved.returnData());
-            else //set primary class to retrieved.
-                primaryClass = ((characterClass)Retrieved.returnData());
-        }
-    }
-
-    //selects and 'equips' a passive skill that the character has learned
-    public void choosePassive(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose a passive skill.");
-        Passives.displayNumbered();
-        int toGet = scanner.nextInt();
-        scanner.nextLine();
-        LLLnode Retrieved = Passives.retrieveInt(toGet);
-        if(Retrieved == null){
-            System.out.println("Invalid passive skill.");
-        }
-        else
-            currentPassive = ((passiveSkill)Retrieved.returnData());
     }
 
     public void Ding(int exp, int jexp){
@@ -819,11 +785,17 @@ public class playerCharacter extends gameCharacter {
     }
 
     public void setPrimaryClass(characterClass primaryclass) {
+        if(primaryclass == secondaryClass)
+            secondaryClass = null;
         primaryClass = primaryclass;
     }
 
-    public void setSecondaryClass(characterClass secondaryclass) {
-        secondaryClass = secondaryclass;
+    public boolean setSecondaryClass(characterClass secondaryclass) {
+        if(secondaryclass != primaryClass) {
+            secondaryClass = secondaryclass;
+            return true;
+        }
+        return false;
     }
 
     public boolean canUseHeavyArmor(){
@@ -889,5 +861,17 @@ public class playerCharacter extends gameCharacter {
                 return Accessory2.returnKey();
         }
         return "";
+    }
+
+    public rotarySelectionPane getSkillPane(){
+        return new rotarySelectionPane(getPassives().Peek());
+    }
+
+    public rotarySelectionPane getPrimaryClassesPane(){
+        return new rotarySelectionPane(getClasses().Peek(), true);
+    }
+
+    public rotarySelectionPane getSecondaryClassesPane(){
+        return new rotarySelectionPane(getClasses().Peek(), false);
     }
 }

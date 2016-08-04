@@ -48,16 +48,25 @@ public class rogueSteal extends Skill {
         Random Rand = new Random();
         Caster.printName(); //preemptively print name for other statements
         int Roll = Rand.nextInt(10);
-        if (Roll < 7) { //steal gold case
+        if (Roll < 5) { //steal gold case
             int Stolen = ((Monster)Defender).getExp();
-            System.out.println(" stole " + Stolen + " gold!");
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " stole " + Stolen + " gold!");
             Game.Player.addCoins(Stolen);
         }
-        if(Roll == 8){ //steal item case
-            System.out.println(" stole an item!");
-            Defender.Loot();
+        else{ //steal item case
+            Item temp = Defender.Loot();
+            if(temp != null && !((Monster)Defender).hasBeenStolenFrom()) {
+                Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() +
+                        " stole a " + temp.returnKey() + "!");
+                Game.Player.Insert(temp);
+                ((Monster)Defender).setHasBeenStolenFrom(true);
+            }
+            else{
+                Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() +
+                        " didn't manage to steal anything.");
+            }
+
         }
         //otherwise the skill fails to steal anything.
-
     }
 }

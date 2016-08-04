@@ -200,7 +200,6 @@ public class experienceNotification extends StackPane{
             timeline.getKeyFrames().add(kf3);
             getChildren().add(star);
             timeline.play();
-
         }
 
         public void animateExpGain(float start, float end, String message, int level){

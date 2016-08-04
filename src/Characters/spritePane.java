@@ -52,9 +52,9 @@ public class spritePane extends StackPane implements Serializable{
         final Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         final KeyValue kv1 = new KeyValue(damageText.translateYProperty(), -100, Interpolator.EASE_OUT); //y property
-        final KeyValue kv2 = new KeyValue(damageText.translateXProperty(), 10, Interpolator.EASE_IN); //x property
+        final KeyValue kv2 = new KeyValue(damageText.translateXProperty(), 20*getScaleX(), Interpolator.EASE_IN); //x property
         final KeyValue kv3 = new KeyValue(damageText.opacityProperty(), 0, Interpolator.EASE_IN); //opacity
-        final KeyFrame kf = new KeyFrame(Duration.millis(3000), kv1, kv2, kv3);
+        final KeyFrame kf = new KeyFrame(Duration.millis(1000), kv1, kv2, kv3);
         timeline.getKeyFrames().add(kf);
         if(toTake < 0){ //healing case
             damageText.setText("" + toTake*-1);

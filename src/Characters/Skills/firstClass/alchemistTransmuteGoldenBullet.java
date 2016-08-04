@@ -39,9 +39,9 @@ public class alchemistTransmuteGoldenBullet extends Skill {
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(toCheck.getSP() >= 5)
+        if(toCheck.getSP() <= 5)
             return false; //SP requirements
-        if(Game.Player.hasCoins(toCheck.getWeaponDamage(false)))
+        if(!Game.Player.hasCoins(toCheck.getWeaponDamage(false)))
             return false; //this spell cannot be used if the player does not have at
                           //least as many coins as this character has weapon damage
         if(!toCheck.hasWeaponType("Gun", false))

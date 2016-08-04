@@ -2,6 +2,8 @@ package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
+import Profile.Battle;
+import Profile.Game;
 
 /**
  * Created by Miles on 5/5/2015.
@@ -9,7 +11,7 @@ import Characters.gameCharacter;
 public class inquisitorExpellereSpiritusImmundus extends Skill{
     public inquisitorExpellereSpiritusImmundus(){
         super("Expellere Spiritus Immundus",
-                "Drives out dark spirits, dealing heavy holy damage and SP damage to undead and unholy foes.", 15);
+                "Drives out dark spirits, dealing holy damage and SP damage to undead and unholy foes.", 15);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class inquisitorExpellereSpiritusImmundus extends Skill{
             Defender.subtractSP(Caster.getTempFth() * 4); //deal SP damage
         }
         else
-            System.out.println("The spell had no effect.");
+            Game.battle.getInterface().printLeftAtNextAvailable("The spell had no effect on " + Defender.getName() + ".");
 
     }
 }

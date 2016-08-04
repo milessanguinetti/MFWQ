@@ -53,10 +53,11 @@ public abstract class characterClass implements Data, Serializable {
             return; //no leveling past 20 for first classes or 10 for second classes
         }
         if((jexp + Gains) >= jexpCap){ //if we've received enough jexp to level...
-            experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!"
-                    + '\n' + jobDing(toLevel), (1f*jexp)/jexpCap, 1f, false, jlevel, 0);
-            Gains -= (jexpCap - jexp);
+            int topass = jlevel;
             ++jlevel;
+            experienceNotification.queueExpEvent(toLevel.getName() + " gained a job level as a " + className + "!"
+                    + '\n' + jobDing(toLevel), (1f*jexp)/jexpCap, 1f, false, topass, 0);
+            Gains -= (jexpCap - jexp);
             jexpCap += Math.round(jexpCap*0.2); //jexp cap goes up by 20%
             jexp = 0; //reset jexp to 0 now that we've leveled.
             gainJexp(Gains, toLevel); //recursive call to add the rest of the jexp

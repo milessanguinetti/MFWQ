@@ -35,7 +35,7 @@ public class alchemistTransmutePStone extends Skill {
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(toCheck.getSP() >= 50)
+        if(toCheck.getSP() <= 50)
             return false; //SP requirements
         return true;
     }

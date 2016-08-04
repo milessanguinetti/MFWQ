@@ -2,6 +2,7 @@ package Profile;
 
 import Characters.Inventory.Inventory;
 import Characters.playerCharacter;
+import Characters.rotarySelectionPane;
 import Structures.Structure;
 import Structures.orderedLLL;
 import javafx.animation.PauseTransition;
@@ -180,9 +181,11 @@ public class characterScreen {
 
         public static void addDisplays(){
             try {
-                primaryClass = new selectableStatViewObject(null, null, Current.getClass().getMethod("getClasses"), Current);
-                secondaryClass = new selectableStatViewObject(null, primaryClass, Current.getClass().getMethod("getClasses"), Current);
-                passive = new selectableStatViewObject(null, secondaryClass, Current.getClass().getMethod("getPassives"), Current);
+                primaryClass = new selectableStatViewObject(null, null,
+                        Current.getClass().getMethod("getPrimaryClassesPane"), Current);
+                secondaryClass = new selectableStatViewObject(null, primaryClass,
+                        Current.getClass().getMethod("getSecondaryClassesPane"), Current);
+                passive = new selectableStatViewObject(null, secondaryClass, Current.getClass().getMethod("getSkillPane"), Current);
                 hp = new unselectableStatViewObject(null, null);
                 sp = new unselectableStatViewObject(null, hp);
                 armor = new unselectableStatViewObject(null, sp);
@@ -336,6 +339,15 @@ public class characterScreen {
             else
                 return 3; //accessories are category 4 and are the only other case where this would be called
         }
+
+        public static int decideSkillOrClass(){
+            if(currentStatViewObject == primaryClass)
+                return 1;
+            if(currentStatViewObject == secondaryClass)
+                return 2;
+            else
+                return 3; //skill case
+        }
     }
 
     private static class spritesPane extends HBox{
@@ -480,6 +492,13 @@ public class characterScreen {
                             selectionPane.getChildren().add(secondaryObject);
                         }
                     }
+                    else if(mode == 2){
+                        if(rotarySelectionPane.isDone()){
+                            getChildren().remove(primaryObject);
+                            MainPane.initializeDisplay();
+                            swapToMainPane();
+                        }
+                    }
                 }
             });
         }
@@ -516,8 +535,32 @@ public class characterScreen {
                         title.setText("No other items available!");
                     }
                 }
+                else{
+                    mode = 2;
+                    switch (MainPane.decideSkillOrClass()){
+                        case 1:{
+                            title.setText("Select a primary class for " + getCurrentCharacter().getName());
+                            primaryObject = (Node) toCall.invoke(toCallFrom);
+                            break;
+                        }
+                        case 2:{
+                            title.setText("Select a secondary class for " + getCurrentCharacter().getName());
+                            primaryObject = (Node) toCall.invoke(toCallFrom);
+                            break;
+                        }
+                        case 3:{
+                            title.setText("Select a new passive skill for " + getCurrentCharacter().getName());
+                            primaryObject = (Node) toCall.invoke(toCallFrom);
+                            break;
+                        }
+                    }
+                    selectionPane.getChildren().add(primaryObject);
+                    primaryObject.requestFocus();
+                }
             }
             catch (Exception e){
+                System.out.println(toCall.getParameterCount());
+
                 System.out.println(e.getMessage());
             }
         }

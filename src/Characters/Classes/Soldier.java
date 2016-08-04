@@ -43,7 +43,7 @@ public class Soldier extends characterClass {
             return (toLevel.getName() +" learned Defend!");
         }
         if(jlevel == 10){ //level 10 passive skill/second classes
-            toLevel.addPassive(null);
+            //toLevel.addPassive(null);
             if(toLevel.isOfRace("Faithful")){
                 toLevel.addClass(new Crusader()); //add crusader class
                 toLevel.addClass(new Defender()); //add defender class
