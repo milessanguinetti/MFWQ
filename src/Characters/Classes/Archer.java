@@ -15,6 +15,11 @@ public class Archer extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "A swift, bow-wielding class that attacks foes from afar";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(2, 1); //add a speed

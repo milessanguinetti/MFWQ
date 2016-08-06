@@ -29,7 +29,7 @@ public class characterScreen {
     private static StackPane contentRoot;
     private static MainPane mainPane; //the primary pane for viewing stats and jobs/skills/equipment
     private static SelectionPane selectionPane; //the pane for selecting different jobs/skills/equipment
-    private static boolean mainPaneIsActive = false;
+    private static boolean mainPaneIsActive = true;
     private static statViewObject currentStatViewObject; //the currently selected statviewobject.
     private static playerCharacter [] currentParty;
     private static int currentCharacter;
@@ -45,11 +45,16 @@ public class characterScreen {
         selectionPane = new SelectionPane();
     }
 
+    public static boolean isMainPaneIsActive(){
+        return mainPaneIsActive;
+    }
+
     public static void swapToMainPane(){
         if(!mainPaneIsActive){
             contentRoot.getChildren().remove(selectionPane);
-            contentRoot.getChildren().add(mainPane);
         }
+        contentRoot.getChildren().remove(mainPane); //avoid potential duplicates.
+        contentRoot.getChildren().add(mainPane);
         mainPane.initializeDisplay();
         mainPane.requestFocus();
         mainPaneIsActive = true;
@@ -58,6 +63,7 @@ public class characterScreen {
     public static void swapToSelectionPane(){
         if(mainPaneIsActive){
             contentRoot.getChildren().remove(mainPane);
+            contentRoot.getChildren().remove(selectionPane);
             contentRoot.getChildren().add(selectionPane);
             selectionPane.requestFocus();
             mainPaneIsActive = false;
@@ -69,6 +75,15 @@ public class characterScreen {
     }
 
     public static playerCharacter getCurrentCharacter(){
+        if(currentParty == null){
+            currentParty = Game.Player.getParty();
+            for(int i = 0; i < 4; ++i) { //ensure that we have a current player character so we don't cause segfaults
+                if (currentParty[i] != null) { //in the following lines of code.
+                    currentCharacter = i;
+                    break;
+                }
+            }
+        }
         return currentParty[currentCharacter];
     }
 
@@ -468,7 +483,7 @@ public class characterScreen {
             setAlignment(Pos.CENTER);
             title = new Text();
             title.setTranslateY(-350);
-            //title.setTextAlignment(TextAlignment.CENTER);
+            title.setTextAlignment(TextAlignment.CENTER);
             title.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 40));
             title.setFill(Color.WHITE);
             getChildren().add(title);
@@ -491,6 +506,12 @@ public class characterScreen {
                             secondaryObject.setTranslateY(0);
                             selectionPane.getChildren().add(secondaryObject);
                         }
+                        if(event.getCode() == KeyCode.ENTER){
+                            getChildren().removeAll(primaryObject, secondaryObject);
+                            MainPane.initializeDisplay();
+                            Inventory.returnItemBoxPane();
+                            swapToMainPane();
+                        }
                     }
                     else if(mode == 2){
                         if(rotarySelectionPane.isDone()){
@@ -499,6 +520,13 @@ public class characterScreen {
                             swapToMainPane();
                         }
                     }
+                }
+            });
+            setOnMouseReleased(event -> {
+                if(rotarySelectionPane.isDone() && mode == 2){
+                    getChildren().remove(primaryObject);
+                    MainPane.initializeDisplay();
+                    swapToMainPane();
                 }
             });
         }
@@ -616,6 +644,7 @@ public class characterScreen {
                 }
                 case 3:{
                     toSet.setAdjacent(this, 1);
+                    toSet.setAdjacent(this, 1);
                     break;
                 }
             }
@@ -648,7 +677,6 @@ public class characterScreen {
                 text += "...";
             }
             displayText.setText(text);
-            //displayText.resize(highLit.getWidth()-30, highLit.getHeight()-3); //ensure that text fits inside the box.
         }
 
         public abstract void performAction(); //either does nothing or performs an action. Called when the user hits the

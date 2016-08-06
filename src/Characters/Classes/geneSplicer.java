@@ -17,6 +17,11 @@ public class geneSplicer extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "At the vanguard of scientific achievement, the gene splicer is peerless in their knowledge of homunculi";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0) {
             toLevel.incrementStat(4, 2); //add two int

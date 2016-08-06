@@ -79,7 +79,8 @@ public class experienceNotification extends StackPane{
         getChildren().add(characters);
         jexpBar.toFront();
         expBar.toFront();
-        //expText.setText("");
+        jexpBar.setText("");
+        expBar.setText("");
     }
 
     public static void queueExpEvent(String message, float start, float end, boolean isBaseExp, int level, int jlevel){

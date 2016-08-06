@@ -863,6 +863,22 @@ public class playerCharacter extends gameCharacter {
         return "";
     }
 
+    public String getWeaponName(int which){
+        if(which == 1){
+            if(Right == null)
+                return "None";
+            else
+                return Right.returnKey();
+        }
+        else if(which == 2){
+            if(Left == null)
+                return "None";
+            else
+                return Left.returnKey();
+        }
+        return "";
+    }
+
     public rotarySelectionPane getSkillPane(){
         return new rotarySelectionPane(getPassives().Peek());
     }

@@ -17,6 +17,11 @@ public class Enchanter extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "A practitioner of magic that can both attack enemies and assist allies with elemental spells";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(2, 1); //add a speed

@@ -1,5 +1,6 @@
 package Characters.Inventory;
 
+import Characters.rotarySelectionPane;
 import Profile.Game;
 import Profile.characterScreen;
 import Structures.*;
@@ -234,7 +235,9 @@ public class Inventory implements Serializable {
         }
 
         public static void Remove(){
-            Inventory.contentRoot.getChildren().remove(currentDisplay);
+            if(currentDisplay != null)
+                Inventory.contentRoot.getChildren().remove(currentDisplay);
+            currentDisplay = null;
         }
 
         public static itemDisplay getCurrentDisplay(){
@@ -385,13 +388,64 @@ public class Inventory implements Serializable {
         }
 
         public static void useCurrent(){
-            if(itemArray != null){
-                if(itemArray[currentItem].Use()) {
-                    Items[currentCategory].Remove(itemArray[currentItem].getKey());
-                    setItemBox(currentCategory);
+            if(!characterScreen.isMainPaneIsActive()){
+                if(itemArray[currentItem] != null) {
+                    if (itemArray[currentItem].item.Use(characterScreen.getCurrentCharacter())) {
+                        Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                    }
                 }
             }
-
+            else if(itemArray != null){
+                rotarySelectionPane Selector = new rotarySelectionPane(Game.Player.getParty(),
+                        itemArray[currentItem].item);
+                Rectangle tint = new Rectangle(3000, 3000, Color.BLACK);
+                tint.setOpacity(.75);
+                contentRoot.getChildren().addAll(tint, Selector);
+                Selector.requestFocus();
+                contentRoot.setOnKeyReleased(event -> {
+                    if(event.getCode() == KeyCode.ENTER){ //the user used the item in question
+                        if(rotarySelectionPane.isDone()) {
+                            Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                            setItemBox(currentCategory);
+                            contentRoot.setOnMouseReleased(event1 -> {
+                            }); //revert to doing nothing
+                            contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
+                                if(event1.getCode() == KeyCode.ESCAPE){
+                                    Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                }
+                            });
+                            contentRoot.getChildren().removeAll(Selector, tint);
+                            itemBoxPane.requestFocus();
+                        }
+                    }
+                    else if(event.getCode() == KeyCode.ESCAPE){
+                        contentRoot.getChildren().removeAll(Selector, tint);
+                        contentRoot.setOnMouseReleased(event1 -> {
+                        }); //revert to doing nothing
+                        contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
+                            if(event1.getCode() == KeyCode.ESCAPE){
+                                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                            }
+                        });
+                        itemBoxPane.requestFocus();
+                    }
+                });
+                contentRoot.setOnMouseReleased(event -> {
+                    if(rotarySelectionPane.isDone()){
+                        Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                        setItemBox(currentCategory);
+                        contentRoot.setOnMouseReleased(event1 -> {
+                        }); //revert to doing nothing
+                        contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
+                            if(event1.getCode() == KeyCode.ESCAPE){
+                                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                            }
+                        });
+                        contentRoot.getChildren().removeAll(Selector, tint);
+                        itemBoxPane.requestFocus();
+                    }
+                });
+            }
         }
 
         private Line generateLine() {
@@ -506,6 +560,4 @@ public class Inventory implements Serializable {
     public static void returnItemBoxPane(){
         buttonPane.getChildren().add(itemBoxPane);
     }
-
-
 }

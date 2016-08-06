@@ -15,6 +15,11 @@ public class Alchemist extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "A master of potions and transmutation that supports allies with the power of science";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(1, 1); //add a dex

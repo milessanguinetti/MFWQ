@@ -16,6 +16,11 @@ public class Inquisitor extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "Inquisitors are keepers of the faith and the bane of all who dare to oppose the church";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(0, 5); //add a faith

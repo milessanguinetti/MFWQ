@@ -18,6 +18,11 @@ public class Idolator extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "The idolator is a twisted exemplar of unholy might that calls upon the elder gods for otherworldly power";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0) {
             toLevel.incrementStat(0, 2); //add two str

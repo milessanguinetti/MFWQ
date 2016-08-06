@@ -17,6 +17,11 @@ public class Rogue extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "Sellswords. Highwaymen. Tricksters and charlatans. The rogue is the favored class of the lot of them";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(0, 1); //add a str

@@ -17,6 +17,11 @@ public class Soldier extends characterClass {
     }
 
     @Override
+    public String getClassDescription(){
+        return "Though nothing more than a common military man, the soldier's strength and bravery are invaluable on the battlefield";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(0, 1); //add a str

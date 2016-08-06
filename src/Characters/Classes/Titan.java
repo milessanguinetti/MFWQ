@@ -17,6 +17,11 @@ public class Titan extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "An emblem of scientific might, the titan class gives homunculi incredible fortitude and powers of regeneration";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0) {
             toLevel.incrementStat(0, 2); //add two str

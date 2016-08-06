@@ -85,7 +85,7 @@ public class settingsScreen extends StackPane {
             else if(event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT){
                 Sliders[currentSlider].adjustCurrentSegment(1);
             }
-            else if(event.getCode() == KeyCode.ESCAPE) {
+            else if(event.getCode() == KeyCode.ESCAPE || event.getCode() == KeyCode.ENTER) {
                 if(Game.mainmenu.isMostRecentPane())
                     Game.mainmenu.getCurrentGame().swapToMainMenu(this);
                 else if(Game.currentMap == null)

@@ -15,6 +15,11 @@ public class Crusader extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "A fearless paragon of the light that tirelessly hunts unholy powers, wherever they appear";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0) {
             toLevel.incrementStat(0, 2); //add two str

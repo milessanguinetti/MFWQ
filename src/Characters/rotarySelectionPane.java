@@ -1,15 +1,17 @@
 package Characters;
 
 import Characters.Classes.characterClass;
+import Characters.Inventory.*;
 import Characters.Skills.Passive.passiveSkill;
 import Profile.characterScreen;
 import Structures.LLLnode;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
+import com.sun.org.apache.xerces.internal.dom.ParentNode;
+import javafx.animation.*;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
@@ -39,9 +41,11 @@ public class rotarySelectionPane extends StackPane{
     private static final int backx = 0;
     private static final int backy = -150;
 
+    private static playerCharacter displayingCharacter;
     private static rotarySelectionIcon Current;
     private static boolean isDone;
     private static boolean isAnimating;
+    private static rotarySelectionPane mostRecent;
 
     public rotarySelectionPane(LLLnode toCopy){
         isDone = false;
@@ -59,6 +63,9 @@ public class rotarySelectionPane extends StackPane{
             Current.setTranslateY(centery);
             getChildren().add(Current);
             rotarySelectionIcon temp = Current;
+
+            Current.setFullOrPartialDescription(true);
+
             while(toCopy.getNext() != null){
                 toCopy = toCopy.getNext();
                 temp.Next = new skillSelectionIcon((passiveSkill) toCopy.returnData());
@@ -69,6 +76,7 @@ public class rotarySelectionPane extends StackPane{
                 Current.Next.setTranslateX(onerightx);
                 Current.Next.setTranslateY(onerighty);
                 getChildren().add(Current.Next);
+                Current.Next.toFront();
                 if(Current.Next.Next != null){
                     Current.Next.Next.setTranslateX(tworightx);
                     Current.Next.Next.setTranslateY(tworighty);
@@ -95,6 +103,9 @@ public class rotarySelectionPane extends StackPane{
             Current.setTranslateY(centery);
             getChildren().add(Current);
             rotarySelectionIcon temp = Current;
+
+            Current.setFullOrPartialDescription(true);
+
             while(toCopy.getNext() != null){
                 toCopy = toCopy.getNext();
                 temp.Next = new classSelectionIcon((characterClass)toCopy.returnData(), isForPrimary);
@@ -109,6 +120,7 @@ public class rotarySelectionPane extends StackPane{
                 Current.Next.setTranslateX(onerightx);
                 Current.Next.setTranslateY(onerighty);
                 Current.Next.setOpacity(1);
+                Current.Next.toFront();
                 if(Current.Next.Next != null){
                     Current.Next.Next.setTranslateX(tworightx);
                     Current.Next.Next.setTranslateY(tworighty);
@@ -119,13 +131,60 @@ public class rotarySelectionPane extends StackPane{
         }
     }
 
+    public rotarySelectionPane(playerCharacter [] party, Item toUse){
+        isDone = false;
+        mostRecent = this;
+        Current = null; //reset current.
+        setAlignment(Pos.CENTER);
+        int numCharacters = 0;
+        for(int i = 0; i < 4; ++i) {
+            if(party[i] != null){
+                if(Current != null) {
+                    Current.Next = new characterSelectionIcon(party[i], toUse);
+                    Current.Next.Prev = Current;
+                    Current = Current.Next;
+                }
+                if(numCharacters == 0) {
+                    Current = new characterSelectionIcon(party[i], toUse);
+                    Current.setFullOrPartialDescription(true);
+                    Current.setTranslateX(centerx);
+                    Current.setTranslateY(centery);
+                    Current.toFront();
+                }
+                else if(numCharacters == 1) {
+                    Current.setTranslateX(onerightx);
+                    Current.setTranslateY(onerighty);
+                    Current.toFront();
+                }
+                else if(numCharacters == 2) {
+                    Current.setTranslateX(tworightx);
+                    Current.setTranslateY(twolefty);
+                    Current.setOpacity(.5);
+                }
+                else{
+                    Current.setTranslateX(backx);
+                    Current.setTranslateY(backy);
+                    Current.setOpacity(0);
+                }
+                ++numCharacters;
+                getChildren().add(Current);
+            }
+        }
+        applyKeySettings();
+    }
+
     private void applyKeySettings(){
+        //add a gamecharacter sprite to the pane. this obviously isn't a key setting, but the handling on the method
+        //is identical for all constructors, so the code is placed in this method.
+        mostRecent = this;
+        setDisplayingCharacter(characterScreen.getCurrentCharacter());
+
         setOnKeyReleased(event -> {
             if(isAnimating)
                 return;
             switch (event.getCode()){
                 case ENTER:{
-                        Current.performFunction();
+                    Current.performFunction();
                     break;
                 }
                 case RIGHT:{
@@ -152,34 +211,47 @@ public class rotarySelectionPane extends StackPane{
         });
     }
 
+    public static void setDisplayingCharacter(playerCharacter toDisplay){
+        if(displayingCharacter != null){
+            displayingCharacter.Animate(false);
+            mostRecent.getChildren().remove(displayingCharacter);
+        }
+        displayingCharacter = toDisplay;
+        mostRecent.getChildren().add(toDisplay);
+        toDisplay.toBack();
+        toDisplay.Animate(true);
+    }
+
     public static boolean isDone(){
-        return isDone;
+        if(isDone && displayingCharacter != null) //stop animation if we're leaving this screen.
+            displayingCharacter.Animate(false);
+        return isDone && !isAnimating;
     }
 
     //base class for dispay icons on the pane
-    private static abstract class rotarySelectionIcon extends StackPane{
+    private static abstract class rotarySelectionIcon extends VBox{
         private rotarySelectionIcon Next;
         private rotarySelectionIcon Prev;
+        protected Text Description;
         protected static Text errorText;
 
         public rotarySelectionIcon(String name, String description){
-            setMinSize(150, 200);
-            setMaxSize(150, 200);
             setAlignment(Pos.CENTER);
+            setMinSize(350, 400);
+            setMaxSize(350, 400);
             Text Name = new Text(name);
             Name.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 30));
             Name.setFill(Color.GOLDENROD);
-            Name.setTranslateY(30);
             getChildren().add(Name);
-            Text Description = new Text(description);
+            Description = new Text(description);
             Description.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 20));
             Description.setFill(Color.WHITE);
-            Description.setTranslateY(60);
-            Description.setWrappingWidth(150);
+            Description.setWrappingWidth(350);
             Description.setTextAlignment(TextAlignment.CENTER);
             getChildren().add(Description);
 
             setOnMouseReleased(event -> {
+                characterSelectionIcon.ignoreOne = false;
                 if(Current == this){
                     performFunction();
                 }
@@ -192,15 +264,9 @@ public class rotarySelectionPane extends StackPane{
                     }
                 }
             });
-            setOnMouseEntered(event -> {
-                if(Current == this || Current.Prev == this || Current.Next == this){
-                    this.toFront();
-                }
-                else{
-                    this.toBack();
-                }
-            });
         }
+
+        public abstract void setFullOrPartialDescription(boolean isFull);
 
         public void Rotate(boolean toRight){
             if(errorText != null){
@@ -208,6 +274,7 @@ public class rotarySelectionPane extends StackPane{
                 errorText = null;
             }
             isAnimating = true;
+            Current.setFullOrPartialDescription(false);
             if(toRight){ //case for rotation to right.
                 //center rotation
                 (generatePathTransition(Current, onerightx, onerighty)).play();
@@ -231,6 +298,7 @@ public class rotarySelectionPane extends StackPane{
                 PathTransition last = generatePathTransition(Current.Prev, centerx, centery);
                 last.setOnFinished(event -> {
                     isAnimating = false;
+                    Current.setFullOrPartialDescription(true);
                 });
                 last.play();
                 Current = Current.Prev;
@@ -257,6 +325,7 @@ public class rotarySelectionPane extends StackPane{
                 //one right rotation
                 PathTransition last = generatePathTransition(Current.Next, centerx, centery);
                 last.setOnFinished(event -> {
+                    Current.setFullOrPartialDescription(true);
                     isAnimating = false;
                 });
                 last.play();
@@ -270,16 +339,26 @@ public class rotarySelectionPane extends StackPane{
             toReturn.setDuration(Duration.millis(1000));
             toReturn.setNode(which);
             Path path = new Path();
+            //adjustments for calculations
             path.getElements().add(new MoveTo(which.getTranslateX()+which.getWidth()/2,
                     which.getTranslateY()+which.getHeight()/2));
-            path.getElements().add(new CubicCurveTo((endx + which.getTranslateX()) / 2,
-                    (endy + which.getTranslateY()) / 2, (endx + which.getTranslateX()) /2,
-                    (endy + which.getTranslateY()) / 2, endx, endy));
+            path.getElements().add(new CubicCurveTo((endx + which.getTranslateX() + which.getWidth())/1.7,
+                    (endy + which.getTranslateY() + which.getHeight())/1.7,
+                    (endx + which.getTranslateX() + which.getWidth())/1.7,
+                    (endy + which.getTranslateY() + which.getHeight())/1.7,
+                    endx + which.getWidth()/2, endy + which.getHeight()/2));
             toReturn.setPath(path);
+            toReturn.setInterpolator(Interpolator.EASE_OUT);
             return toReturn;
         }
 
         private Timeline generateOpacityTimeline(rotarySelectionIcon which, float endOpacity){
+            if(endOpacity != 1.0){
+                which.toBack();
+            }
+            else{
+                which.toFront();
+            }
             Timeline timeline = new Timeline();
             timeline.setCycleCount(1);
             timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
@@ -301,6 +380,16 @@ public class rotarySelectionPane extends StackPane{
         }
 
         @Override
+        public void setFullOrPartialDescription(boolean isFull){
+            if(isFull){
+                Description.setText("Level: " + thisClass.getJlevel() + '\n' + thisClass.getClassDescription());
+            }
+            else{
+                Description.setText("Level: " + thisClass.getJlevel());
+            }
+        }
+
+        @Override
         public void performFunction() {
             if (isForPrimaryClass) {
                 characterScreen.getCurrentCharacter().setPrimaryClass(thisClass);
@@ -310,8 +399,8 @@ public class rotarySelectionPane extends StackPane{
                     if(errorText == null) {
                         errorText = new Text("This class is selected as your primary class!");
                         errorText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 30));
-                        errorText.setWrappingWidth(300);
-                        errorText.setTranslateY(-150);
+                        errorText.setWrappingWidth(350);
+                        errorText.setTranslateY(backy);
                         errorText.setFill(Color.RED);
                         errorText.setTextAlignment(TextAlignment.CENTER);
                         getChildren().add(errorText);
@@ -328,14 +417,91 @@ public class rotarySelectionPane extends StackPane{
         private passiveSkill thisSkill;
 
         public skillSelectionIcon(passiveSkill toCopy) {
-            super(toCopy.getSkillName(), toCopy.getDescription());
+            super(toCopy.getSkillName(), "");
             thisSkill = toCopy;
+        }
+
+        @Override
+        public void setFullOrPartialDescription(boolean isFull){
+            if(isFull){
+                Description.setText(thisSkill.getDescription());
+            }
+            else{
+                Description.setText("");
+            }
         }
 
         @Override
         public void performFunction() {
             characterScreen.getCurrentCharacter().setCurrentPassive(thisSkill);
             isDone = true;
+        }
+    }
+
+    private static class characterSelectionIcon extends rotarySelectionIcon{
+        private playerCharacter thisCharacter;
+        private static Item toUse;
+        private static boolean ignoreOne; //ensures that we do not immediately close the window.
+
+        public characterSelectionIcon(playerCharacter toCopy, Item touse) {
+            super(toCopy.getName(), "");
+            thisCharacter = toCopy;
+            toUse = touse;
+            ignoreOne = true;
+        }
+
+        @Override
+        public void setFullOrPartialDescription(boolean isFull){
+            if(isFull){
+                //update the character that we're currently displaying.
+                setDisplayingCharacter(thisCharacter);
+
+                if(toUse instanceof equipableItem){ //if this is an equipable item, we want to compare what the
+                                                    //character currently has equipped with toUse.
+                    if(toUse instanceof Weapon){
+                        Description.setText("Current weapons: " + thisCharacter.getWeaponName(1) + " and " +
+                                thisCharacter.getWeaponName(2) + "\n" + "Replace with " + toUse.returnKey() + "?");
+                    }
+                    else if(toUse instanceof Armor){
+                        Description.setText("Current armor: " + thisCharacter.getArmorName() +
+                                "\n" + "Replace with " + toUse.returnKey() + "?");
+                    }
+                    else if(toUse instanceof Accessory){
+                        Description.setText("Current accessories: " + thisCharacter.getAccessoryName(1) + " and " +
+                                thisCharacter.getAccessoryName(2) + "\n" + "Replace with " + toUse.returnKey() + "?");
+                    }
+
+                }
+                else{ //otherwise, it's invariable a consumable, so we display the character's stats.
+                    Description.setText("HP: " + thisCharacter.getHP() + "/" + thisCharacter.getHPCap() + "\n"
+                            + "SP: " + thisCharacter.getSP() + "/" + thisCharacter.getSPCap());
+                }
+            }
+            else{
+                Description.setText("");
+            }
+        }
+
+        @Override
+        public void performFunction() {
+            if(ignoreOne){ //ensures that we don't immediately close the window.
+                ignoreOne = false;
+                return;
+            }
+            if(toUse.Use(thisCharacter)){
+                isDone = true;
+            }
+            else{
+                if(errorText == null) {
+                    errorText = new Text("This item cannot be used by " + thisCharacter.getName() + "!");
+                    errorText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 30));
+                    errorText.setWrappingWidth(300);
+                    errorText.setTranslateY(backy);
+                    errorText.setFill(Color.RED);
+                    errorText.setTextAlignment(TextAlignment.CENTER);
+                    getChildren().add(errorText);
+                }
+            }
         }
     }
 }

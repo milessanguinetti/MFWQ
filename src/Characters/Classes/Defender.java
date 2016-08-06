@@ -18,6 +18,11 @@ public class Defender extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "A stalwart shield-bearer that protects allies with their knightly prowess";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0) {
             toLevel.incrementStat(0, 2); //add two str

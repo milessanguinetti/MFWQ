@@ -15,6 +15,11 @@ public class Primalist extends characterClass{
     }
 
     @Override
+    public String getClassDescription(){
+        return "As one with the elements, the primalist brings the might of nature to bear on the battlefield";
+    }
+
+    @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
             toLevel.incrementStat(2, 1); //add a speed

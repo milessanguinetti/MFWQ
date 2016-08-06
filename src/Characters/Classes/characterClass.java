@@ -37,6 +37,8 @@ public abstract class characterClass implements Data, Serializable {
         return className;
     }
 
+    public abstract String getClassDescription();
+
     public int getJlevel(){
         return jlevel;
     }
