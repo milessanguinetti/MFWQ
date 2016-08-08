@@ -170,6 +170,9 @@ public class rotarySelectionPane extends StackPane{
                 getChildren().add(Current);
             }
         }
+        for(int i = 1; i < numCharacters; ++i){
+            Current = Current.Prev;
+        }
         applyKeySettings();
     }
 
@@ -217,6 +220,8 @@ public class rotarySelectionPane extends StackPane{
             mostRecent.getChildren().remove(displayingCharacter);
         }
         displayingCharacter = toDisplay;
+        toDisplay.setTranslateX(0);
+        toDisplay.setTranslateY(0);
         mostRecent.getChildren().add(toDisplay);
         toDisplay.toBack();
         toDisplay.Animate(true);
@@ -400,7 +405,7 @@ public class rotarySelectionPane extends StackPane{
                         errorText = new Text("This class is selected as your primary class!");
                         errorText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 30));
                         errorText.setWrappingWidth(350);
-                        errorText.setTranslateY(backy);
+                        errorText.setTranslateY(backy-250);
                         errorText.setFill(Color.RED);
                         errorText.setTextAlignment(TextAlignment.CENTER);
                         getChildren().add(errorText);
@@ -496,7 +501,7 @@ public class rotarySelectionPane extends StackPane{
                     errorText = new Text("This item cannot be used by " + thisCharacter.getName() + "!");
                     errorText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 30));
                     errorText.setWrappingWidth(300);
-                    errorText.setTranslateY(backy);
+                    errorText.setTranslateY(backy-250);
                     errorText.setFill(Color.RED);
                     errorText.setTextAlignment(TextAlignment.CENTER);
                     getChildren().add(errorText);

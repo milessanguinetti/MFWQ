@@ -44,6 +44,22 @@ public class spritePane extends StackPane implements Serializable{
         }
     }
 
+    public void rebuildTransientValues(){
+        setAlignment(Pos.CENTER); //center any added children.
+        try(InputStream imginput = Files.newInputStream(Paths.get("resources/sprites/testsprites.png"))){
+            ImageView thisSprite = new ImageView(new Image(imginput));
+            thisSprite.setViewport(new Rectangle2D(0, 0, 96, 96)); //initalize viewport to starting parameters
+            charAnimation = new characterSpriteAnimation(thisSprite); //animate sprite
+            colorAdjust = new ColorAdjust();
+            thisSprite.setEffect(colorAdjust);
+            getChildren().add(thisSprite); //add sprite to the stackpane.
+        }
+
+        catch (IOException e){
+            System.out.println("Error loading " + Name + "'s sprite.");
+        }
+    }
+
     public void animateDamage(int toTake){
         getChildren().remove(damageText);
         damageText = new Text();

@@ -2,18 +2,15 @@ package Profile;
 
 import Characters.Classes.*;
 import Characters.Inventory.Weapons.Nodachi;
+import Characters.Inventory.Weapons.generic2hBlunt;
 import Characters.Inventory.Weapons.genericGun;
-import Characters.Inventory.Weapons.koboldSlayingSword;
 import Characters.playerCharacter;
 import Maps.Map;
-import Maps.Valley01;
-import Maps.overWorld;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -36,7 +33,7 @@ public class Game {
     public static userProfile Player; //the game's player.
     public static mainMenu mainmenu = new mainMenu();
     public static Battle battle = new Battle();
-    public static overWorld overworld = new overWorld();
+    public static overworldMap overworld = new overworldMap();
     public static settingsScreen settings = new settingsScreen();
     public static characterScreen characterscreen;
     public static Map currentMap;
@@ -81,26 +78,10 @@ public class Game {
 
     public void newPlayer(){
         Player = new userProfile();
+        //TEST CHARACTER
         playerCharacter bob = new playerCharacter("Spaghetti", "Faithful",
                 350, 100, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(bob);
-        /*
-        Player.Insert(new Nodachi(5));
-        Player.Insert(new koboldSlayingSword(5));
-        Player.Insert(new koboldSlayingSword(15));
-        Player.Insert(new koboldSlayingSword(25));
-        Player.Insert(new koboldSlayingSword(35));
-        Player.Insert(new koboldSlayingSword(45));
-        Player.Insert(new koboldSlayingSword(55));
-        Player.Insert(new koboldSlayingSword(65));
-        Player.Insert(new koboldSlayingSword(75));
-        Player.Insert(new koboldSlayingSword(85));
-        Player.Insert(new koboldSlayingSword(95));
-        Player.Insert(new koboldSlayingSword(105));
-        Player.Insert(new koboldSlayingSword(115));
-        Player.Insert(new koboldSlayingSword(125));
-        */
-
         new genericGun(6).Use(bob);
         new Nodachi().Use(bob); //equip the good sergeant with a motherfucking nodachi
         bob.addClass(new Soldier());
@@ -109,10 +90,18 @@ public class Game {
         bob.addClass(new Inquisitor());
         bob.setPrimaryClass(new Primalist());
         bob.setSecondaryClass(new geneSplicer());
+        //TEST CHARACTER 2
+        playerCharacter oxy = new playerCharacter("Oxy", "Heretic", 350, 100, 10, 10, 10, 10, 10, 10, 0);
+        Player.addCharacter(oxy);
+        new generic2hBlunt(20).Use(oxy);
+        characterClass oxyPrimary = new Soldier();
+        oxy.setPrimaryClass(oxyPrimary);
+        oxy.addClass(oxyPrimary);
+        oxy.addClass(new Rogue());
+        oxy.addClass(new Alchemist());
+        oxy.addClass(new Inquisitor());
 
-        currentMap = new Valley01();
-        currentMap.enterFromOverworld();
-        swapToMap(mainmenu.getPane());
+        swapToOverworld(mainmenu.getPane());
         writeToDisk();
     }
 
@@ -129,10 +118,10 @@ public class Game {
         catch (ClassNotFoundException e){
             System.err.println("Load unsuccessful.");
         }
-
-        currentMap = new Valley01();
-        currentMap.enterFromOverworld();
-        swapToMap(mainmenu.getPane());
+        for(int i = 0; i < 4; ++i)
+            if(Player.getParty()[i] != null)
+            Player.getParty()[i].rebuildTransientValues(); //rebuild each character's transient values.
+        swapToOverworld(mainmenu.getPane());
         writeToDisk();
     }
 
@@ -207,7 +196,7 @@ public class Game {
         }
         else{
             swapToOverworld(null);
-            overworld.getPane().requestFocus();
+            overworld.requestFocus();
         }
     }
 
@@ -216,8 +205,8 @@ public class Game {
         currentMap = null;
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
-        writeToDisk();
-        swapToMainMenu(null);
+        gameRoot.getChildren().add(overworld);
+        overworld.requestFocus();
     }
 
     public void swapToInventory(Node toRemove){

@@ -156,9 +156,6 @@ public class characterScreen {
                         currentStatViewObject.setCurrentToAdjacent(3);
                     }
                     else if(leftOfCurrent != null){
-                        for(int i = 0; i < 4; ++i)
-                            if(currentParty[i] == leftOfCurrent)
-                                currentCharacter = i;
                         changeCharacter(false);
                     }
                 }
@@ -177,14 +174,10 @@ public class characterScreen {
                         currentStatViewObject.setCurrentToAdjacent(1);
                     }
                     else if (rightOfCurrent != null){
-                        for(int i = 0; i < 4; ++i)
-                            if(currentParty[i] == rightOfCurrent)
-                                currentCharacter = i;
                         changeCharacter(true);
                     }
                 }
                 else if(event.getCode() == KeyCode.ESCAPE){
-
                     if(Game.currentMap != null)
                         Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
                     else
@@ -263,9 +256,22 @@ public class characterScreen {
                 currentStatViewObject.setPlain();
             currentStatViewObject = null;
             spritesPane.highLightChar(true);
+            spritesPane.setLeft(leftOfCurrent, null);
+            leftOfCurrent = null;
             for(int i = 0; i < 4; ++i)
-                if(currentParty[i] != null)
+                if(currentParty[i] != null) {
+                    spritesPane.setCenter(currentParty[currentCharacter], currentParty[i]);
                     currentCharacter = i;
+                    break;
+                }
+            for(int i = currentCharacter+1; i < 4; ++i){
+                if(currentParty[i] != null){
+                    spritesPane.setRight(rightOfCurrent, currentParty[i]);
+                    rightOfCurrent = currentParty[i];
+                    break;
+                }
+            }
+
             initializeDisplay(currentParty[currentCharacter]);
         }
 
@@ -273,14 +279,9 @@ public class characterScreen {
             nameText.setText(current.getName());
             levelRaceExpText.setText("Level: " + current.getLevel() + "          Race: " + current.getRace()
                     + current.getExp());
-            currentParty = Game.Player.getParty();
+            //currentParty = Game.Player.getParty();
             currentStatViewObject = null;
             Current = current;
-            spritesPane.setCenter(Current, Current);
-            mainPane.decideLeftOfCurrent();
-            mainPane.decideRightOfCurrent();
-            spritesPane.setLeft(leftOfCurrent, leftOfCurrent);
-            spritesPane.setRight(rightOfCurrent, rightOfCurrent);
             //updates all stat view objects with the current character.
             primaryClass.setText("Primary Class: " + Current.getCurrentClassName());
             secondaryClass.setText("Secondary Class: " + Current.getSecondaryClassName());
@@ -309,41 +310,48 @@ public class characterScreen {
             accessory2.setText("Accessory 2: " + Current.getAccessoryName(2));
         }
 
-        private void decideLeftOfCurrent(){
-            for(int i = currentCharacter-1; i > 0 ; --i){
-                if(currentParty[i] != null){
-                    leftOfCurrent = currentParty[i];
-                    break;
-                }
-            }
-        }
-
-        private void decideRightOfCurrent(){
-            for(int i = currentCharacter+1; i < 4; ++i){
-                if(currentParty[i] != null){
-                    rightOfCurrent = currentParty[i];
-                    break;
-                }
-            }
-        }
-
         private static void changeCharacter(boolean isRight){
             if(isRight){
                 if(rightOfCurrent != null){
                     spritesPane.setLeft(leftOfCurrent, Current);
                     spritesPane.setCenter(Current, rightOfCurrent);
-                    initializeDisplay(rightOfCurrent);
-                    spritesPane.setRight(Current, rightOfCurrent);
+                    leftOfCurrent = currentParty[currentCharacter];
+                    for(int i = currentCharacter+1;  i < 4; ++i){
+                        if(currentParty[i] == rightOfCurrent)
+                            currentCharacter = i;
+                    }
+                    playerCharacter temp = rightOfCurrent;
+                    rightOfCurrent = null;
+                    for(int i = currentCharacter+1; i < 4; ++i){
+                        if(currentParty[i] != null){
+                            rightOfCurrent = currentParty[i];
+                            break;
+                        }
+                    }
+                    spritesPane.setRight(temp, rightOfCurrent);
                 }
             }
             else{
                 if(leftOfCurrent != null){
                     spritesPane.setRight(rightOfCurrent, Current);
                     spritesPane.setCenter(Current, leftOfCurrent);
-                    initializeDisplay(leftOfCurrent);
-                    spritesPane.setLeft(Current, leftOfCurrent);
+                    rightOfCurrent = currentParty[currentCharacter];
+                    for(int i = currentCharacter-1; i >= 0; --i){
+                        if(currentParty[i] == leftOfCurrent)
+                            currentCharacter = i;
+                    }
+                    playerCharacter temp = leftOfCurrent;
+                    leftOfCurrent = null;
+                    for(int i = currentCharacter-1; i >= 0; --i){
+                        if(currentParty[i] != null){
+                            leftOfCurrent = currentParty[i];
+                            break;
+                        }
+                    }
+                    spritesPane.setLeft(temp, leftOfCurrent);
                 }
             }
+            initializeDisplay(currentParty[currentCharacter]);
         }
 
         public static int decideCurrentItemCategory(){
@@ -375,7 +383,7 @@ public class characterScreen {
 
         public spritesPane(){
             setAlignment(Pos.CENTER);
-            setSpacing(300);
+            setSpacing(100);
             Rectangle Darken;
             //Initialize left pane.
             left = new StackPane();
@@ -433,10 +441,11 @@ public class characterScreen {
         public static void setLeft(playerCharacter toremove, playerCharacter toadd){
             if(toremove != null) {
                 left.getChildren().remove(toremove);
-                toremove.Animate(false);
+                if(toremove != getCurrentCharacter())
+                    toremove.Animate(false);
             }
             if(toadd != null) {
-                toadd.setTranslateX(0);
+                toadd.setTranslateX(50);
                 toadd.setTranslateY(0);
                 left.getChildren().add(toadd);
                 toadd.toBack();
@@ -450,10 +459,11 @@ public class characterScreen {
         public static void setRight(playerCharacter toremove, playerCharacter toadd){
             if(toremove != null) {
                 right.getChildren().remove(toremove);
-                toremove.Animate(false);
+                if(toremove != getCurrentCharacter())
+                    toremove.Animate(false);
             }
             if(toadd != null) {
-                toadd.setTranslateX(0);
+                toadd.setTranslateX(-50);
                 toadd.setTranslateY(0);
                 right.getChildren().add(toadd);
                 toadd.toBack();
