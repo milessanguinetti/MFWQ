@@ -7,7 +7,7 @@ import Characters.playerCharacter;
  * Created by Miles Sanguinetti on 3/29/15.
  */
 public class userProfile extends Inventory{
-    private int Coins; //how much money the player has.
+    private int Coins = 0; //how much money the player has.
     private int philosophersStones; //quantity of philosopher's stones, a non-inventory "item" that
                                     //can be used to resurrect downed characters rather than having
                                     //them permanently die after a battle.
@@ -66,6 +66,10 @@ public class userProfile extends Inventory{
         Coins -= toSubtract;
         if(Coins < 0)
             Coins = 0;
+        return Coins;
+    }
+
+    public int getCoins(){
         return Coins;
     }
 

@@ -1,14 +1,13 @@
 package Profile;
 
+import Maps.Map;
 import Maps.Valley01;
-import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
 import javafx.animation.SequentialTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -20,6 +19,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -46,10 +46,17 @@ public class overworldMap extends StackPane implements Serializable{
             System.out.println("Error loading world map.");
         }
 
-        currentZone = new mapIcon("Valley", -100, -100);
-        mapIcon alsoValley = new mapIcon("Also Valley", 100, 100);
+        currentZone = new dungeonIcon("Valley", -100, -100, "Valley01");
+        mapIcon alsoValley = new dungeonIcon("Also Valley", 100, 100, "Valley01");
         getChildren().addAll(currentZone, alsoValley);
-        currentZone.generatePath(alsoValley, 2);
+        mapIcon totallyNotValley = new dungeonIcon("Totally Not Valley", 200, -100, "Valley01");
+        getChildren().add(totallyNotValley);
+        mapIcon cave = new dungeonIcon("Cave", 0, -100, "Valley01");
+        getChildren().add(cave);
+        totallyNotValley.generatePath(cave, 3);
+        cave.generatePath(currentZone, 3);
+        cave.generatePath(alsoValley, 2);
+
 
         if(playerIcon == null){ // load player icon
             try(InputStream imginput = Files.newInputStream(Paths.get("resources/images/player.png"))){
@@ -103,7 +110,7 @@ public class overworldMap extends StackPane implements Serializable{
         }
     }
 
-    private class mapIcon extends StackPane {
+    private abstract class mapIcon extends StackPane {
         private Text nameText;
         private mapIcon[] Connections = new mapIcon[4];
         private transient ImageView icon;
@@ -112,8 +119,8 @@ public class overworldMap extends StackPane implements Serializable{
         public mapIcon(String name, int xcord, int ycord) {
             setTranslateX(xcord);
             setTranslateY(ycord);
-            setMaxSize(200, 100);
-            setMinSize(200, 100);
+            setMaxSize(100, 100);
+            setMinSize(100, 100);
             setAlignment(Pos.CENTER);
             try (InputStream imginput = Files.newInputStream(Paths.get("resources/images/blueicon.png"))) {
                 icon = new ImageView(new Image(imginput));
@@ -127,7 +134,7 @@ public class overworldMap extends StackPane implements Serializable{
             nameText = new Text(name);
             nameText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 20));
             nameText.setFill(Color.BLACK);
-            nameText.setTranslateY(50);
+            nameText.setTranslateY(25);
             getChildren().add(nameText);
 
             setOnMouseReleased(event -> {
@@ -145,6 +152,8 @@ public class overworldMap extends StackPane implements Serializable{
                 });
             });
         }
+
+        public abstract void Enter();
 
         public void travelToConnection(int which){
             if(Connections[which] != null){
@@ -201,6 +210,7 @@ public class overworldMap extends StackPane implements Serializable{
         }
 
         public void calculateDistances(int currentDistance, mapIcon toFind){
+            //System.out.println("Calculating distance on " + nameText.getText());
             if(distance != 0 && distance < currentDistance)
                 return;
             distance = currentDistance + 1;
@@ -216,11 +226,12 @@ public class overworldMap extends StackPane implements Serializable{
         }
 
         public void resetAndMap(int targetDistance){
-            //System.out.println(nameText.getText() + " distance is " + distance + "; target distance is " + targetDistance);
             if(distance == 0)
                 return;
+            //System.out.println(nameText.getText() + " distance is " + distance + "; target distance is " + targetDistance);
             if(distance == targetDistance){
                 distance = 0;
+                //System.out.println("setting travelpath[" + (targetDistance-1) + "] to " + nameText.getText());
                 travelPath[targetDistance-1] = this;
                 for(int i = 0; i < 4; ++i){
                     if(Connections[i] != null)
@@ -265,5 +276,33 @@ public class overworldMap extends StackPane implements Serializable{
             }
         }
     }*/
+    }
+
+    private class dungeonIcon extends mapIcon{
+        private Class thisDungeon;
+
+        public dungeonIcon(String name, int xcoord, int ycoord, String classToInitialize){
+            super(name, xcoord, ycoord);
+            try {
+                thisDungeon = Class.forName("Maps." + classToInitialize);
+            }
+            catch (Exception e){
+                System.out.println(e.getClass());
+                System.out.println("Error initializing dungeon icon: " + e.getMessage());
+            }
+        }
+
+        @Override
+        public void Enter(){
+            try {
+                Constructor constructor = thisDungeon.getConstructor();
+                Game.currentMap = (Map)(constructor.newInstance());
+                Game.currentMap.enterFromOverworld();
+                Game.mainmenu.getCurrentGame().swapToMap(this);
+            }
+            catch (Exception e){
+                System.out.println("Error initializing dungeon: " + e.getMessage());
+            }
+        }
     }
 }

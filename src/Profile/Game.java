@@ -5,6 +5,7 @@ import Characters.Inventory.Weapons.Nodachi;
 import Characters.Inventory.Weapons.generic2hBlunt;
 import Characters.Inventory.Weapons.genericGun;
 import Characters.playerCharacter;
+import Cities.City;
 import Maps.Map;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -37,6 +38,7 @@ public class Game {
     public static settingsScreen settings = new settingsScreen();
     public static characterScreen characterscreen;
     public static Map currentMap;
+    public static City currentCity;
     private optionsOverlay options = new optionsOverlay();
     private Stage primaryStage;
     private StackPane gameRoot = new StackPane();

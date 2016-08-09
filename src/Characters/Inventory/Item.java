@@ -14,6 +14,8 @@ import java.io.Serializable;
 public abstract class Item implements incrementableData, Serializable {
     protected String itemName;
     protected String Description;
+    protected int Value = 0;
+    protected boolean canBeSold = true;
     private int Quantity;
 
     //default constructor
@@ -104,4 +106,13 @@ public abstract class Item implements incrementableData, Serializable {
     public int compareTo(Data toCompare) {
         return itemName.toLowerCase().compareTo(toCompare.returnKey().toLowerCase());
     }
+
+    public boolean CanBeSold(){
+        return canBeSold;
+    }
+
+    public int getValue(){
+        return Value;
+    }
+
 }

@@ -42,6 +42,7 @@ public class Inventory implements Serializable {
     private static GridPane buttonPane;
     private static ItemUseBox usebox;
     private static transient ScrollPane itemBoxPane;
+    private static boolean canSell = false;
 
     public Inventory() {
         contentRoot = new StackPane();
@@ -82,6 +83,8 @@ public class Inventory implements Serializable {
             usebox = new ItemUseBox();
             buttonPane.getChildren().add(usebox);
         }
+
+        ItemUseBox.RefreshSellUsable();
 
         //interfacing code:
         itemBoxPane.setOnKeyPressed(event -> {
@@ -136,6 +139,11 @@ public class Inventory implements Serializable {
 
     }
 
+    public static void setCanSell(boolean cansell){
+        canSell = cansell;
+        ItemUseBox.RefreshSellUsable();
+    }
+
     public static void setItemBox(int i){
         if(i >= 0 && i < 5){
             itemBoxPane.requestFocus();
@@ -150,6 +158,7 @@ public class Inventory implements Serializable {
             itemBoxPane.setContent(itemBox);
             itemBox.setVgrow(itemBoxPane, Priority.ALWAYS);
         }
+        ItemUseBox.RefreshSellUsable();
     }
 
     //returns the head of the consumables DLL
@@ -371,6 +380,7 @@ public class Inventory implements Serializable {
                 currentItem = which;
                 itemArray[currentItem].setBold();
             }
+            ItemUseBox.RefreshSellUsable();
         }
         public static void incrementCurrent(int toIncrement){
             if(currentItem + toIncrement >= 0 && currentItem + toIncrement < sumItems && sumItems != 0) {
@@ -384,7 +394,7 @@ public class Inventory implements Serializable {
             else if(toIncrement < 0 && currentItem < (sumItems*itemBoxPane.getVvalue() - itemBoxPane.getHeight()*(itemBoxPane.getVvalue())/46)) {
                 itemBoxPane.setVvalue(itemBoxPane.getVvalue() - 1.0/((sumItems-1)-itemBoxPane.getHeight()/46));
             }
-            //System.out.println();
+            ItemUseBox.RefreshSellUsable();
         }
 
         public static void useCurrent(){
@@ -395,56 +405,59 @@ public class Inventory implements Serializable {
                     }
                 }
             }
-            else if(itemArray != null){
-                rotarySelectionPane Selector = new rotarySelectionPane(Game.Player.getParty(),
-                        itemArray[currentItem].item);
-                Rectangle tint = new Rectangle(3000, 3000, Color.BLACK);
-                tint.setOpacity(.75);
-                contentRoot.getChildren().addAll(tint, Selector);
-                Selector.requestFocus();
-                contentRoot.setOnKeyReleased(event -> {
-                    if(event.getCode() == KeyCode.ENTER){ //the user used the item in question
-                        if(rotarySelectionPane.isDone()) {
+            else if(itemArray != null) {
+                if (canSell) {
+                    sellCurrent();
+                } else {
+                    rotarySelectionPane Selector = new rotarySelectionPane(Game.Player.getParty(),
+                            itemArray[currentItem].item);
+                    Rectangle tint = new Rectangle(3000, 3000, Color.BLACK);
+                    tint.setOpacity(.75);
+                    contentRoot.getChildren().addAll(tint, Selector);
+                    Selector.requestFocus();
+                    contentRoot.setOnKeyReleased(event -> {
+                        if (event.getCode() == KeyCode.ENTER) { //the user used the item in question
+                            if (rotarySelectionPane.isDone()) {
+                                Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                                setItemBox(currentCategory);
+                                contentRoot.setOnMouseReleased(event1 -> {
+                                }); //revert to doing nothing
+                                contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
+                                    if (event1.getCode() == KeyCode.ESCAPE) {
+                                        Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                    }
+                                });
+                                contentRoot.getChildren().removeAll(Selector, tint);
+                                itemBoxPane.requestFocus();
+                            }
+                        } else if (event.getCode() == KeyCode.ESCAPE) {
+                            contentRoot.getChildren().removeAll(Selector, tint);
+                            contentRoot.setOnMouseReleased(event1 -> {
+                            }); //revert to doing nothing
+                            contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
+                                if (event1.getCode() == KeyCode.ESCAPE) {
+                                    Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                }
+                            });
+                            itemBoxPane.requestFocus();
+                        }
+                    });
+                    contentRoot.setOnMouseReleased(event -> {
+                        if (rotarySelectionPane.isDone()) {
                             Items[currentCategory].Remove(itemArray[currentItem].getKey());
                             setItemBox(currentCategory);
                             contentRoot.setOnMouseReleased(event1 -> {
                             }); //revert to doing nothing
                             contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
-                                if(event1.getCode() == KeyCode.ESCAPE){
+                                if (event1.getCode() == KeyCode.ESCAPE) {
                                     Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
                                 }
                             });
                             contentRoot.getChildren().removeAll(Selector, tint);
                             itemBoxPane.requestFocus();
                         }
-                    }
-                    else if(event.getCode() == KeyCode.ESCAPE){
-                        contentRoot.getChildren().removeAll(Selector, tint);
-                        contentRoot.setOnMouseReleased(event1 -> {
-                        }); //revert to doing nothing
-                        contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
-                            if(event1.getCode() == KeyCode.ESCAPE){
-                                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
-                            }
-                        });
-                        itemBoxPane.requestFocus();
-                    }
-                });
-                contentRoot.setOnMouseReleased(event -> {
-                    if(rotarySelectionPane.isDone()){
-                        Items[currentCategory].Remove(itemArray[currentItem].getKey());
-                        setItemBox(currentCategory);
-                        contentRoot.setOnMouseReleased(event1 -> {
-                        }); //revert to doing nothing
-                        contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
-                            if(event1.getCode() == KeyCode.ESCAPE){
-                                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
-                            }
-                        });
-                        contentRoot.getChildren().removeAll(Selector, tint);
-                        itemBoxPane.requestFocus();
-                    }
-                });
+                    });
+                }
             }
         }
 
@@ -459,15 +472,28 @@ public class Inventory implements Serializable {
             if(itemArray != null)
                 Items[currentCategory].Remove(itemArray[currentItem].getKey());
         }
+
+        public static void sellCurrent(){
+            if(itemArray != null){
+                if(itemArray[currentItem].item.CanBeSold()){
+                    Game.Player.addCoins(itemArray[currentItem].item.getValue());
+                    Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                    Game.battle.playMedia("loot");
+                }
+            }
+        }
     }
 
     private static class ItemUseBox extends StackPane{
+        private static Text sellText; //we need a reference to this because it can potentially be unavailable to players.
+        private static Text goldText; //we also need a reference to this to possibly update it.
+
         public ItemUseBox(){
             Text texttoadd;
             setAlignment(Pos.CENTER);
             setTranslateX(-450);
             setTranslateY(75);
-            Rectangle background = new Rectangle(300, 300);
+            Rectangle background = new Rectangle(300, 450);
             background.setFill(Color.GRAY);
             getChildren().add(background);
             GridPane buttonpane = new GridPane();
@@ -476,9 +502,15 @@ public class Inventory implements Serializable {
             //USE BUTTON
             Rectangle use = new Rectangle(250, 50);
             use.setFill(Color.LIGHTGRAY);
-            use.setTranslateY(-75);
+            use.setTranslateY(-150);
             use.setOnMouseClicked(event ->{
+                if(canSell){
+                    canSell = false;
+                    inventoryBox.useCurrent();
+                    canSell = true;
+                }
                 inventoryBox.useCurrent();
+                RefreshSellUsable();
             });
             use.setOnMouseEntered(event1 -> {
                 use.setFill(Color.DARKGRAY);
@@ -488,10 +520,16 @@ public class Inventory implements Serializable {
             });
             buttonpane.getChildren().add(use);
             texttoadd = new Text("Use");
-            texttoadd.setTranslateY(-75);
+            texttoadd.setTranslateY(-150);
             texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
+                if(canSell){
+                    canSell = false;
+                    inventoryBox.useCurrent();
+                    canSell = true;
+                }
                 inventoryBox.useCurrent();
+                RefreshSellUsable();
             });
             texttoadd.setOnMouseEntered(event1 -> {
                 use.setFill(Color.DARKGRAY);
@@ -500,9 +538,10 @@ public class Inventory implements Serializable {
             getChildren().add(texttoadd);
             //DROP BUTTON
             Rectangle drop = new Rectangle(250, 50);
+            drop.setTranslateY(-75);
             drop.setFill(Color.LIGHTGRAY);
             drop.setOnMouseClicked(event ->{
-                inventoryBox.useCurrent();
+                inventoryBox.dropCurrent();
             });
             drop.setOnMouseEntered(event1 -> {
                 drop.setFill(Color.DARKGRAY);
@@ -512,6 +551,7 @@ public class Inventory implements Serializable {
             });
             buttonpane.getChildren().add(drop);
             texttoadd = new Text("Drop");
+            texttoadd.setTranslateY(-75);
             texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
                 inventoryBox.dropCurrent();
@@ -520,6 +560,30 @@ public class Inventory implements Serializable {
                 drop.setFill(Color.DARKGRAY);
             });
             getChildren().add(texttoadd);
+            //SELL BUTTON
+            Rectangle sell = new Rectangle(250, 50);
+            sell.setFill(Color.LIGHTGRAY);
+            sell.setOnMouseClicked(event ->{
+                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+            });
+            sell.setOnMouseEntered(event1 -> {
+                sell.setFill(Color.DARKGRAY);
+            });
+            sell.setOnMouseExited(event ->{
+                sell.setFill(Color.LIGHTGRAY);
+            });
+            buttonpane.getChildren().add(sell);
+            sellText = new Text("Sell");
+            sellText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+            sellText.setOnMouseClicked(event -> {
+                if(canSell){
+                    itemBox.sellCurrent();
+                }
+            });
+            sellText.setOnMouseEntered(event1 -> {
+                sell.setFill(Color.DARKGRAY);
+            });
+            getChildren().add(sellText);
             //BACK BUTTON
             Rectangle back = new Rectangle(250, 50);
             back.setFill(Color.LIGHTGRAY);
@@ -544,6 +608,33 @@ public class Inventory implements Serializable {
                 back.setFill(Color.DARKGRAY);
             });
             getChildren().add(texttoadd);
+
+            goldText = new Text();
+            goldText.setTextAlignment(TextAlignment.CENTER);
+            goldText.setFill(Color.BLACK);
+            goldText.setTranslateY(150);
+            goldText.setTranslateX(0);
+            goldText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+            buttonpane.getChildren().add(goldText);
+        }
+
+        public static void RefreshSellUsable(){
+            if(Game.Player != null)
+                goldText.setText("Gold: " + Game.Player.getCoins());
+            if(itemBox.itemArray == null) {
+                sellText.setFill(Color.RED);
+                return;
+            }
+            if(itemBox.itemArray[itemBox.currentItem] == null) {
+                sellText.setFill(Color.RED);
+                return;
+            }
+            if(canSell && itemBox.itemArray[itemBox.currentItem].item.canBeSold){
+                    sellText.setFill(Color.BLACK);
+            }
+            else{
+                sellText.setFill(Color.RED);
+            }
         }
     }
 

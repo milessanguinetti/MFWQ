@@ -96,6 +96,11 @@ public class optionsOverlay extends StackPane{
         current = (optionsButton) buttonBox.getChildren().get(0);
         current.setHighLit();
         currentButton = 0;
+        if(Game.currentMap != null)
+            ((optionsButton)buttonBox.getChildren().get(4)).setGrayedOut(true);
+        else{
+            ((optionsButton)buttonBox.getChildren().get(4)).setGrayedOut(false);
+        }
         Enterdown = false;
     }
 
@@ -105,6 +110,7 @@ public class optionsOverlay extends StackPane{
         private Text buttonText;
         protected Rectangle buttonShape;
         private LinearGradient buttonGradient;
+        protected boolean isGrayedOut = false;
 
         public optionsButton(String buttonname){
             buttonNumber = numButtons;
@@ -161,25 +167,47 @@ public class optionsOverlay extends StackPane{
         }
 
         public void setHighLit(){
-            buttonShape.setFill(buttonGradient);
-            buttonShape.setOpacity(.6);
-            buttonText.setFill(Color.WHITE);
+            if(!isGrayedOut) {
+                buttonShape.setFill(buttonGradient);
+                buttonShape.setOpacity(.6);
+                buttonText.setFill(Color.WHITE);
+            }
+            else
+                buttonShape.setFill(Color.GRAY);
         }
 
         public void setPlain(){
-            buttonShape.setFill(Color.BLACK);
-            buttonShape.setOpacity(.4);
-            buttonText.setFill(Color.GRAY);
+            if(!isGrayedOut) {
+                buttonShape.setFill(Color.BLACK);
+                buttonShape.setOpacity(.4);
+                buttonText.setFill(Color.GRAY);
+            }
+            else{
+                buttonShape.setFill(Color.LIGHTGRAY);
+            }
+        }
+
+        public void setGrayedOut(boolean isGray){
+            isGrayedOut = isGray;
+            if(isGrayedOut){
+                buttonShape.setFill(Color.LIGHTGRAY);
+                buttonText.setFill(Color.BLACK);
+            }
+            else{
+                setPlain();
+            }
         }
 
         public abstract void performAction();
 
         public void setSelected(){
-            buttonShape.setFill(Color.RED);
+            if(!isGrayedOut)
+                buttonShape.setFill(Color.RED);
         }
 
         public void setUnselected(){
-            buttonShape.setFill(buttonGradient);
+            if(!isGrayedOut)
+                buttonShape.setFill(buttonGradient);
         }
     }
 
@@ -192,7 +220,9 @@ public class optionsOverlay extends StackPane{
         public void performAction(){
             setUnselected();
             Game.mainmenu.getCurrentGame().removeOptionsOverylay();
-            if(Game.currentMap == null)
+            if(Game.currentCity != null)
+                Game.mainmenu.getCurrentGame().swapToMainMenu(Game.currentCity);
+            else if(Game.currentMap == null)
                 Game.mainmenu.getCurrentGame().swapToMainMenu(Game.overworld);
             else
                 Game.mainmenu.getCurrentGame().swapToMainMenu(Game.currentMap.getPane());
@@ -268,11 +298,11 @@ public class optionsOverlay extends StackPane{
 
         @Override
         public void performAction(){
-            setUnselected();
-            if(Game.currentMap == null)
+            if(!isGrayedOut) {
+                setUnselected();
                 Game.mainmenu.getCurrentGame().writeToDisk();
-            else
-                buttonShape.setFill(Color.RED);
+                //buttonShape.setFill(Color.RED);
+            }
 
         }
     }
