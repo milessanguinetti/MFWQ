@@ -38,7 +38,7 @@ public class Kobold extends Monster{
 
     @Override
     public int getJexp() {
-        return 5000;
+        return 500;
     }
 
     @Override

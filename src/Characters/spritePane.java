@@ -24,9 +24,9 @@ package Characters;
  */
 public class spritePane extends StackPane implements Serializable{
     protected String Name; //character name; stored here for access to spritesheet images.
-    private transient Text damageText;
     private transient characterSpriteAnimation charAnimation = null;
     private transient ColorAdjust colorAdjust;
+    private int numAnimations = 0;
 
     public spritePane(){
         setAlignment(Pos.CENTER); //center any added children.
@@ -61,17 +61,19 @@ public class spritePane extends StackPane implements Serializable{
     }
 
     public void animateDamage(int toTake){
-        getChildren().remove(damageText);
-        damageText = new Text();
+        //getChildren().remove(damageText);
+        Text damageText = new Text();
         damageText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 40));
         damageText.setOpacity(1);
         final Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), new KeyValue(damageText.opacityProperty(), 1)));
         final KeyValue kv1 = new KeyValue(damageText.translateYProperty(), -100, Interpolator.EASE_OUT); //y property
         final KeyValue kv2 = new KeyValue(damageText.translateXProperty(), 20*getScaleX(), Interpolator.EASE_IN); //x property
         final KeyValue kv3 = new KeyValue(damageText.opacityProperty(), 0, Interpolator.EASE_IN); //opacity
         final KeyFrame kf = new KeyFrame(Duration.millis(1000), kv1, kv2, kv3);
         timeline.getKeyFrames().add(kf);
+        damageText.setOpacity(0);
         if(toTake < 0){ //healing case
             damageText.setText("" + toTake*-1);
             damageText.setFill(Color.GREEN);
@@ -81,7 +83,43 @@ public class spritePane extends StackPane implements Serializable{
             damageText.setFill(Color.RED);
         }
         getChildren().add(damageText);
+        timeline.setDelay(Duration.millis(numAnimations*300));
+        timeline.setOnFinished(event -> {
+            getChildren().remove(damageText);
+            --numAnimations;
+        });
         timeline.play();
+        ++numAnimations;
+    }
+
+    public void animateStatusCondition(String Name, boolean isBeneficial){
+        //getChildren().remove(damageText);
+        Text damageText = new Text(Name);
+        damageText.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 40));
+        damageText.setOpacity(1);
+        final Timeline timeline = new Timeline();
+        timeline.setCycleCount(1);
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), new KeyValue(damageText.opacityProperty(), 1)));
+        final KeyValue kv1 = new KeyValue(damageText.translateYProperty(), -100, Interpolator.EASE_OUT); //y property
+        final KeyValue kv2 = new KeyValue(damageText.translateXProperty(), 20*getScaleX(), Interpolator.EASE_IN); //x property
+        final KeyValue kv3 = new KeyValue(damageText.opacityProperty(), 0, Interpolator.EASE_IN); //opacity
+        final KeyFrame kf = new KeyFrame(Duration.millis(1000), kv1, kv2, kv3);
+        timeline.getKeyFrames().add(kf);
+        damageText.setOpacity(0);
+        if(isBeneficial){ //beneficial case
+            damageText.setFill(Color.GREEN);
+        }
+        else{ //negative case
+            damageText.setFill(Color.RED);
+        }
+        getChildren().add(damageText);
+        timeline.setDelay(Duration.millis(numAnimations*300));
+        timeline.setOnFinished(event -> {
+            getChildren().remove(damageText);
+            --numAnimations;
+        });
+        timeline.play();
+        ++numAnimations;
     }
 
     protected void setWaiting(){

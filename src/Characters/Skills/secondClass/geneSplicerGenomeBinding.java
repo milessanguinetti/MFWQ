@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.matchBestStats;
+import Characters.statusEffects.matchBestStats;
 import Characters.gameCharacter;
 
 /**

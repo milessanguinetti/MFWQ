@@ -1,8 +1,8 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Poisoned;
-import Characters.Status.deliriantPoison;
+import Characters.statusEffects.Poisoned;
+import Characters.statusEffects.deliriantPoison;
 import Characters.gameCharacter;
 
 import java.util.Random;

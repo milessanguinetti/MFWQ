@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.spRegen;
+import Characters.statusEffects.spRegen;
 import Characters.gameCharacter;
 
 /**

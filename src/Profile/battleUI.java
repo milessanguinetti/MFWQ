@@ -170,6 +170,8 @@ public class battleUI extends StackPane {
 
     //prints to the left at just one index specified as an argument.
     public void printLeftAtNextAvailable(String S1){
+        if(S1.matches(""))
+            return; //don't print empty strings.
         for(int i = 0; i < 4; ++i) {
             if (Left[i] != null) {
                 Left[i].setPlain(); //ensure that info printed in this method is not highlit, as it

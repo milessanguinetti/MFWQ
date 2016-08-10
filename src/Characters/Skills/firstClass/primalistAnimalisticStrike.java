@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.damageAdditive;
+import Characters.statusEffects.damageAdditive;
 import Characters.gameCharacter;
 
 /**

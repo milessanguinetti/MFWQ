@@ -2,7 +2,7 @@ package Characters.Skills.secondClass;
 
 import Characters.Properties.Unholy;
 import Characters.Skills.Skill;
-import Characters.Status.fthBuff;
+import Characters.statusEffects.fthBuff;
 import Characters.gameCharacter;
 
 /**

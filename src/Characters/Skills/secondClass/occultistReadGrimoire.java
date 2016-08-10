@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.intBuff;
+import Characters.statusEffects.intBuff;
 import Characters.gameCharacter;
 
 /**

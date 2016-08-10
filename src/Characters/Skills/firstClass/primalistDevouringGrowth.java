@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.exponentialDoT;
+import Characters.statusEffects.exponentialDoT;
 import Characters.gameCharacter;
 
 /**

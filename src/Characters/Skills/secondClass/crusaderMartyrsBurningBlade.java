@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Burning;
+import Characters.statusEffects.Burning;
 import Characters.gameCharacter;
 
 /**

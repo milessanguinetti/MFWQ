@@ -1,8 +1,8 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.neutralEvade;
-import Characters.Status.spdBuff;
+import Characters.statusEffects.neutralEvade;
+import Characters.statusEffects.spdBuff;
 import Characters.gameCharacter;
 
 /**

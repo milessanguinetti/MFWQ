@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Bleeding;
+import Characters.statusEffects.Bleeding;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 

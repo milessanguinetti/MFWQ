@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Created by Miles Sanguinetti on 3/18/15.
  */
-public class statusEffectData implements Data, incrementableData, Serializable{
+public abstract class statusEffectData implements Data, incrementableData, Serializable{
     protected String Name; //name of status effect
     protected int Turns; //turns remaining
 
@@ -29,6 +29,8 @@ public class statusEffectData implements Data, incrementableData, Serializable{
         Name = toName;
         Turns = Duration;
     }
+
+    public abstract boolean isPositive();
 
     //increments the turn value
     @Override
@@ -80,6 +82,8 @@ public class statusEffectData implements Data, incrementableData, Serializable{
 
     //same, except that this takes a data reference as a parameter
     public int compareTo(Data toCompare){
+        if(this.getClass().equals(toCompare.getClass()))
+            return 0;
         return Name.compareTo(toCompare.returnKey());
     }
 }

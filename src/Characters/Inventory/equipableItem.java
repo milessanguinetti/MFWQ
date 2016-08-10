@@ -16,4 +16,5 @@ public interface equipableItem{
     //these methods are item-specific, but help to compartmentalize
     //the use and unequip methods to more general tasks while
     //still being able to call these to handle specific tasks
+    String getStatText();
 }

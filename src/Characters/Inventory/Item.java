@@ -4,6 +4,14 @@ import Characters.gameCharacter;
 import Structures.Data;
 import Structures.incrementableData;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -91,6 +99,56 @@ public abstract class Item implements incrementableData, Serializable {
         }
         System.out.println("Quantity: " + Quantity);
     }
+
+    public StackPane getItemDisplay(){
+        StackPane detailed = buildSpecificItemDisplay();
+        double detailedHeight = 0;
+        if(detailed != null)
+            detailedHeight = detailed.getMaxHeight() + 20;
+
+        StackPane toReturn = new StackPane();
+        toReturn.setTranslateX(450);
+        toReturn.setTranslateY(50);
+        Rectangle displayBackground = new Rectangle(300, 400 + detailedHeight);
+        displayBackground.setFill(Color.LIGHTGRAY);
+        toReturn.getChildren().add(displayBackground);
+        Text nametext = new Text(itemName);
+        nametext.setTextAlignment(TextAlignment.CENTER);
+        nametext.setTranslateY(displayBackground.getHeight()/-2 + 40);
+        nametext.setWrappingWidth(260);
+        nametext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.BOLD, 25));
+        toReturn.getChildren().add(nametext);
+        Text quanttext = new Text("Quantity: " + Quantity);
+        quanttext.setTextAlignment(TextAlignment.CENTER);
+        quanttext.setTranslateX(-66);
+        quanttext.setTranslateY(nametext.getTranslateY() + 50);
+        quanttext.setWrappingWidth(130);
+        quanttext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        toReturn.getChildren().add(quanttext);
+        Text valuetext = new Text("Value: " + Value);
+        valuetext.setTextAlignment(TextAlignment.CENTER);
+        valuetext.setTranslateX(66);
+        valuetext.setTranslateY(nametext.getTranslateY() + 50);
+        valuetext.setWrappingWidth(130);
+        valuetext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        toReturn.getChildren().add(valuetext);
+        ImageView icon = getIcon();
+        icon.setTranslateY(valuetext.getTranslateY() + 105);
+        toReturn.getChildren().add(icon);
+        Text destext = new Text(Description);
+        destext.setTranslateY(displayBackground.getHeight()/2 -80);
+        destext.setWrappingWidth(260);
+        destext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        toReturn.getChildren().add(destext);
+
+        if(detailed != null){
+            detailed.setTranslateY(icon.getTranslateY() + icon.getFitHeight()/2 + detailedHeight/2);
+        }
+
+        return toReturn;
+    }
+
+    public abstract StackPane buildSpecificItemDisplay();
 
     @Override
     public void setKey(String name) {

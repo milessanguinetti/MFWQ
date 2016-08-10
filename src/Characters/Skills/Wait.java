@@ -1,13 +1,14 @@
 package Characters.Skills;
 
 import Characters.gameCharacter;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 4/28/15.
  */
 public class Wait extends Skill{
     public Wait(){
-        super("Wait", "", 0);
+        super("", "", 0);
     }
 
     @Override
@@ -37,7 +38,6 @@ public class Wait extends Skill{
 
     @Override //waits a turn.
     public void takeAction(gameCharacter Caster, gameCharacter Defender){
-            Caster.printName();
-            System.out.println(" waited.");
+        Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " waited.");
     }
 }

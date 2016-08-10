@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.additivePhysicalBuff;
+import Characters.statusEffects.additivePhysicalBuff;
 import Characters.gameCharacter;
 
 /**

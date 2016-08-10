@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.leechingDoT;
+import Characters.statusEffects.leechingDoT;
 import Characters.gameCharacter;
 
 /**

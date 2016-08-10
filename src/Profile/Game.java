@@ -96,10 +96,10 @@ public class Game {
         playerCharacter oxy = new playerCharacter("Oxy", "Heretic", 350, 100, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(oxy);
         new generic2hBlunt(20).Use(oxy);
-        characterClass oxyPrimary = new Soldier();
+        characterClass oxyPrimary = new Rogue();
         oxy.setPrimaryClass(oxyPrimary);
         oxy.addClass(oxyPrimary);
-        oxy.addClass(new Rogue());
+        oxy.addClass(new Soldier());
         oxy.addClass(new Alchemist());
         oxy.addClass(new Inquisitor());
 
@@ -235,6 +235,13 @@ public class Game {
         characterScreen.swapToMainPane();
     }
 
+    public void swapToCity(Node toRemove){
+        if(toRemove != null)
+            gameRoot.getChildren().remove(toRemove);
+        gameRoot.getChildren().add(currentCity);
+        currentCity.requestFocus();
+    }
+
     public void setDelay(int Delay){
         delayStartTime = System.currentTimeMillis();
         delayDuration = Delay;
@@ -278,7 +285,10 @@ public class Game {
 
     public void removeOptionsOverylay(){
         gameRoot.getChildren().remove(options);
-        if(currentMap != null) {
+        if(currentCity != null){
+            currentCity.requestFocus();
+        }
+        else if(currentMap != null) {
             currentMap.getPane().requestFocus();
         }
         else

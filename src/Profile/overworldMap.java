@@ -1,5 +1,6 @@
 package Profile;
 
+import Cities.City;
 import Maps.Map;
 import Maps.Valley01;
 import javafx.animation.PathTransition;
@@ -51,11 +52,11 @@ public class overworldMap extends StackPane implements Serializable{
         getChildren().addAll(currentZone, alsoValley);
         mapIcon totallyNotValley = new dungeonIcon("Totally Not Valley", 200, -100, "Valley01");
         getChildren().add(totallyNotValley);
-        mapIcon cave = new dungeonIcon("Cave", 0, -100, "Valley01");
-        getChildren().add(cave);
-        totallyNotValley.generatePath(cave, 3);
-        cave.generatePath(currentZone, 3);
-        cave.generatePath(alsoValley, 2);
+        cityIcon spagoot = new cityIcon("Spaghettistan", 0, -100, "Spaghettistan");
+        getChildren().add(spagoot);
+        totallyNotValley.generatePath(spagoot, 3);
+        spagoot.generatePath(currentZone, 3);
+        spagoot.generatePath(alsoValley, 2);
 
 
         if(playerIcon == null){ // load player icon
@@ -78,9 +79,7 @@ public class overworldMap extends StackPane implements Serializable{
             if(isAnimating)
                 return;
             if(event.getCode() == KeyCode.ENTER){
-                Game.currentMap = new Valley01();
-                Game.currentMap.enterFromOverworld();
-                Game.mainmenu.getCurrentGame().swapToMap(this);
+                currentZone.Enter();
             }
             else if(event.getCode() == KeyCode.ESCAPE){
                 Game.mainmenu.getCurrentGame().addOptionsOverlay();
@@ -138,8 +137,12 @@ public class overworldMap extends StackPane implements Serializable{
             getChildren().add(nameText);
 
             setOnMouseReleased(event -> {
-                if(currentZone == this || isAnimating)
+                if(isAnimating)
                     return; //waste of effort.
+                if(currentZone == this) {
+                    Enter();
+                    return;
+                }
                 currentZone.calculateDistances(0, this);
                 resetAndMap(travelLength+1);
                 SequentialTransition journey = new SequentialTransition();
@@ -298,7 +301,33 @@ public class overworldMap extends StackPane implements Serializable{
                 Constructor constructor = thisDungeon.getConstructor();
                 Game.currentMap = (Map)(constructor.newInstance());
                 Game.currentMap.enterFromOverworld();
-                Game.mainmenu.getCurrentGame().swapToMap(this);
+                Game.mainmenu.getCurrentGame().swapToMap(Game.overworld);
+            }
+            catch (Exception e){
+                System.out.println("Error initializing dungeon: " + e.getMessage());
+            }
+        }
+    }
+    private class cityIcon extends mapIcon{
+        private Class thisCity;
+
+        public cityIcon(String name, int xcoord, int ycoord, String classToInitialize){
+            super(name, xcoord, ycoord);
+            try {
+                thisCity = Class.forName("Cities." + classToInitialize);
+            }
+            catch (Exception e){
+                System.out.println(e.getClass());
+                System.out.println("Error initializing city icon: " + e.getMessage());
+            }
+        }
+
+        @Override
+        public void Enter(){
+            try {
+                Constructor constructor = thisCity.getConstructor();
+                Game.currentCity = (City)(constructor.newInstance());
+                Game.mainmenu.getCurrentGame().swapToCity(Game.overworld);
             }
             catch (Exception e){
                 System.out.println("Error initializing dungeon: " + e.getMessage());

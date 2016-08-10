@@ -4,6 +4,12 @@ import Characters.combatEffect;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Profile.Game;
+import javafx.geometry.Pos;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -126,5 +132,38 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         }
         subtractStats(toEquipTo); //subtract stats
         Game.Player.Insert(this); //insert the item into global inventory
+    }
+
+    @Override
+    public StackPane buildSpecificItemDisplay() {
+        StackPane toReturn = new StackPane();
+        toReturn.setAlignment(Pos.CENTER);
+        if(getStatText() == null){
+            toReturn.setMaxSize(300, 200);
+            toReturn.setMinSize(300, 200);
+        }
+        else{
+            toReturn.setMaxSize(300, 300);
+            toReturn.setMinSize(300, 300);
+            Text statText = new Text();
+            statText.setTextAlignment(TextAlignment.CENTER);
+            statText.setTranslateY(250);
+            statText.setWrappingWidth(260);
+            statText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+            toReturn.getChildren().add(statText);
+        }
+        Text handText = new Text();
+        if(isTwoHand())
+            handText.setText("Two-handed");
+        else if(isRightHand())
+            handText.setText("Main Hand");
+        else
+            handText.setText("Off Hand");
+        handText.setTextAlignment(TextAlignment.CENTER);
+        handText.setWrappingWidth(260);
+        handText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        toReturn.getChildren().add(handText);
+
+        return toReturn;
     }
 }

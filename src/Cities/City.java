@@ -3,6 +3,7 @@ package Cities;
 import Characters.Inventory.Inventory;
 import Profile.Game;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -14,6 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 
 /**
  * Created by Spaghetti on 8/8/2016.
@@ -29,8 +31,12 @@ public class City extends StackPane{
     private boolean enterDown = false;
 
     public City(StackPane inn, StackPane shop){
+        setAlignment(Pos.CENTER);
+        Rectangle background = new Rectangle(3000, 3000, Color.BLACK);
+        getChildren().add(background);
         VBox buttonBox = new VBox();
         buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(15);
         if(inn != null){
             Inn = inn;
             buttonBox.getChildren().add(new innButton());
@@ -39,6 +45,7 @@ public class City extends StackPane{
             Shop = shop;
             buttonBox.getChildren().add(new shopButton());
         }
+        buttonBox.getChildren().add(new optionsButton());
         buttonBox.getChildren().add(new leaveButton());
         buttons = new cityButton[buttonBox.getChildren().size()];
         for(int i = 0; i < buttonBox.getChildren().size(); ++i){
@@ -46,6 +53,14 @@ public class City extends StackPane{
         }
         currentButton = 0;
         buttons[currentButton].setSelected();
+        buttons[currentButton].setHighLit();
+        Rectangle buttonBackground1 = new Rectangle(320, numButtons*70, Color.GRAY);
+        Rectangle buttonBackground2 = new Rectangle(315, numButtons*65, Color.BLACK);
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        buttonBackground1.setTranslateX(0 - bounds.getWidth()/3);
+        buttonBackground2.setTranslateX(0 - bounds.getWidth()/3);
+        buttonBox.setTranslateX(0-bounds.getWidth()/3);
+        getChildren().addAll(buttonBackground1, buttonBackground2, buttonBox);
         Game.currentCity = this;
         setOnKeyPressed(event1 -> {
             if(event1.getCode() == KeyCode.ENTER){
@@ -191,7 +206,18 @@ public class City extends StackPane{
         @Override
         public void performAction(){
             Inventory.setCanSell(false);
-            Game.mainmenu.getCurrentGame().swapToOverworld(Game.currentCity);
+            exit();
+        }
+    }
+
+    private class optionsButton extends cityButton{
+        public optionsButton(){
+            super("Options");
+        }
+
+        @Override
+        public void performAction() {
+            Game.mainmenu.getCurrentGame().addOptionsOverlay();
         }
     }
 }

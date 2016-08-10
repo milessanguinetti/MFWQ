@@ -1,8 +1,8 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.fthBuff;
-import Characters.Status.intBuff;
+import Characters.statusEffects.fthBuff;
+import Characters.statusEffects.intBuff;
 import Characters.gameCharacter;
 
 /**

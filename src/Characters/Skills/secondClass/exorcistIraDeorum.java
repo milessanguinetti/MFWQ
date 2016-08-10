@@ -1,10 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Poisoned;
 import Characters.gameCharacter;
-
-import java.util.Random;
 
 /**
  * Created by Miles Sanguinetti on 5/5/15.

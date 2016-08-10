@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.multiTargetCounter;
+import Characters.statusEffects.multiTargetCounter;
 import Characters.gameCharacter;
 
 /**

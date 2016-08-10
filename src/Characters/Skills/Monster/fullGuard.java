@@ -1,7 +1,7 @@
 package Characters.Skills.Monster;
 
 import Characters.Skills.Skill;
-import Characters.Status.Guard;
+import Characters.statusEffects.Guard;
 import Characters.gameCharacter;
 import Profile.Game;
 

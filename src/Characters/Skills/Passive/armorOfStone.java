@@ -1,6 +1,6 @@
 package Characters.Skills.Passive;
 
-import Characters.Status.hitLimitedDamageReduction;
+import Characters.statusEffects.hitLimitedDamageReduction;
 import Characters.gameCharacter;
 
 /**

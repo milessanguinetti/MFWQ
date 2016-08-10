@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.Poisoned;
+import Characters.statusEffects.Poisoned;
 import Characters.gameCharacter;
 
 import java.util.Random;
@@ -46,8 +46,6 @@ public class primalistBogMiasma extends Skill {
         int Roll = Rand.nextInt(4);
         if (!(Roll == 3)) { //3/4 of the time, inflict standard poison
                 Defender.addStatus(new Poisoned(Caster.getTempInt(), 5));
-                Defender.printName();
-                System.out.println(" was afflicted with poison!");
         }
         //otherwise the skill fails to poison.
     }

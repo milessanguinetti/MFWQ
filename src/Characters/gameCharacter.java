@@ -3,11 +3,10 @@ package Characters;
 import Characters.Inventory.Item;
 import Characters.Properties.Property;
 import Characters.Skills.Passive.passiveSkill;
-import Characters.Status.Counter;
-import Characters.Status.damageEffect;
-import Characters.Status.endOfTurn;
-import Characters.Status.statChange;
-import Profile.Game;
+import Characters.statusEffects.Counter;
+import Characters.statusEffects.damageEffect;
+import Characters.statusEffects.endOfTurn;
+import Characters.statusEffects.statChange;
 import Structures.LLLnode;
 import Structures.battleData;
 import Structures.statusEffectData;
@@ -180,6 +179,7 @@ public abstract class gameCharacter extends Stats {
     //inserts a status effect; returns true if we need to readjust temp stats
     public boolean addStatus(statusEffectData toInsert){
         LLLnode nodeToInsert; //LLLnode reference
+        animateStatusCondition(toInsert.returnKey(), toInsert.isPositive());
         if(toInsert instanceof damageEffect){ //insert to damage effects if this condition
             nodeToInsert = new LLLnode(toInsert); //has damage effect properties
             damageEffectList.Insert(nodeToInsert);

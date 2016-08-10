@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class Flee extends Skill {
     public Flee(){
-        super("Flee", "", 0);
+        super("", "", 0);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Flee extends Skill {
         if(Rand.nextInt(2) == 1)
             throw new fleeObject();
         else {
-            Caster.printName();
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " fled!");
             Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " could not escape!");
         }
     }

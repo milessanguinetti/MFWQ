@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.armorBuff;
+import Characters.statusEffects.armorBuff;
 import Characters.gameCharacter;
 
 /**

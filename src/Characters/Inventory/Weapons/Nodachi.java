@@ -85,7 +85,7 @@ public class Nodachi extends Weapon {
 
     @Override
     public void subtractStats(playerCharacter toSubtract) {
-        toSubtract.incrementStat(2, 30);
+        toSubtract.incrementStat(2, -30);
     }
 
     @Override

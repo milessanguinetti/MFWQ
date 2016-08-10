@@ -42,6 +42,7 @@ public class Inventory implements Serializable {
     private static GridPane buttonPane;
     private static ItemUseBox usebox;
     private static transient ScrollPane itemBoxPane;
+    private static StackPane itemDisplay;
     private static boolean canSell = false;
 
     public Inventory() {
@@ -150,7 +151,8 @@ public class Inventory implements Serializable {
             Categories[currentCategory].setPlain();
             currentCategory = i;
             Categories[currentCategory].setBold();
-            itemDisplay.Remove();
+            if(itemDisplay != null)
+                contentRoot.getChildren().remove(itemDisplay);
             itemBox = new inventoryBox(Items[i]);
             itemBox.setCurrent(0);
             if(Items[i].getSize() != 0)
@@ -206,52 +208,6 @@ public class Inventory implements Serializable {
 
     public StackPane getContentRoot(){
         return contentRoot;
-    }
-
-    private static class itemDisplay extends StackPane{
-        private static itemDisplay currentDisplay;
-
-        public itemDisplay(Item toDisplay){
-            if(toDisplay != null){
-                if(currentDisplay != null){
-                    Inventory.contentRoot.getChildren().remove(currentDisplay);
-                }
-                currentDisplay = this;
-                setTranslateX(450);
-                setTranslateY(100);
-                Rectangle displayBackground = new Rectangle(300, 550);
-                displayBackground.setFill(Color.LIGHTGRAY);
-                getChildren().add(displayBackground);
-                addText(toDisplay.returnKey(), -200, 35);
-                ImageView icon = toDisplay.getIcon();
-                icon.setTranslateY(-50);
-                getChildren().add(icon);
-                addText(toDisplay.getDescription(), 100, 20);
-                addText("Quantity: " + toDisplay.getQuantity(), 200, 20);
-                Inventory.contentRoot.getChildren().add(currentDisplay);
-                Inventory.buttonPane.toFront();
-
-            }
-        }
-
-        private void addText(String toAdd, int Y, int size){
-            Text text = new Text(toAdd);
-            text.setWrappingWidth(250);
-            text.setTextAlignment(TextAlignment.CENTER);
-            text.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, size));
-            text.setTranslateY(Y);
-            getChildren().add(text);
-        }
-
-        public static void Remove(){
-            if(currentDisplay != null)
-                Inventory.contentRoot.getChildren().remove(currentDisplay);
-            currentDisplay = null;
-        }
-
-        public static itemDisplay getCurrentDisplay(){
-            return currentDisplay;
-        }
     }
 
     private class categoryButton extends StackPane{
@@ -327,7 +283,10 @@ public class Inventory implements Serializable {
         public void setBold() {
             buttonShape.setOpacity(.8);
             buttonShape.setFill(Color.DARKGRAY);
-            new itemDisplay(item);
+            getChildren().remove(itemDisplay);
+            itemDisplay = item.getItemDisplay();
+            contentRoot.getChildren().add(itemDisplay);
+            buttonPane.toFront();
         }
 
         public boolean Use(){
@@ -469,15 +428,19 @@ public class Inventory implements Serializable {
         }
 
         public static void dropCurrent(){
-            if(itemArray != null)
+            if(itemArray != null) {
                 Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                setItemBox(currentCategory);
+            }
         }
 
         public static void sellCurrent(){
             if(itemArray != null){
                 if(itemArray[currentItem].item.CanBeSold()){
                     Game.Player.addCoins(itemArray[currentItem].item.getValue());
-                    Items[currentCategory].Remove(itemArray[currentItem].getKey());
+                    Item toSell = (Item)Items[currentCategory].Retrieve(itemArray[currentItem].getKey()).returnData();
+                    if(toSell.Decrement(-1) == 0)
+                        dropCurrent();
                     Game.battle.playMedia("loot");
                 }
             }
@@ -493,7 +456,7 @@ public class Inventory implements Serializable {
             setAlignment(Pos.CENTER);
             setTranslateX(-450);
             setTranslateY(75);
-            Rectangle background = new Rectangle(300, 450);
+            Rectangle background = new Rectangle(300, 400);
             background.setFill(Color.GRAY);
             getChildren().add(background);
             GridPane buttonpane = new GridPane();
@@ -612,10 +575,10 @@ public class Inventory implements Serializable {
             goldText = new Text();
             goldText.setTextAlignment(TextAlignment.CENTER);
             goldText.setFill(Color.BLACK);
-            goldText.setTranslateY(150);
+            goldText.setTranslateY(145);
             goldText.setTranslateX(0);
             goldText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
-            buttonpane.getChildren().add(goldText);
+            getChildren().add(goldText);
         }
 
         public static void RefreshSellUsable(){
@@ -644,8 +607,8 @@ public class Inventory implements Serializable {
         return itemBoxPane;
     }
 
-    public static itemDisplay getItemDisplay() {
-        return itemDisplay.getCurrentDisplay();
+    public static StackPane getItemDisplay() {
+        return itemBox.itemArray[itemBox.currentItem].item.getItemDisplay();
     }
 
     public static void returnItemBoxPane(){

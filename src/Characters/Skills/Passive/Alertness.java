@@ -1,7 +1,7 @@
 package Characters.Skills.Passive;
 
-import Characters.Status.neutralEvade;
-import Characters.Status.spdBuff;
+import Characters.statusEffects.neutralEvade;
+import Characters.statusEffects.spdBuff;
 import Characters.gameCharacter;
 
 /**

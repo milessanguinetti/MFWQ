@@ -1,7 +1,7 @@
 package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.damageMultiplier;
+import Characters.statusEffects.damageMultiplier;
 import Characters.gameCharacter;
 
 /**

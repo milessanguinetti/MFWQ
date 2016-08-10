@@ -2,6 +2,8 @@ package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
+import Profile.Battle;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/5/15.
@@ -41,8 +43,7 @@ public class rogueRapidStriking extends Skill {
     @Override //hit more times based on speed
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         int Strikes = (Caster.getTempSpd() + 10) / 10; //strike once per ten speed
-        Caster.printName();
-        System.out.println(" struck " + Strikes + " times!");
+        Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " struck " + Strikes + " times!");
         for (int i = Strikes; i > 0; --i) {
             Defender.takeDamage(Math.round(.4f * (Caster.getTempStr() +
                     Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));

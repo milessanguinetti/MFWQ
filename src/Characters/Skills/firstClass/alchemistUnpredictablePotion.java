@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.*;
+import Characters.statusEffects.*;
 import Characters.gameCharacter;
 
 import java.util.Random;

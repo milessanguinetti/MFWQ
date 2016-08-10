@@ -1,7 +1,7 @@
 package Characters.Skills.firstClass;
 
 import Characters.Skills.Skill;
-import Characters.Status.healOverTime;
+import Characters.statusEffects.healOverTime;
 import Characters.gameCharacter;
 
 /**
