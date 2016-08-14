@@ -39,18 +39,15 @@ public class Game {
     public static characterScreen characterscreen;
     public static Map currentMap;
     public static City currentCity;
-    private optionsOverlay options = new optionsOverlay();
-    private Stage primaryStage;
-    private StackPane gameRoot = new StackPane();
-    private long delayStartTime; //variable to track time at which a delay was requested.
-    private int delayDuration; //variable to track requested delay
-    private MediaPlayer mediaPlayer; //media player variable for playing music.
-    private float musicVolume = 1; //a floating point between 0.0 and 1.0 that denotes the volume of
+    private static optionsOverlay options = new optionsOverlay();
+    private static Stage primaryStage;
+    private static StackPane gameRoot = new StackPane();
+    private static MediaPlayer mediaPlayer; //media player variable for playing music.
+    private static float musicVolume = 1; //a floating point between 0.0 and 1.0 that denotes the volume of
                                //any music that the game plays, with 0.0 == silent and 1.0 == full
-    private float masterVolume = 1; //see above, but impacts both music and sound effects.
+    private static float masterVolume = 1; //see above, but impacts both music and sound effects.
 
     public Game(Stage primarystage){
-        mainmenu.setGame(this);
         primaryStage = primarystage;
         primaryStage.setTitle("MFWQ");
         primaryStage.setFullScreen(true);
@@ -78,7 +75,7 @@ public class Game {
         primaryStage.show();
     }
 
-    public void newPlayer(){
+    public static void newPlayer(){
         Player = new userProfile();
         //TEST CHARACTER
         playerCharacter bob = new playerCharacter("Spaghetti", "Faithful",
@@ -107,7 +104,7 @@ public class Game {
         writeToDisk();
     }
 
-    public void loadPlayer(){
+    public static void loadPlayer(){
         try {
             FileInputStream fileInput = new FileInputStream("MFWQsave.dat");
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
@@ -127,7 +124,7 @@ public class Game {
         writeToDisk();
     }
 
-    public void writeToDisk(){
+    public static void writeToDisk(){
         try {
             FileOutputStream FileOutput = new FileOutputStream("MFWQsave.dat");
             ObjectOutputStream ObjectOutput = new ObjectOutputStream(FileOutput);
@@ -139,36 +136,36 @@ public class Game {
         }
     }
 
-    public void setMusicVolume(float toSet){
+    public static void setMusicVolume(float toSet){
         musicVolume = toSet;
         if(mediaPlayer != null)
             mediaPlayer.setVolume(masterVolume * toSet);
     }
 
-    public void setMasterVolume(float toSet){
+    public static void setMasterVolume(float toSet){
         masterVolume = toSet;
         if(mediaPlayer != null)
             mediaPlayer.setVolume(musicVolume * toSet);
     }
 
-    public float getMasterVolume(){
+    public static float getMasterVolume(){
         return masterVolume;
     }
 
-    public void swapToBattle(Node toRemove){
+    public static void swapToBattle(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(battle.getPane());
         battle.getPane().requestFocus();
         if(mediaPlayer != null)
             mediaPlayer.stop();
-        mediaPlayer = new MediaPlayer(new Media(getClass().getResource("music/battletheme.mp3").toString()));
+        mediaPlayer = new MediaPlayer(new Media(battle.getClass().getResource("music/battletheme.mp3").toString()));
         mediaPlayer.setVolume(musicVolume * masterVolume);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
 
-    public void swapToMainMenu(Node toRemove){
+    public static void swapToMainMenu(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(mainmenu.getPane());
@@ -176,14 +173,14 @@ public class Game {
         mainmenu.getPane().requestFocus();
         if(mediaPlayer != null)
             mediaPlayer.stop();
-        mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/titletheme.mp3")).toString()));
+        mediaPlayer = new MediaPlayer(new Media((battle.getClass().getResource("music/titletheme.mp3")).toString()));
         mediaPlayer.setVolume(musicVolume * masterVolume);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
 
 
-    public void swapToMap(Node toRemove){
+    public static void swapToMap(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         if(currentMap != null){
@@ -191,7 +188,7 @@ public class Game {
             currentMap.getPane().requestFocus();
             if(mediaPlayer != null)
                 mediaPlayer.stop();
-            mediaPlayer = new MediaPlayer(new Media((getClass().getResource("music/maptheme.mp3")).toString()));
+            mediaPlayer = new MediaPlayer(new Media((battle.getClass().getResource("music/maptheme.mp3")).toString()));
             mediaPlayer.setVolume(musicVolume * masterVolume);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.play();
@@ -202,7 +199,7 @@ public class Game {
         }
     }
 
-    public void swapToOverworld(Node toRemove){
+    public static void swapToOverworld(Node toRemove){
         //NOT YET IMPLEMENTED
         currentMap = null;
         if(toRemove != null)
@@ -211,7 +208,7 @@ public class Game {
         overworld.requestFocus();
     }
 
-    public void swapToInventory(Node toRemove){
+    public static void swapToInventory(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(Player.getContentRoot());
@@ -219,14 +216,14 @@ public class Game {
         Player.setItemBox(0);
     }
 
-    public void swapToSettings(Node toRemove){
+    public static void swapToSettings(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(settings);
         settings.requestFocus();
     }
 
-    public void swapToCharacterScreen(Node toRemove){
+    public static void swapToCharacterScreen(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         if(characterscreen == null)
@@ -235,29 +232,14 @@ public class Game {
         characterScreen.swapToMainPane();
     }
 
-    public void swapToCity(Node toRemove){
+    public static void swapToCity(Node toRemove){
         if(toRemove != null)
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(currentCity);
         currentCity.requestFocus();
     }
 
-    public void setDelay(int Delay){
-        delayStartTime = System.currentTimeMillis();
-        delayDuration = Delay;
-    }
-
-    public boolean isDelayOver(){
-        if(delayDuration == 0)
-            return true;
-        if(System.currentTimeMillis() - delayDuration > delayStartTime) {
-            delayDuration = 0;
-            return true;
-        }
-        return false;
-    }
-
-    public void lootNotificationToFront(){
+    public static void lootNotificationToFront(){
         gameRoot.getChildren().remove(experiencenotification);
         notification.Animate();
         if(notification.isActive()) {
@@ -266,24 +248,24 @@ public class Game {
         }
     }
 
-    public void expNotificationToFront(){
+    public static void expNotificationToFront(){
         experiencenotification.updateAndAnimate();
         gameRoot.getChildren().remove(experiencenotification);
         gameRoot.getChildren().add(experiencenotification);
     }
 
-    public void removeNotifications(){
+    public static void removeNotifications(){
         gameRoot.getChildren().remove(experiencenotification);
         gameRoot.getChildren().remove(notification);
     }
 
-    public void addOptionsOverlay(){
+    public static void addOptionsOverlay(){
         options.Reset();
         gameRoot.getChildren().add(options);
         options.requestFocus();
     }
 
-    public void removeOptionsOverylay(){
+    public static void removeOptionsOverylay(){
         gameRoot.getChildren().remove(options);
         if(currentCity != null){
             currentCity.requestFocus();

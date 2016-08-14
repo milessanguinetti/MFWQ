@@ -100,7 +100,7 @@ public abstract class Item implements incrementableData, Serializable {
         System.out.println("Quantity: " + Quantity);
     }
 
-    public StackPane getItemDisplay(){
+    public StackPane getItemDisplay(boolean noteQuantity){
         StackPane detailed = buildSpecificItemDisplay();
         double detailedHeight = 0;
         if(detailed != null)
@@ -118,13 +118,6 @@ public abstract class Item implements incrementableData, Serializable {
         nametext.setWrappingWidth(260);
         nametext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.BOLD, 25));
         toReturn.getChildren().add(nametext);
-        Text quanttext = new Text("Quantity: " + Quantity);
-        quanttext.setTextAlignment(TextAlignment.CENTER);
-        quanttext.setTranslateX(-66);
-        quanttext.setTranslateY(nametext.getTranslateY() + 50);
-        quanttext.setWrappingWidth(130);
-        quanttext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
-        toReturn.getChildren().add(quanttext);
         Text valuetext = new Text("Value: " + Value);
         valuetext.setTextAlignment(TextAlignment.CENTER);
         valuetext.setTranslateX(66);
@@ -132,6 +125,19 @@ public abstract class Item implements incrementableData, Serializable {
         valuetext.setWrappingWidth(130);
         valuetext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
         toReturn.getChildren().add(valuetext);
+        if(noteQuantity) {
+            Text quanttext = new Text("Quantity: " + Quantity);
+            quanttext.setTextAlignment(TextAlignment.CENTER);
+            quanttext.setTranslateX(-66);
+            quanttext.setTranslateY(nametext.getTranslateY() + 50);
+            quanttext.setWrappingWidth(130);
+            quanttext.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+            toReturn.getChildren().add(quanttext);
+        }
+        else{
+            valuetext.setWrappingWidth(260);
+            valuetext.setTranslateX(0);
+        }
         ImageView icon = getIcon();
         icon.setTranslateY(valuetext.getTranslateY() + 105);
         toReturn.getChildren().add(icon);
@@ -142,7 +148,8 @@ public abstract class Item implements incrementableData, Serializable {
         toReturn.getChildren().add(destext);
 
         if(detailed != null){
-            detailed.setTranslateY(icon.getTranslateY() + icon.getFitHeight()/2 + detailedHeight/2);
+            detailed.setTranslateY(icon.getTranslateY() + icon.getFitHeight()/2+30);
+            toReturn.getChildren().add(detailed);
         }
 
         return toReturn;

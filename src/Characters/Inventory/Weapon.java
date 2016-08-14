@@ -6,6 +6,7 @@ import Characters.playerCharacter;
 import Profile.Game;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -138,20 +139,30 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
     public StackPane buildSpecificItemDisplay() {
         StackPane toReturn = new StackPane();
         toReturn.setAlignment(Pos.CENTER);
+        //decide size for the specific display
         if(getStatText() == null){
-            toReturn.setMaxSize(300, 200);
-            toReturn.setMinSize(300, 200);
+            toReturn.setMaxSize(300, 120);
+            toReturn.setMinSize(300, 120);
         }
         else{
-            toReturn.setMaxSize(300, 300);
-            toReturn.setMinSize(300, 300);
-            Text statText = new Text();
-            statText.setTextAlignment(TextAlignment.CENTER);
-            statText.setTranslateY(250);
-            statText.setWrappingWidth(260);
-            statText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
-            toReturn.getChildren().add(statText);
+            toReturn.setMaxSize(300, 150);
+            toReturn.setMinSize(300, 150);
         }
+        //text for weapon type
+        Text typeText = new Text(weaponType);
+        typeText.setTextAlignment(TextAlignment.CENTER);
+        typeText.setWrappingWidth(260);
+        typeText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        typeText.setTranslateY(toReturn.getHeight()/-2);
+        toReturn.getChildren().add(typeText);
+        //text for damage dealt by the weapon
+        Text damageText = new Text("Damage: " + Damage);
+        damageText.setTextAlignment(TextAlignment.CENTER);
+        damageText.setWrappingWidth(260);
+        damageText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        damageText.setTranslateY(typeText.getTranslateY()+35);
+        toReturn.getChildren().add(damageText);
+        //Text for hand the weapon goes in
         Text handText = new Text();
         if(isTwoHand())
             handText.setText("Two-handed");
@@ -162,7 +173,47 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         handText.setTextAlignment(TextAlignment.CENTER);
         handText.setWrappingWidth(260);
         handText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        handText.setTranslateY(damageText.getTranslateY()+35);
         toReturn.getChildren().add(handText);
+        //Text for property
+        Text propText = new Text(Property + " Property");
+        switch (Property){
+            case "Fire":
+                propText.setFill(Color.RED);
+                break;
+            case "Ghost":
+                propText.setFill(Color.ALICEBLUE);
+                break;
+            case "Holy":
+                propText.setFill(Color.GOLDENROD);
+                break;
+            case "Organic":
+                propText.setFill(Color.FORESTGREEN);
+                break;
+            case "Undead":
+                propText.setFill(Color.GREENYELLOW);
+                break;
+            case "Unholy":
+                propText.setFill(Color.PURPLE);
+                break;
+            case "Water":
+                propText.setFill(Color.BLUE);
+                break;
+        }
+        propText.setTextAlignment(TextAlignment.CENTER);
+        propText.setWrappingWidth(260);
+        propText.setTranslateY(handText.getTranslateY()+35);
+        propText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+        toReturn.getChildren().add(propText);
+        //potential stat text
+        if(getStatText() != null) {
+            Text statText = new Text(getStatText());
+            statText.setTextAlignment(TextAlignment.CENTER);
+            statText.setTranslateY(propText.getTranslateY()+35);
+            statText.setWrappingWidth(260);
+            statText.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
+            toReturn.getChildren().add(statText);
+        }
 
         return toReturn;
     }

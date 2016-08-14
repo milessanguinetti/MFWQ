@@ -179,9 +179,11 @@ public class characterScreen {
                 }
                 else if(event.getCode() == KeyCode.ESCAPE){
                     if(Game.currentMap != null)
-                        Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                        Game.swapToMap(contentRoot);
+                    else if(Game.currentCity != null)
+                        Game.swapToCity(this);
                     else
-                        Game.mainmenu.getCurrentGame().swapToOverworld(contentRoot);
+                        Game.swapToOverworld(contentRoot);
                 }
 
             });

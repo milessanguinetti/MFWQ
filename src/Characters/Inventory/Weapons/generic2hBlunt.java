@@ -170,4 +170,9 @@ public class generic2hBlunt extends Weapon{
         }
         return null;
     }
+
+    @Override
+    public String getStatText(){
+        return null;
+    }
 }

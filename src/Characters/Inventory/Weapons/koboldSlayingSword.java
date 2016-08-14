@@ -100,4 +100,9 @@ public class koboldSlayingSword extends Weapon{
         }
         return null;
     }
+
+    @Override
+    public String getStatText(){
+        return "Strength +1";
+    }
 }

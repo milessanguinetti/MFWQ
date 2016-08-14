@@ -23,6 +23,7 @@ public class battleData implements Data, Serializable {
     private combatEffect toCast; //the combat effect that the character is using this turn
     private boolean playerSide; //is the attacker on the player's side?
     private boolean primaryTarget = true;
+    private static boolean isAnimating;
 
     //default constructor
     public battleData() {
@@ -144,7 +145,6 @@ public class battleData implements Data, Serializable {
                             Game.battle.playMedia("basicattack");
                         else
                             Game.battle.playMedia("skill");
-                        Game.mainmenu.getCurrentGame().setDelay(1000);
                     }
                     catch(fleeObject Caught){
                         throw Caught; //if the "attacker" fled, throw the caught flee object
@@ -202,6 +202,14 @@ public class battleData implements Data, Serializable {
         if (toCast == null)
             return true;
         return toCast.notUsableOnDead();
+    }
+
+    public static boolean IsAnimating(){
+        return isAnimating;
+    }
+
+    public static void setAnimating(boolean toset){
+        isAnimating = toset;
     }
 
     @Override

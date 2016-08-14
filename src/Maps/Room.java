@@ -346,7 +346,6 @@ public class Room extends StackPane {
 
         }
         if(Valid){ //if the move was valid.
-            //Game.mainmenu.getCurrentGame().setDelay(250);
             s = targetedSpace; //set s to targeted space.
             m = targetedTile; //set m to the original targeted tile.
             characterInMotion = true;

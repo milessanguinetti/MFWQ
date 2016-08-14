@@ -59,8 +59,7 @@ public class experienceNotification extends StackPane{
         if(!animated) {
             if(gainEventQueueNode.RecursivePop()) {
                 active = false;
-                Game.mainmenu.getCurrentGame().lootNotificationToFront();
-                //Game.mainmenu.getCurrentGame().setDelay(1000); //set a delay on any processed user input
+                Game.lootNotificationToFront();
             }
         }
         return true;

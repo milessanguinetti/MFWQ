@@ -87,11 +87,13 @@ public class settingsScreen extends StackPane {
             }
             else if(event.getCode() == KeyCode.ESCAPE || event.getCode() == KeyCode.ENTER) {
                 if(Game.mainmenu.isMostRecentPane())
-                    Game.mainmenu.getCurrentGame().swapToMainMenu(this);
+                    Game.swapToMainMenu(this);
+                else if(Game.currentCity != null)
+                    Game.swapToCity(this);
                 else if(Game.currentMap == null)
-                    Game.mainmenu.getCurrentGame().swapToOverworld(this);
+                    Game.swapToOverworld(this);
                 else
-                    Game.mainmenu.getCurrentGame().swapToMap(this);
+                    Game.swapToMap(this);
             }
         });
     }
@@ -157,7 +159,7 @@ public class settingsScreen extends StackPane {
 
         @Override
         public void performAction(){
-            Game.mainmenu.getCurrentGame().setMasterVolume(current.getValue());
+            Game.setMasterVolume(current.getValue());
         }
 
         @Override
@@ -174,7 +176,7 @@ public class settingsScreen extends StackPane {
         @Override
         public void performAction(){
             if(current != null)
-                Game.mainmenu.getCurrentGame().setMusicVolume(current.getValue());
+                Game.setMusicVolume(current.getValue());
         }
 
         @Override
@@ -306,11 +308,11 @@ public class settingsScreen extends StackPane {
             setOnMouseReleased(event -> {
                 setUnselected();
                 if(Game.mainmenu.isMostRecentPane())
-                    Game.mainmenu.getCurrentGame().swapToMainMenu(Game.settings);
+                    Game.swapToMainMenu(Game.settings);
                 else if(Game.currentMap == null)
-                    Game.mainmenu.getCurrentGame().swapToOverworld(Game.settings);
+                    Game.swapToOverworld(Game.settings);
                 else
-                    Game.mainmenu.getCurrentGame().swapToMap(Game.settings);
+                    Game.swapToMap(Game.settings);
             });
 
             setOnMouseExited(event -> {

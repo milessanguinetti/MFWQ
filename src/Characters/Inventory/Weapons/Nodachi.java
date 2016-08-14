@@ -102,4 +102,9 @@ public class Nodachi extends Weapon {
         }
         return null;
     }
+
+    @Override
+    public String getStatText(){
+        return "Speed +30";
+    }
 }

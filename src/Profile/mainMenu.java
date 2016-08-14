@@ -25,7 +25,6 @@ import java.nio.file.Paths;
  * Created by Miles on 6/2/2015.
  */
 public class mainMenu {
-    private Game currentGame;
     static private int Selection;
     private menuButton newGame = new menuButton("NEW GAME", 0);
     private menuButton loadGame = new menuButton("LOAD GAME", 1);
@@ -99,10 +98,6 @@ public class mainMenu {
 
     public Pane getPane(){
         return contentRoot;
-    }
-
-    public void setGame(Game currentgame){
-        currentGame = currentgame;
     }
 
     //class for housing buttons within the main menu.
@@ -208,19 +203,15 @@ public class mainMenu {
         isMostRecentPane = false;
         intToButton(toConvert).setUnselected();
         if(toConvert == 0) {
-            currentGame.newPlayer(); //new game
+            Game.newPlayer(); //new game
         }
         else if(toConvert == 1)
-            currentGame.loadPlayer(); //load game
+            Game.loadPlayer(); //load game
         else if(toConvert == 2) {
             isMostRecentPane = true;
-            currentGame.swapToSettings(contentRoot);
+            Game.swapToSettings(contentRoot);
         }
         else
             System.exit(0); //exit
-    }
-
-    public Game getCurrentGame(){
-        return currentGame;
     }
 }

@@ -8,6 +8,7 @@ import Characters.playerCharacter;
 import Structures.LLLnode;
 import Structures.battleData;
 import Structures.orderedLLL;
+import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -15,6 +16,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.Serializable;
 
@@ -49,15 +54,15 @@ public class Battle {
         contentRoot.setAlignment(Pos.CENTER);
         contentRoot.getChildren().add(Interface);
         contentRoot.setOnKeyReleased(event -> {
-            if(Game.mainmenu.getCurrentGame().isDelayOver()) {
+            if(!battleData.IsAnimating()) {
                 if(State == 6){
                     endBattle();
                     if(enemyVictory()) { //since this state can also be reached via a flee command, we print !enemyvictory
-                        Game.mainmenu.getCurrentGame().swapToMainMenu(contentRoot);
+                        Game.swapToMainMenu(contentRoot);
                     }
                     else {
-                        Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
-                        Game.mainmenu.getCurrentGame().expNotificationToFront();
+                        Game.swapToMap(contentRoot);
+                        Game.expNotificationToFront();
                     }
                     return; //nothing else to be done.
                 }
@@ -129,7 +134,6 @@ public class Battle {
 
     //bool signifies whether or not the player won or escaped.
     public void commenceBattle(gameCharacter[] Allies, gameCharacter[] Enemies) {
-        Game.mainmenu.getCurrentGame().setDelay(500); //1/2 second UI delay at start of battle.
         turnOrder.removeAll(); //nullifies any extant turn order data from previous battles
         contentRoot.getChildren().add(Game.currentMap); //add the current map's background image to the battle
         Game.currentMap.setTranslateY(-100);
@@ -165,6 +169,29 @@ public class Battle {
             }
             ++State; //if the character at this index is dead or nonexistant, increment the state so we know that.
         }
+        battleData.setAnimating(true);
+        Text starttext = new Text("Fight!");
+        starttext.setFont(Font.font("Tw Cen MT Condensed", FontWeight.EXTRA_BOLD, 60));
+        starttext.setFill(Color.GOLDENROD);
+        contentRoot.getChildren().add(starttext);
+        final Timeline timeline = new Timeline();
+        timeline.setCycleCount(1);
+        final KeyValue kv1 = new KeyValue(starttext.scaleXProperty(), 1.3); //x property
+        final KeyValue kv2 = new KeyValue(starttext.scaleYProperty(), 1.3); //y property
+        final KeyFrame kf = new KeyFrame(Duration.millis(500), kv1, kv2);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(event -> {
+            final Timeline timeline2 = new Timeline();
+            timeline2.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(starttext.opacityProperty(), 0,
+                    Interpolator.EASE_IN)));
+            timeline2.setOnFinished(event1 -> {
+                contentRoot.getChildren().remove(starttext);
+                battleData.setAnimating(false);
+            });
+            timeline2.play();
+        });
+        timeline.play();
+
     }
 
     public void endBattle(){
@@ -583,7 +610,7 @@ public class Battle {
     public void playMedia(String toPlay){
         MediaPlayer mediaPlayer = new MediaPlayer(
                 new Media((getClass().getResource("soundeffects/" + toPlay + ".mp3")).toString()));
-        mediaPlayer.setVolume(soundEffectVolume * Game.mainmenu.getCurrentGame().getMasterVolume());
+        mediaPlayer.setVolume(soundEffectVolume * Game.getMasterVolume());
         mediaPlayer.setCycleCount(1);
         mediaPlayer.play();
     }

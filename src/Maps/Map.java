@@ -82,9 +82,9 @@ public abstract class Map extends Tileset{
                             if (Connections[0] != null) {
                                 Game.currentMap = Connections[0];
                                 Connections[0].Enter(3);
-                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot);
+                                Game.swapToMap(sceneRoot);
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot);
+                                Game.swapToOverworld(sceneRoot);
                         } else { //a simple change of rooms within the map
                             currentRoom -= yBound; //decrement current room by y bound
                             contentRoot.getChildren().add(Rooms[currentRoom]); //add the one we're entering's
@@ -98,9 +98,9 @@ public abstract class Map extends Tileset{
                             if (Connections[1] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[1].Enter(4); //enter from the west
-                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
+                                Game.swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                                Game.swapToOverworld(sceneRoot); //we have left the scope
                                 // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             ++currentRoom; //increment current room by 1
@@ -115,9 +115,9 @@ public abstract class Map extends Tileset{
                             if (Connections[2] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[2].Enter(1); //enter from the north
-                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
+                                Game.swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                                Game.swapToOverworld(sceneRoot); //we have left the scope
                             // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             currentRoom += yBound; //increment currentroom by yBound
@@ -132,9 +132,9 @@ public abstract class Map extends Tileset{
                             if (Connections[3] != null) {
                                 Game.currentMap = Connections[1]; //set current map to the connection
                                 Connections[3].Enter(2); //enter from the east
-                                Game.mainmenu.getCurrentGame().swapToMap(sceneRoot); //load the new map's scene
+                                Game.swapToMap(sceneRoot); //load the new map's scene
                             } else
-                                Game.mainmenu.getCurrentGame().swapToOverworld(sceneRoot); //we have left the scope
+                                Game.swapToOverworld(sceneRoot); //we have left the scope
                             // of this connected grouping of maps; swap to overworld
                         } else { //a simple change of rooms within the map
                             --currentRoom; //decrement currentroom by 1
@@ -146,14 +146,14 @@ public abstract class Map extends Tileset{
                     case 5: { //treasure case
                         if (Rooms[currentRoom].getLoot() != null) {
                             Game.notification.lootNotification(Rooms[currentRoom].getLoot()); //add in the item
-                            Game.mainmenu.getCurrentGame().lootNotificationToFront();
+                            Game.lootNotificationToFront();
                         }
                         break;
                     }
                     case 6: { //boss case
                         if (Rooms[currentRoom].getBoss() != null) {
                             Game.battle.commenceBattle(Game.Player.getParty(), Rooms[currentRoom].getBoss());
-                            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
+                            Game.swapToBattle(sceneRoot);
                         }
                         break;
                     }
@@ -173,7 +173,7 @@ public abstract class Map extends Tileset{
             }
             //ESCAPE CASE
             else if(event1.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().addOptionsOverlay();
+                Game.addOptionsOverlay();
             }
         });
 
@@ -181,7 +181,7 @@ public abstract class Map extends Tileset{
         sceneRoot.setOnKeyPressed(event -> {
             if(Game.notification.isActive() || Game.experiencenotification.isActive())
                 return;
-            //if(Game.mainmenu.getCurrentGame().isDelayOver()) {
+            //if(Game.isDelayOver()) {
                 //UP CASE
                 if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
                     Rooms[currentRoom].pressKey(0, true);
@@ -205,7 +205,7 @@ public abstract class Map extends Tileset{
     public boolean rollForEncounter(){ //called from room objects to create random map-defined enemy encounters
         if(Rand.nextInt(100) < encounterRate){
             Game.battle.commenceBattle(Game.Player.getParty(), generateEnemies());
-            Game.mainmenu.getCurrentGame().swapToBattle(sceneRoot);
+            Game.swapToBattle(sceneRoot);
             return true;
         }
         return false;

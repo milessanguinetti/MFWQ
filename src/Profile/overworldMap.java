@@ -1,6 +1,7 @@
 package Profile;
 
 import Cities.City;
+import Cities.Spaghettistan;
 import Maps.Map;
 import Maps.Valley01;
 import javafx.animation.PathTransition;
@@ -82,7 +83,7 @@ public class overworldMap extends StackPane implements Serializable{
                 currentZone.Enter();
             }
             else if(event.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().addOptionsOverlay();
+                Game.addOptionsOverlay();
             }
             else if(event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W){
                 currentZone.travelToConnection(0);
@@ -301,7 +302,7 @@ public class overworldMap extends StackPane implements Serializable{
                 Constructor constructor = thisDungeon.getConstructor();
                 Game.currentMap = (Map)(constructor.newInstance());
                 Game.currentMap.enterFromOverworld();
-                Game.mainmenu.getCurrentGame().swapToMap(Game.overworld);
+                Game.swapToMap(Game.overworld);
             }
             catch (Exception e){
                 System.out.println("Error initializing dungeon: " + e.getMessage());
@@ -327,10 +328,10 @@ public class overworldMap extends StackPane implements Serializable{
             try {
                 Constructor constructor = thisCity.getConstructor();
                 Game.currentCity = (City)(constructor.newInstance());
-                Game.mainmenu.getCurrentGame().swapToCity(Game.overworld);
+                Game.swapToCity(Game.overworld);
             }
             catch (Exception e){
-                System.out.println("Error initializing dungeon: " + e.getMessage());
+                System.out.println("Error initializing city: " + e.getMessage());
             }
         }
     }

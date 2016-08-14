@@ -24,13 +24,14 @@ import javafx.stage.Screen;
 //Many scripted events also take place in cities.
 public class City extends StackPane{
     protected StackPane Inn;
-    protected StackPane Shop;
+    protected Shop thisShop;
+    private boolean isInSubPane = false;
     private int numButtons; //number of buttons that this city has.
     private int currentButton;
     private cityButton [] buttons;
     private boolean enterDown = false;
 
-    public City(StackPane inn, StackPane shop){
+    public City(StackPane inn, Shop shop){
         setAlignment(Pos.CENTER);
         Rectangle background = new Rectangle(3000, 3000, Color.BLACK);
         getChildren().add(background);
@@ -42,7 +43,7 @@ public class City extends StackPane{
             buttonBox.getChildren().add(new innButton());
         }
         if(shop != null){
-            Shop = shop;
+            thisShop = shop;
             buttonBox.getChildren().add(new shopButton());
         }
         buttonBox.getChildren().add(new optionsButton());
@@ -63,34 +64,38 @@ public class City extends StackPane{
         getChildren().addAll(buttonBackground1, buttonBackground2, buttonBox);
         Game.currentCity = this;
         setOnKeyPressed(event1 -> {
-            if(event1.getCode() == KeyCode.ENTER){
+            if(event1.getCode() == KeyCode.ENTER && !isInSubPane){
                 buttons[currentButton].setSelected();
             }
         });
         setOnKeyReleased(event -> {
-            if(event.getCode() == KeyCode.ENTER){
-                buttons[currentButton].performAction();
-                buttons[currentButton].setUnselected();
+            if(!isInSubPane) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    buttons[currentButton].performAction();
+                    buttons[currentButton].setUnselected();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    Game.addOptionsOverlay();
+                } else if ((event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) && currentButton < numButtons-1) {
+                    System.out.println(currentButton);
+                    buttons[currentButton].setPlain();
+                    ++currentButton;
+                    buttons[currentButton].setHighLit();
+                } else if ((event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) && currentButton != 0) {
+                    buttons[currentButton].setPlain();
+                    --currentButton;
+                    buttons[currentButton].setHighLit();
+                }
             }
-            else if(event.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().addOptionsOverlay();
-            }
-            else if((event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) && currentButton < numButtons){
-                buttons[currentButton].setPlain();
-                ++currentButton;
-                buttons[currentButton].setHighLit();
-            }
-            else if((event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) && currentButton != 0){
-                buttons[currentButton].setPlain();
-                --currentButton;
-                buttons[currentButton].setHighLit();
+            else if(event.getCode() == KeyCode.ESCAPE) {
+                isInSubPane = false;
+                requestFocus();
             }
         });
     }
 
     public void exit(){
         Game.currentCity = null;
-        Game.mainmenu.getCurrentGame().swapToOverworld(this);
+        Game.swapToOverworld(this);
     }
 
     private abstract class cityButton extends StackPane{
@@ -184,6 +189,9 @@ public class City extends StackPane{
         @Override
         public void performAction() {
             Inventory.setCanSell(true);
+            isInSubPane = true;
+            Game.currentCity.getChildren().add(thisShop);
+            thisShop.Enter();
         }
     }
 
@@ -217,7 +225,7 @@ public class City extends StackPane{
 
         @Override
         public void performAction() {
-            Game.mainmenu.getCurrentGame().addOptionsOverlay();
+            Game.addOptionsOverlay();
         }
     }
 }

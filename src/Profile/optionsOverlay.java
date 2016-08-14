@@ -85,7 +85,7 @@ public class optionsOverlay extends StackPane{
                 }
             }
             else if(event.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+                Game.removeOptionsOverylay();
             }
         });
     }
@@ -219,13 +219,13 @@ public class optionsOverlay extends StackPane{
         @Override
         public void performAction(){
             setUnselected();
-            Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+            Game.removeOptionsOverylay();
             if(Game.currentCity != null)
-                Game.mainmenu.getCurrentGame().swapToMainMenu(Game.currentCity);
+                Game.swapToMainMenu(Game.currentCity);
             else if(Game.currentMap == null)
-                Game.mainmenu.getCurrentGame().swapToMainMenu(Game.overworld);
+                Game.swapToMainMenu(Game.overworld);
             else
-                Game.mainmenu.getCurrentGame().swapToMainMenu(Game.currentMap.getPane());
+                Game.swapToMainMenu(Game.currentMap.getPane());
         }
     }
 
@@ -237,11 +237,11 @@ public class optionsOverlay extends StackPane{
         @Override
         public void performAction(){
             setUnselected();
-            Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+            Game.removeOptionsOverylay();
             if(Game.currentMap == null)
-                Game.mainmenu.getCurrentGame().swapToSettings(Game.overworld);
+                Game.swapToSettings(Game.overworld);
             else
-                Game.mainmenu.getCurrentGame().swapToSettings(Game.currentMap.getPane());
+                Game.swapToSettings(Game.currentMap.getPane());
         }
     }
 
@@ -253,7 +253,7 @@ public class optionsOverlay extends StackPane{
         @Override
         public void performAction(){
             setUnselected();
-            Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+            Game.removeOptionsOverylay();
         }
     }
 
@@ -265,12 +265,12 @@ public class optionsOverlay extends StackPane{
         @Override
         public void performAction(){
             setUnselected();
-            Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+            Game.removeOptionsOverylay();
             if(Game.currentMap == null) {
-                Game.mainmenu.getCurrentGame().swapToCharacterScreen(Game.overworld);
+                Game.swapToCharacterScreen(Game.overworld);
             }
             else {
-                Game.mainmenu.getCurrentGame().swapToCharacterScreen(Game.currentMap.getPane());
+                Game.swapToCharacterScreen(Game.currentMap.getPane());
             }
         }
     }
@@ -283,11 +283,11 @@ public class optionsOverlay extends StackPane{
         @Override
         public void performAction(){
             setUnselected();
-            Game.mainmenu.getCurrentGame().removeOptionsOverylay();
+            Game.removeOptionsOverylay();
             if(Game.currentMap == null)
-                Game.mainmenu.getCurrentGame().swapToInventory(Game.overworld);
+                Game.swapToInventory(Game.overworld);
             else
-                Game.mainmenu.getCurrentGame().swapToInventory(Game.currentMap.getPane());
+                Game.swapToInventory(Game.currentMap.getPane());
         }
     }
 
@@ -300,7 +300,7 @@ public class optionsOverlay extends StackPane{
         public void performAction(){
             if(!isGrayedOut) {
                 setUnselected();
-                Game.mainmenu.getCurrentGame().writeToDisk();
+                Game.writeToDisk();
                 //buttonShape.setFill(Color.RED);
             }
 

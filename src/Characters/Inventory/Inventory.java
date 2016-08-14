@@ -134,10 +134,12 @@ public class Inventory implements Serializable {
         });
         contentRoot.setOnKeyReleased(event -> {
             if(event.getCode() == KeyCode.ESCAPE){
-                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                if(Game.currentCity != null)
+                    Game.swapToCity(contentRoot);
+                else
+                    Game.swapToMap(contentRoot);
             }
         });
-
     }
 
     public static void setCanSell(boolean cansell){
@@ -283,8 +285,8 @@ public class Inventory implements Serializable {
         public void setBold() {
             buttonShape.setOpacity(.8);
             buttonShape.setFill(Color.DARKGRAY);
-            getChildren().remove(itemDisplay);
-            itemDisplay = item.getItemDisplay();
+            contentRoot.getChildren().remove(itemDisplay);
+            itemDisplay = item.getItemDisplay(true);
             contentRoot.getChildren().add(itemDisplay);
             buttonPane.toFront();
         }
@@ -383,7 +385,7 @@ public class Inventory implements Serializable {
                                 }); //revert to doing nothing
                                 contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
                                     if (event1.getCode() == KeyCode.ESCAPE) {
-                                        Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                        Game.swapToMap(contentRoot);
                                     }
                                 });
                                 contentRoot.getChildren().removeAll(Selector, tint);
@@ -395,7 +397,7 @@ public class Inventory implements Serializable {
                             }); //revert to doing nothing
                             contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
                                 if (event1.getCode() == KeyCode.ESCAPE) {
-                                    Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                    Game.swapToMap(contentRoot);
                                 }
                             });
                             itemBoxPane.requestFocus();
@@ -409,7 +411,7 @@ public class Inventory implements Serializable {
                             }); //revert to doing nothing
                             contentRoot.setOnKeyReleased(event1 -> { //revert to standard escape functionality.
                                 if (event1.getCode() == KeyCode.ESCAPE) {
-                                    Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                                    Game.swapToMap(contentRoot);
                                 }
                             });
                             contentRoot.getChildren().removeAll(Selector, tint);
@@ -527,7 +529,7 @@ public class Inventory implements Serializable {
             Rectangle sell = new Rectangle(250, 50);
             sell.setFill(Color.LIGHTGRAY);
             sell.setOnMouseClicked(event ->{
-                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                Game.swapToMap(contentRoot);
             });
             sell.setOnMouseEntered(event1 -> {
                 sell.setFill(Color.DARKGRAY);
@@ -552,7 +554,7 @@ public class Inventory implements Serializable {
             back.setFill(Color.LIGHTGRAY);
             back.setTranslateY(75);
             back.setOnMouseClicked(event ->{
-                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                Game.swapToMap(contentRoot);
             });
             back.setOnMouseEntered(event1 -> {
                 back.setFill(Color.DARKGRAY);
@@ -565,7 +567,7 @@ public class Inventory implements Serializable {
             texttoadd.setTranslateY(75);
             texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
-                Game.mainmenu.getCurrentGame().swapToMap(contentRoot);
+                Game.swapToMap(contentRoot);
             });
             texttoadd.setOnMouseEntered(event1 -> {
                 back.setFill(Color.DARKGRAY);
@@ -608,7 +610,7 @@ public class Inventory implements Serializable {
     }
 
     public static StackPane getItemDisplay() {
-        return itemBox.itemArray[itemBox.currentItem].item.getItemDisplay();
+        return itemBox.itemArray[itemBox.currentItem].item.getItemDisplay(true);
     }
 
     public static void returnItemBoxPane(){

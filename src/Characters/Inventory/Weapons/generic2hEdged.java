@@ -171,4 +171,9 @@ public class generic2hEdged extends Weapon{
         }
         return null;
     }
+
+    @Override
+    public String getStatText(){
+        return null;
+    }
 }

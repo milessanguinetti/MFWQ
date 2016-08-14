@@ -169,4 +169,9 @@ public class genericGun extends Weapon{
         }
         return null;
     }
+
+    @Override
+    public String getStatText(){
+        return null;
+    }
 }

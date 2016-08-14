@@ -77,7 +77,6 @@ public class Notification extends StackPane implements Serializable{
         if(count != 0) { //if at least one item dropped...
             active = true;
             Animating = true;
-            //Game.mainmenu.getCurrentGame().setDelay(count * 1000); //set a delay on any processed user input
         }
     }
 
@@ -92,7 +91,7 @@ public class Notification extends StackPane implements Serializable{
                 getChildren().removeAll(lootcontainer); //remove any extant elements for next usage.
 
                 Description.setVisible(false);
-                Game.mainmenu.getCurrentGame().removeNotifications();
+                Game.removeNotifications();
                 active = false;
         }
         return true; //denote that this erased a notification or ran into the delay.
