@@ -91,6 +91,8 @@ public class Shop extends StackPane{
         setOnKeyReleased(event -> {
             if(event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP){
                 if(Description != null && currentContainer != 0) {
+                    if(((itemContainer)itemContainers.getChildren().get(currentContainer-1)).getCurrent().Quantity == 0)
+                        return;
                     selectedContainer.getCurrent().setPlain();
                     --currentContainer;
                     selectedContainer = (itemContainer) itemContainers.getChildren().get(currentContainer);
@@ -103,15 +105,22 @@ public class Shop extends StackPane{
                 }
             }
             else if(event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT){
-                if(selectedContainer.current != 0){
+                if(selectedContainer.current != 0 && Description != null){
                     for(int i = selectedContainer.current - 1; i >= 0; --i){
                         if(((itemBox)selectedContainer.getChildren().get(i)).Quantity != 0){
                             selectedContainer.setCurrent(i);
                             break;
                         }
+                        if(i == 0){ //if we reached the end in this loop, instead switch to buttons.
+                            selectedContainer.getCurrent().setPlain();
+                            ((shopButton)shopButtons.getChildren().get(0)).setHighLit();
+                            currentButton = 0;
+                            getChildren().remove(Description);
+                            Description = null;
+                        }
                     }
                 }
-                else{
+                else if(Description != null){
                     selectedContainer.getCurrent().setPlain();
                     ((shopButton)shopButtons.getChildren().get(0)).setHighLit();
                     currentButton = 0;
@@ -121,6 +130,8 @@ public class Shop extends StackPane{
             }
             else if(event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN){
                 if(Description != null && currentContainer != itemContainers.getChildren().size()-1) {
+                    if(((itemContainer)itemContainers.getChildren().get(currentContainer+1)).getCurrent().Quantity == 0)
+                        return;
                     selectedContainer.getCurrent().setPlain();
                     ++currentContainer;
                     selectedContainer = (itemContainer) itemContainers.getChildren().get(currentContainer);
@@ -150,14 +161,19 @@ public class Shop extends StackPane{
                     currentButton = 0;
                     currentContainer = 0;
                     selectedContainer = (itemContainer) itemContainers.getChildren().get(0);
-                    selectedContainer.setCurrent(0);
+                    for (int i = 0; i < selectedContainer.itemSum; ++i) {
+                        if (((itemBox) selectedContainer.getChildren().get(i)).Quantity != 0) {
+                            selectedContainer.setCurrent(i);
+                            break;
+                        }
+                    }
                 }
             }
             else if(event.getCode() == KeyCode.ENTER) {
                 if(Description == null){
                     ((shopButton)shopButtons.getChildren().get(currentButton)).performAction();
-                    ((shopButton)shopButtons.getChildren().get(currentButton)).setPlain();
                     ((shopButton)shopButtons.getChildren().get(currentButton)).setUnselected();
+                    ((shopButton)shopButtons.getChildren().get(currentButton)).setPlain();
                 }
                 else {
                     enterDown = false;
@@ -338,6 +354,13 @@ public class Shop extends StackPane{
             if(Description != null)
             Description.setVisible(false);
             highlit.setVisible(false);
+
+            for(int i = 0; i < selectedContainer.getChildren().size(); ++i) { //determine another suitable current item
+                if (((itemBox) selectedContainer.getChildren().get(i)).Quantity != 0) {
+                    selectedContainer.setCurrent(i);
+                    break;
+                }
+            }
         }
     }
 
@@ -454,6 +477,7 @@ public class Shop extends StackPane{
             Game.currentCity.getChildren().remove(currentShop); //remove this pane from its city's pane
             Inventory.setCanSell(false); //ensure that the player can no longer sell
             selectedContainer.getCurrent().setPlain();
+            Game.currentCity.returnFromSubpane();
         }
     }
 }

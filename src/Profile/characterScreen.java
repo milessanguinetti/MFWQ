@@ -181,7 +181,7 @@ public class characterScreen {
                     if(Game.currentMap != null)
                         Game.swapToMap(contentRoot);
                     else if(Game.currentCity != null)
-                        Game.swapToCity(this);
+                        Game.swapToCity(contentRoot);
                     else
                         Game.swapToOverworld(contentRoot);
                 }

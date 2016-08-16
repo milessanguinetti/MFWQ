@@ -404,4 +404,9 @@ public class Stats extends spritePane{
             if (MSP < SP)
                 SP = MSP;
     }
+
+    public void fullyHeal(){
+        HP = MHP;
+        SP = MSP;
+    }
 }

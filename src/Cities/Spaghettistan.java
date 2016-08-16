@@ -11,10 +11,11 @@ import Characters.Inventory.Weapons.genericGun;
  */
 public class Spaghettistan extends City{
     private static Shop spaghettishop;
+    private static Inn spaghettiinn;
 
     public Spaghettistan(){
         super(
-                null, //no inn
+                getInn(), //no inn
                 getShop());
     }
 
@@ -28,4 +29,13 @@ public class Spaghettistan extends City{
                     new genericGun(50));
         return spaghettishop;
     }
+
+    private static Inn getInn(){
+        if(spaghettiinn == null){
+            spaghettiinn = new Inn("Spaghetti Inn", 100);
+        }
+        return spaghettiinn;
+    }
+
+
 }

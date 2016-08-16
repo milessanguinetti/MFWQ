@@ -692,8 +692,7 @@ public class playerCharacter extends gameCharacter {
             baseStatGains(); //increase base stats.
             if(primaryClass != null)
                 primaryClass.baseDing(this, Level); //gain auxilary class stat boosts
-            HP = MHP; //set health and sp to full following levelup.
-            SP = MSP;
+            fullyHeal();
             Ding(exp, 0); //recursive call; jexp == 0 so that we don't gain it twice.
         }
         else if(exp > 0){

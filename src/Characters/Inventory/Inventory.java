@@ -441,8 +441,15 @@ public class Inventory implements Serializable {
                 if(itemArray[currentItem].item.CanBeSold()){
                     Game.Player.addCoins(itemArray[currentItem].item.getValue());
                     Item toSell = (Item)Items[currentCategory].Retrieve(itemArray[currentItem].getKey()).returnData();
-                    if(toSell.Decrement(-1) == 0)
+                    if(toSell.Decrement(-1) == 0) {
                         dropCurrent();
+                        Inventory.contentRoot.getChildren().remove(itemDisplay);
+                    }
+                    else{
+                        Inventory.contentRoot.getChildren().remove(itemDisplay);
+                        Inventory.itemDisplay = itemArray[currentItem].item.getItemDisplay(true);
+                        Inventory.contentRoot.getChildren().add(itemDisplay);
+                    }
                     Game.battle.playMedia("loot");
                 }
             }
@@ -554,7 +561,10 @@ public class Inventory implements Serializable {
             back.setFill(Color.LIGHTGRAY);
             back.setTranslateY(75);
             back.setOnMouseClicked(event ->{
-                Game.swapToMap(contentRoot);
+                if(Game.currentCity != null)
+                    Game.swapToCity(contentRoot);
+                else
+                    Game.swapToMap(contentRoot);
             });
             back.setOnMouseEntered(event1 -> {
                 back.setFill(Color.DARKGRAY);
@@ -567,7 +577,10 @@ public class Inventory implements Serializable {
             texttoadd.setTranslateY(75);
             texttoadd.setFont(Font.font(("Tw Cen MT Condensed"), FontWeight.SEMI_BOLD, 20));
             texttoadd.setOnMouseClicked(event -> {
-                Game.swapToMap(contentRoot);
+                if(Game.currentCity != null)
+                    Game.swapToCity(contentRoot);
+                else
+                    Game.swapToMap(contentRoot);
             });
             texttoadd.setOnMouseEntered(event1 -> {
                 back.setFill(Color.DARKGRAY);

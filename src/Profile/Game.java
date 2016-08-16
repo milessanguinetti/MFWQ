@@ -237,6 +237,7 @@ public class Game {
             gameRoot.getChildren().remove(toRemove);
         gameRoot.getChildren().add(currentCity);
         currentCity.requestFocus();
+        currentCity.focusShop();
     }
 
     public static void lootNotificationToFront(){

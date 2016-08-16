@@ -45,7 +45,6 @@ public class rogueSteal extends Skill {
     @Override //70% chance to steal gold, 10% for loot, 20% to fail
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         Random Rand = new Random();
-        Caster.printName(); //preemptively print name for other statements
         int Roll = Rand.nextInt(10);
         if (Roll < 5) { //steal gold case
             int Stolen = ((Monster)Defender).getExp();

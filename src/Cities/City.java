@@ -23,15 +23,16 @@ import javafx.stage.Screen;
 //A location on the map where characters can generally buy and sell items and rest at an inn.
 //Many scripted events also take place in cities.
 public class City extends StackPane{
-    protected StackPane Inn;
+    protected Inn thisInn;
     protected Shop thisShop;
     private boolean isInSubPane = false;
     private int numButtons; //number of buttons that this city has.
     private int currentButton;
     private cityButton [] buttons;
-    private boolean enterDown = false;
+    private boolean enterDown = false; //tracks whether or not enter is down; moreover, ensures that it was pressed down
+                                       //while the user was using the primary elements of this pane and not another.
 
-    public City(StackPane inn, Shop shop){
+    public City(Inn inn, Shop shop){
         setAlignment(Pos.CENTER);
         Rectangle background = new Rectangle(3000, 3000, Color.BLACK);
         getChildren().add(background);
@@ -39,7 +40,7 @@ public class City extends StackPane{
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(15);
         if(inn != null){
-            Inn = inn;
+            thisInn = inn;
             buttonBox.getChildren().add(new innButton());
         }
         if(shop != null){
@@ -66,13 +67,18 @@ public class City extends StackPane{
         setOnKeyPressed(event1 -> {
             if(event1.getCode() == KeyCode.ENTER && !isInSubPane){
                 buttons[currentButton].setSelected();
+                enterDown = true;
             }
         });
         setOnKeyReleased(event -> {
             if(!isInSubPane) {
-                if (event.getCode() == KeyCode.ENTER) {
+                if (event.getCode() == KeyCode.ENTER && enterDown) {
+                    //necessitating that we register that enter was pressed down on this pane prevents the game from
+                    //immediately returning to the shop after leaving it by registering what essentially amounts to a
+                    //second keypress.
                     buttons[currentButton].performAction();
                     buttons[currentButton].setUnselected();
+                    enterDown = false;
                 } else if (event.getCode() == KeyCode.ESCAPE) {
                     Game.addOptionsOverlay();
                 } else if ((event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) && currentButton < numButtons-1) {
@@ -96,6 +102,17 @@ public class City extends StackPane{
     public void exit(){
         Game.currentCity = null;
         Game.swapToOverworld(this);
+    }
+
+    //this method requests focus on the shop if we swapped panes (namely to inventory) without leaving the shop.
+    public void focusShop(){
+        if(isInSubPane)
+            thisShop.Enter();
+    }
+
+    public void returnFromSubpane(){
+        isInSubPane = false;
+        requestFocus();
     }
 
     private abstract class cityButton extends StackPane{
@@ -202,7 +219,9 @@ public class City extends StackPane{
 
         @Override
         public void performAction() {
-
+            isInSubPane = true;
+            Game.currentCity.getChildren().add(thisInn);
+            thisInn.requestFocus();
         }
     }
 

@@ -266,7 +266,10 @@ public class optionsOverlay extends StackPane{
         public void performAction(){
             setUnselected();
             Game.removeOptionsOverylay();
-            if(Game.currentMap == null) {
+            if(Game.currentCity != null){
+                Game.swapToCharacterScreen(Game.currentCity);
+            }
+            else if(Game.currentMap == null) {
                 Game.swapToCharacterScreen(Game.overworld);
             }
             else {
@@ -284,7 +287,10 @@ public class optionsOverlay extends StackPane{
         public void performAction(){
             setUnselected();
             Game.removeOptionsOverylay();
-            if(Game.currentMap == null)
+            if(Game.currentCity != null){
+                Game.swapToInventory(Game.currentCity);
+            }
+            else if(Game.currentMap == null)
                 Game.swapToInventory(Game.overworld);
             else
                 Game.swapToInventory(Game.currentMap.getPane());
