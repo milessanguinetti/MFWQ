@@ -2,6 +2,7 @@ package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/12/15.
@@ -39,11 +40,10 @@ public class assassinLightningStrikes extends Skill{
         return toCheck.getSP() >= 60;
     }
 
-    @Override //deal 125% damage calculated by strength and right weapon damage.
+    @Override //strike with both weapons, a number of times based on speed
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        int Strikes = (Caster.getTempSpd() + 10) / 8; //strike once per ten speed
-        Caster.printName();
-        System.out.println(" attacked " + Strikes + " times!");
+        int Strikes = (Caster.getTempSpd() + 10) / 8; //strike once per 8 speed
+        Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " struck " + Strikes + " times!");
         for (int i = Strikes; i > 0; --i) {
             Defender.takeDamage(Math.round(.4f * (Caster.getTempStr() +
                     Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));

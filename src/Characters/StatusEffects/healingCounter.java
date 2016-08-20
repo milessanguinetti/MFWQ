@@ -16,4 +16,9 @@ public class healingCounter extends Counter{
         Game.battle.getInterface().printLeftAtNextAvailable(Defender.getName() + " healed some of their wounds!");
         Defender.subtractHP(Defender.getTempFth()/2);
     }
+
+    @Override
+    public boolean canEvadeAttack(gameCharacter Attacker, gameCharacter Defender) {
+        return false;
+    }
 }

@@ -139,17 +139,29 @@ public class Battle {
         Game.currentMap.setTranslateY(-100);
         for (int i = 0; i < 4; ++i) {
             if (Allies[i] != null) {
+                /*
                 Allies[i].setTranslateY(-275 + i*136);
                 Allies[i].setTranslateX(-392);
                 Allies[i].Flip(true); //flip this ally's sprite so it faces the right way.
                                       //this isn't necessary for enemies, as they're innately not flipped.
+                */
+                Allies[i].setTranslateY(-250+i*120);
+                Allies[i].setTranslateX(-200 - 50*i);
+                Allies[i].getSprite().setScaleX(-1.7);
+                Allies[i].getSprite().setScaleY(1.7);
                 Allies[i].Animate(true);
                 contentRoot.getChildren().add(Allies[i]);
                 Allies[i].applyAutoBuffs(); //initialize stats
             }
             if (Enemies[i] != null) {
+                /*
                 Enemies[i].setTranslateY(-275 + i*136);
                 Enemies[i].setTranslateX(392);
+                */
+                Enemies[i].setTranslateY(-250+i*120);
+                Enemies[i].setTranslateX(200 + 50*i);
+                Enemies[i].getSprite().setScaleX(1.7);
+                Enemies[i].getSprite().setScaleY(1.7);
                 Enemies[i].Animate(true);
                 contentRoot.getChildren().add(Enemies[i]);
                 Enemies[i].applyAutoBuffs();
@@ -210,6 +222,8 @@ public class Battle {
             }
             if (playerParty[i] != null) { //if a character exists
                 contentRoot.getChildren().remove(playerParty[i]);
+                playerParty[i].getSprite().setScaleX(1);
+                playerParty[i].getSprite().setScaleY(1);
                 playerParty[i].Animate(false); //stop this unit's animation
                 playerParty[i].clearStatus(); //clear their status.
                 if (!playerParty[i].isAlive()) { //if they are dead
@@ -539,24 +553,47 @@ public class Battle {
         toAdd.applyAutoBuffs(); //initialize autobuffs if this minion has any.
         if(whichSide) {
             Minions = playerMinions;
-            System.out.print("A ");
-            toAdd.printName();
-            System.out.println(" joined your party!");
-            toAdd.Flip(true); //flip the minion's sprite so it faces the right way
-            toAdd.setTranslateX(-296); //set translate x to a value suitable for the player's side of the field
+            toAdd.initializeAnimation(); //initialize this minion's animation sequence
+            toAdd.getSprite().setScaleX(-1.7);
+            toAdd.getSprite().setScaleY(1.7);
         }
         else {
             Minions = enemyMinions; //set minions to the appropriate side.
-            System.out.print("A ");
-            toAdd.printName();
-            System.out.println(" joined the enemy!");
-            toAdd.Flip(false); //(possibly) flip the minion's sprite so it faces the right way
-            toAdd.setTranslateX(296); //set translate x to a value suitable for the enemy's side of the field
+            Interface.printLeftAtNextAvailable("A " + toAdd.getName() + " joined the enemy!");
+            toAdd.initializeAnimation(); //initialize this minion's animation sequence
+            toAdd.getSprite().setScaleX(1.7);
+            toAdd.getSprite().setScaleY(1.7);
         }
         for(int i = 0; i < 4; ++i){
             if(Minions[i] == null){ //if an index is empty
                 Minions[i] = toAdd; //add the minion into that index
-                toAdd.setTranslateY(-275 + i*136); //adjust translate y accordingly
+                toAdd.setTranslateY(-250+i*120);
+                if(whichSide) {
+                    toAdd.setTranslateX(-200 - 50 * i);
+                    if(playerParty[i] != null){
+                        toAdd.setOpacity(0);
+                        toAdd.Animate(true);
+                        Timeline timeline = new Timeline();
+                        KeyFrame kf = new KeyFrame(Duration.millis(300),
+                                new KeyValue(playerParty[i].translateXProperty(), playerParty[i].getTranslateX()-200),
+                                new KeyValue(toAdd.opacityProperty(), 1));
+                        timeline.getKeyFrames().add(kf);
+                        timeline.play();
+                    }
+                }
+                else {
+                    toAdd.setTranslateX(200 + 50 * i);
+                    if(enemyParty[i] != null){
+                        toAdd.setOpacity(0);
+                        toAdd.Animate(true);
+                        Timeline timeline = new Timeline();
+                        KeyFrame kf = new KeyFrame(Duration.millis(300),
+                                new KeyValue(enemyParty[i].translateXProperty(), enemyMinions[i].getTranslateX()+200),
+                                new KeyValue(toAdd.opacityProperty(), 1));
+                        timeline.getKeyFrames().add(kf);
+                        timeline.play();
+                    }
+                }
                 toAdd.Animate(true);
                 contentRoot.getChildren().add(toAdd);
                 return; //and return; we're done.
@@ -567,12 +604,12 @@ public class Battle {
             if(Minions[i].getHP() < Minions[weakest].getHP()) //if minion i has lower hp
                 weakest = i; //it becomes the weakest
         }
-        Minions[weakest].printName(); //display a message explaining the replaced minion
-        System.out.println(" was called off to make room for ");
-        toAdd.printName();
-        System.out.println(".");
+        Interface.printLeftAtNextAvailable(Minions[weakest].getName() + " was called off to make room for "
+                + toAdd.getName() + ".");
+        toAdd.setTranslateX(Minions[weakest].getTranslateX()); //adjust translate x and y accordingly
+        toAdd.setTranslateY(Minions[weakest].getTranslateY());
+        contentRoot.getChildren().remove(Minions[weakest]); //remove the weakest minion from the pane.
         Minions[weakest] = toAdd; //replace weakest with toadd.
-        toAdd.setTranslateY(450 - weakest*136); //adjust translate y accordingly
         toAdd.Animate(true);
         contentRoot.getChildren().add(toAdd);
     }

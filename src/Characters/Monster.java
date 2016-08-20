@@ -15,7 +15,7 @@ public abstract class Monster extends gameCharacter{
     protected Skill Combo; //skill reference to let us chain skills with the AI
     protected Skill [] monsterSkills = new Skill[6]; //skill array
     protected int [] skillProbabilities = new int[6]; //chance of each skill
-    private boolean hasBeenStolenFrom = false;
+    protected boolean hasBeenStolenFrom = false;
 
     //default constructor
     public Monster(){}

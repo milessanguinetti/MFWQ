@@ -186,13 +186,15 @@ public class Notification extends StackPane implements Serializable{
                         ftG.setAutoReverse(true);
                         ftG.play();
                     }));
+            lootSound.setOnFinished(event2 -> {
+                if(lootContainer.getItemSum() == itemNumber+1)
+                    Animating = false; //if this is the last item, denote that we are no longer playing an animation.
+            });
             lootSound.play(); //play all transitions and timelines
             stN.play();
             stI.play();
             stI.setOnFinished(event1 -> {
-                if(lootContainer.getItemSum() == itemNumber+1)
-                    Animating = false; //if this is the last item, denote that we are no longer playing an animation.
-                else{
+                if(lootContainer.getItemSum() != itemNumber+1){
                     setPlain();
                     lootcontainer.getCurrent(itemNumber+1).setHighLit();
                 }
@@ -214,16 +216,12 @@ public class Notification extends StackPane implements Serializable{
         }
 
         public void setHighLit(){ //makes the image/text more striking
-            backGround.setOpacity(1);
-            Icon.setOpacity(1);
             itemName.setFill(Color.WHITE);
             Description.setText(contents.getDescription());
             Description.setVisible(true);
         }
 
         public void setPlain() { //self-explanatory
-            backGround.setOpacity(.9);
-            Icon.setOpacity(.9);
             itemName.setFill(Color.GRAY);
             Description.setVisible(false);
         }

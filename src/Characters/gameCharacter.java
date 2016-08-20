@@ -89,6 +89,17 @@ public abstract class gameCharacter extends Stats {
             charCounter.executeCounter(Attacker, this);
     }
 
+    public boolean didCounterEvade(gameCharacter Attacker){
+        if(charCounter != null){
+            return charCounter.canEvadeAttack(Attacker, this);
+        }
+        return false;
+    }
+
+    public Counter getCounter(){
+        return charCounter;
+    }
+
     //sets the character's temp property to a passed property.
     public void setTempProperty(Property tempProperty) {
         this.tempProperty = tempProperty;
@@ -236,10 +247,6 @@ public abstract class gameCharacter extends Stats {
             setWaiting();
         else
             setDead();
-    }
-
-    public void attackAnimation(){
-        setAttacking();
     }
 
     abstract public boolean hasTwoHandedWeapon();

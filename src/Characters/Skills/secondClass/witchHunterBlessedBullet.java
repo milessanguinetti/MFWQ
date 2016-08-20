@@ -9,7 +9,7 @@ import Characters.gameCharacter;
 public class witchHunterBlessedBullet extends Skill{
     public witchHunterBlessedBullet(){
         super("Blessed Bullet",
-                "Blasts several foes with a blessed bullet unleashes an explosion of holy light.", 30);
+                "Blasts several foes with a blessed bullet that unleashes an explosion of holy light.", 30);
     }
 
     @Override
@@ -29,12 +29,12 @@ public class witchHunterBlessedBullet extends Skill{
 
     @Override
     public int getAoE() {
-        return 0;
+        return 1;
     }
 
     @Override
     public boolean canUse(gameCharacter toCheck) {
-        if(!toCheck.hasWeaponType("Gun", false)) //can only be used with a shield
+        if(!toCheck.hasWeaponType("Gun", false)) //can only be used with a gun
             return false;
         return toCheck.getSP() >= 30;
     }

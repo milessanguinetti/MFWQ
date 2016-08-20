@@ -38,6 +38,6 @@ public class Wait extends Skill{
 
     @Override //waits a turn.
     public void takeAction(gameCharacter Caster, gameCharacter Defender){
-        Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " waited.");
+        Game.battle.getInterface().printLeft(Caster.getName() + " waited.");
     }
 }

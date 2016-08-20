@@ -2,6 +2,7 @@ package Characters.Skills.secondClass;
 
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
+import Profile.Game;
 
 /**
  * Created by Miles Sanguinetti on 5/12/15.
@@ -9,7 +10,7 @@ import Characters.gameCharacter;
 public class witchHunterAnnihilateEvil extends Skill{
     public witchHunterAnnihilateEvil(){
         super("Annihilate Evil",
-                "Repeatedly assaults the target with blade and righteous power alike.", 60);
+                "Rapidly assaults the target with blade and righteous power alike.", 60);
     }
 
     @Override
@@ -37,15 +38,17 @@ public class witchHunterAnnihilateEvil extends Skill{
         return toCheck.getSP() >= 60;
     }
 
-    @Override //deal 125% damage calculated by strength and right weapon damage.
+    @Override
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
-        int Strikes = (Caster.getTempSpd() + 10) / 10; //strike once per ten speed
-        Caster.printName();
-        System.out.println(" attacked " + Strikes + " times!");
-        for (int i = Strikes; i > 0; --i) {
-            Defender.takeDamage(Math.round(.4f * (Caster.getTempStr() +
-                    Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));
-            Defender.takeDamage(Math.round((.8f) * Caster.getTempFth()), "Holy");
+        int Strikes = 1;
+        if(Defender.hasProperty("Unholy") || Defender.hasProperty("Undead")) {
+            Strikes += (1 + Math.round((Caster.getTempSpd()/1f)/Defender.getTempSpd()));
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " struck with fury at the evil within "
+            + Defender.getName() + "!");
         }
+        Defender.takeDamage(Math.round(1.4f * (Caster.getTempStr() +
+                Caster.getWeaponDamage(true))), Caster.getWeaponProperty(true));
+        for(int i = 0; i < Strikes; ++i)
+            Defender.takeDamage(Math.round((1.8f) * Caster.getTempFth()), "Holy");
     }
 }

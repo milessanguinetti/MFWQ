@@ -4,13 +4,24 @@ import Characters.combatEffect;
 import Characters.gameCharacter;
 import Characters.playerCharacter;
 import Profile.Game;
+import Structures.battleData;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.WritableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 /**
  * Created by Miles Sanguinetti on 3/29/15.
@@ -216,5 +227,55 @@ public abstract class Weapon extends Item implements equipableItem, combatEffect
         }
 
         return toReturn;
+    }
+
+    public void performAnimation(Pane toAnimateOn, gameCharacter Attacker, gameCharacter Defender){
+        battleData.setAnimating(true);
+        double returntox = Attacker.getTranslateX();
+        double returntoy = Attacker.getTranslateY();
+        Timeline timeline = new Timeline();
+        Attacker.setAttacking(800);
+        //attacking animation
+        //TEST
+        double toMoveTo = Defender.getTranslateX() - 150;
+        if(Defender.getTranslateX() < 0)
+            toMoveTo = Math.round(Math.round(Defender.getTranslateX()) + 150);
+        double apex = Math.min(Attacker.getTranslateY(), Defender.getTranslateY()) - 100;
+
+        final KeyFrame kf0 = new KeyFrame(Duration.millis(400),
+                new KeyValue(Attacker.translateYProperty(), apex, new Interpolator() {
+                    @Override
+                    protected double curve(double t) {
+                        return Math.sqrt(t);
+                    }
+                }),
+                new KeyValue(Attacker.translateXProperty(), (Attacker.getTranslateX()+toMoveTo)/2));
+        timeline.getKeyFrames().add(kf0);
+        //TEST
+        final KeyValue kv1 = new KeyValue(Attacker.translateYProperty(), Defender.getTranslateY(),
+                new Interpolator() {
+                    @Override
+                    protected double curve(double t) {
+                        return t*t*t*t;
+                    }
+                }); //y property
+        final KeyValue kv2 = new KeyValue(Attacker.translateXProperty(), toMoveTo); //x property
+        final KeyFrame kf1 = new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Attacker.updateAnimation();
+                Defender.updateAnimation();
+            }
+        }, kv1, kv2);
+        timeline.getKeyFrames().add(kf1);
+        //returning animation
+        final KeyValue kv4 = new KeyValue(Attacker.translateXProperty(), returntox, Interpolator.EASE_OUT); //x property
+        final KeyValue kv5 = new KeyValue(Attacker.translateYProperty(), returntoy, Interpolator.EASE_OUT); //y property
+        final KeyFrame kf2 = new KeyFrame(Duration.millis(1200), kv4, kv5);
+        timeline.getKeyFrames().add(kf2);
+        timeline.setOnFinished(event -> {
+            battleData.setAnimating(false);
+        });
+        timeline.play();
     }
 }

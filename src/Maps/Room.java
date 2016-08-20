@@ -175,11 +175,6 @@ public class Room extends StackPane {
             if(f == Tiles[m] - 12){ //if the player is facing the correct direction...
                 if(Tiles[m] == 13 && s == 2 || Tiles[m] == 14 && s == 6 ||
                         Tiles[m] == 15 && s == 8 || Tiles[m] == 16 && s == 3) {
-                    Tiles[m] -= 8;
-                    ImageView toPlace = currentMap.getExit(Tiles[m]); //replace boss with empty exit
-                    toPlace.setTranslateY(-384 + 96 * (m/9)); //on the player's current tile.
-                    toPlace.setTranslateX(-384 + 96 * (m%9));
-                    getChildren().add(toPlace);
                     return 6; //return 6 if the player is in the right spot as well.
                 }
             }
@@ -982,5 +977,13 @@ public class Room extends StackPane {
 
     public void removePlayerMarker(){
         mapObject.getChildren().remove(playerMapMarker);
+    }
+
+    public void removeBossIcon(){
+        Tiles[m] -= 8;
+        ImageView toPlace = currentMap.getExit(Tiles[m]); //replace boss with empty exit
+        toPlace.setTranslateY(-384 + 96 * (m/9)); //on the player's current tile.
+        toPlace.setTranslateX(-384 + 96 * (m%9));
+        getChildren().add(toPlace);
     }
 }

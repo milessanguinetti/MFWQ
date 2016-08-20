@@ -122,19 +122,19 @@ public class spritePane extends StackPane implements Serializable{
         ++numAnimations;
     }
 
-    protected void setWaiting(){
+    public void setWaiting(){
         charAnimation.setGraphicMode(0);
     }
 
-    protected void setGettingHit(){
+    public void setGettingHit(){
         charAnimation.setGraphicMode(1);
     }
 
-    protected void setAttacking(){
-        charAnimation.setGraphicMode(2);
+    public void setAttacking(int duration){
+        charAnimation.setGraphicMode(2, duration);
     }
 
-    protected void setDead(){
+    public void setDead(){
         charAnimation.setGraphicMode(3);
     }
 
@@ -144,7 +144,6 @@ public class spritePane extends StackPane implements Serializable{
         private int count = 6; //either 6 in the case of anything other than death or 1 in the case of death.
         private int Mode; //0 = waiting; 1 = getting hit; 2 = attacking; 3 = dead.
         private int lastIndex; //the previous index visited
-        private boolean isFlipped = false; //a boolean value to track whether or not an image needs to be flipped
 
         public characterSpriteAnimation(ImageView imageView) {
             this.imageView = imageView;
@@ -156,7 +155,7 @@ public class spritePane extends StackPane implements Serializable{
         protected void interpolate(double k) {
             final int index = Math.min((int) Math.floor(k * count), count - 1);
             if (index != lastIndex) {
-                if(isFlipped)
+                if(this.imageView.getScaleX() == -1)
                     imageView.setViewport(new Rectangle2D(480 - index * 96, Mode * 96, 96, 96));
                 else
                     imageView.setViewport(new Rectangle2D(index * 96, Mode * 96, 96, 96));
@@ -167,28 +166,47 @@ public class spritePane extends StackPane implements Serializable{
         public void setGraphicMode(int toSet){
             lastIndex = -1; //ensure that we aren't going to skip a frame after switching.
             if(toSet != 3){
+                count = 6; //standard number of frames for a given animation.
                 if(toSet == 0) {
-                    //setCycleCount(Animation.INDEFINITE); //waiting repeats infinitely
+                    stop();
+                    setCycleCount(Animation.INDEFINITE); //waiting repeats infinitely
                     setCycleDuration(javafx.util.Duration.millis(800)); //over 800 ms
+                    play();
                 }
                 else{
-                    //setCycleCount(1); //attack and take damage repeat once
+                    stop();
+                    setCycleCount(1); //attack and take damage repeat once
                     setCycleDuration(javafx.util.Duration.millis(1400)); //over 1400ms
+                    play();
                 }
-                count = 6; //standard number of frames for a given animation.
             }
             else
                 count = 1; //death only has one frame.
             Mode = toSet; //and set mode to whatever was passed in.
-            setCycleCount(Animation.INDEFINITE); //PLACEHOLDER
         }
 
-        protected void Flip(boolean toFlip){
-            isFlipped = toFlip;
-            if(isFlipped)
-                imageView.setScaleX(-1);
+        public void setGraphicMode(int toSet, int duration){
+            lastIndex = -1; //ensure that we aren't going to skip a frame after switching.
+            if(toSet != 3){
+                count = 6; //standard number of frames for a given animation.
+                if(toSet == 0) {
+                    setCycleDuration(javafx.util.Duration.millis(duration)); //use the passed duration.
+                    setCycleCount(Animation.INDEFINITE); //waiting repeats infinitely
+                }
+                else{
+                    stop();
+                    setCycleDuration(javafx.util.Duration.millis(duration)); //use the passed duration.
+                    setCycleCount(1); //attack and take damage repeat once
+                    play();
+                }
+            }
             else
-                imageView.setScaleX(1);
+                count = 1; //death only has one frame.
+            Mode = toSet; //and set mode to whatever was passed in.
+        }
+
+        public ImageView getSprite(){
+            return imageView;
         }
     }
 
@@ -203,7 +221,7 @@ public class spritePane extends StackPane implements Serializable{
     }
 
     //wrapper function that passes a boolean to char animation for sprite flipping purposes
-    public void Flip(boolean toFlip){
+    public void initializeAnimation(){
         if(charAnimation == null){ //if we're loading a save and consequently missing our transient vars
             colorAdjust = new ColorAdjust();
             setAlignment(Pos.CENTER); //center any added children.
@@ -219,7 +237,6 @@ public class spritePane extends StackPane implements Serializable{
                 System.out.println("Error loading " + Name + "'s sprite.");
             }
         }
-        charAnimation.Flip(toFlip);
     }
 
     public void setPlain(){
@@ -231,5 +248,9 @@ public class spritePane extends StackPane implements Serializable{
     }
     public void setTurn(){
         colorAdjust.setBrightness(.4);
+    }
+
+    public ImageView getSprite(){
+        return charAnimation.getSprite();
     }
 }

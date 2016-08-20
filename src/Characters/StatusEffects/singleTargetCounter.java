@@ -23,4 +23,9 @@ public class singleTargetCounter extends Counter{
                     Defender.getWeaponProperty(true));
         }
     }
+
+    @Override
+    public boolean canEvadeAttack(gameCharacter Attacker, gameCharacter Defender) {
+        return false;
+    }
 }

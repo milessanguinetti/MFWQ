@@ -1,5 +1,6 @@
 package Characters.Skills.firstClass;
 
+import Characters.Boss;
 import Characters.Skills.Skill;
 import Characters.gameCharacter;
 import Profile.Game;
@@ -10,7 +11,7 @@ import Profile.Game;
 public class alchemistTransmutePStone extends Skill {
     public alchemistTransmutePStone(){
         super("Transmute: Philosopher's Stone",
-                "A weak attack that transmutes the victim's essence and 10,000 gold into a philosopher's stone if they die.", 50);
+                "A weak attack that transmutes a boss monster's essence into a philosopher's stone if they die.", 50);
     }
 
     @Override
@@ -44,13 +45,10 @@ public class alchemistTransmutePStone extends Skill {
     public void takeAction(gameCharacter Caster, gameCharacter Defender) {
         if(Defender.takeDamage(Math.round(.5f*(Caster.getWeaponDamage(true)
                 + Caster.getTempDex())), Caster.getWeaponProperty(true)) == 0 &&
-                Game.Player.hasCoins(10000)) {
+                Defender instanceof Boss) {
             Game.Player.addStones(1);
-            Game.Player.addCoins(-10000);
-            Caster.printName();
-            System.out.print(" transmuted ");
-            Defender.printName();
-            System.out.println("'s essence into a philosopher's stone.");
+            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " transmuted " + Defender.getName() +
+            "'s essence into a philosopher's stone!");
         }
     }
 }

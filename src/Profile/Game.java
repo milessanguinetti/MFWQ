@@ -45,7 +45,7 @@ public class Game {
     private static MediaPlayer mediaPlayer; //media player variable for playing music.
     private static float musicVolume = 1; //a floating point between 0.0 and 1.0 that denotes the volume of
                                //any music that the game plays, with 0.0 == silent and 1.0 == full
-    private static float masterVolume = 1; //see above, but impacts both music and sound effects.
+    private static float masterVolume = 0; //see above, but impacts both music and sound effects.
 
     public Game(Stage primarystage){
         primaryStage = primarystage;
@@ -79,7 +79,7 @@ public class Game {
         Player = new userProfile();
         //TEST CHARACTER
         playerCharacter bob = new playerCharacter("Spaghetti", "Faithful",
-                350, 100, 10, 10, 10, 10, 10, 10, 0);
+                350, 1000, 10, 10, 10, 10, 10, 10, 0);
         Player.addCharacter(bob);
         new genericGun(6).Use(bob);
         new Nodachi().Use(bob); //equip the good sergeant with a motherfucking nodachi

@@ -26,4 +26,6 @@ public abstract class Counter implements Serializable{
 
     //abstract function for actually executing the movie.
     abstract public void executeCounter(gameCharacter Attacker, gameCharacter Defender);
+
+    public abstract boolean canEvadeAttack(gameCharacter Attacker, gameCharacter Defender);
 }

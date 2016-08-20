@@ -17,4 +17,9 @@ public class poisonCounter extends Counter{
             " in defense!");
         Attacker.addStatus(new Poisoned(3, 2 * Defender.getWeaponDamage(true)));
     }
+
+    @Override
+    public boolean canEvadeAttack(gameCharacter Attacker, gameCharacter Defender) {
+        return false;
+    }
 }

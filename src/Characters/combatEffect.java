@@ -1,6 +1,7 @@
 package Characters;
 
 import Characters.Skills.fleeObject;
+import javafx.scene.layout.Pane;
 
 /**
  * Created by Miles Sanguinetti on 3/21/15.
@@ -17,4 +18,5 @@ public interface combatEffect {
     public int getAoE();
     public void spLoss(gameCharacter Caster);
     public boolean notUsableOnDead();
+    public void performAnimation(Pane toAnimateOn, gameCharacter Attacker, gameCharacter Defender);
 }

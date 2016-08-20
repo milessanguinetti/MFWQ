@@ -549,4 +549,8 @@ public abstract class Map extends Tileset{
         }
         contentRoot.getChildren().add(minimap);
     }
+
+    public void removeBoss(){
+        Rooms[currentRoom].removeBossIcon();
+    }
 }

@@ -45,8 +45,8 @@ public class Flee extends Skill {
         if(Rand.nextInt(2) == 1)
             throw new fleeObject();
         else {
-            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " fled!");
-            Game.battle.getInterface().printLeftAtNextAvailable(Caster.getName() + " could not escape!");
+            Game.battle.getInterface().printLeft(Caster.getName() + " fled!");
+            Game.battle.getInterface().printLeft(Caster.getName() + " could not escape!");
         }
     }
 }

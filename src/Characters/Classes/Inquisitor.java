@@ -23,7 +23,7 @@ public class Inquisitor extends characterClass{
     @Override
     public void baseDing(playerCharacter toLevel, int level) {
         if(level % 2 == 0)
-            toLevel.incrementStat(0, 5); //add a faith
+            toLevel.incrementStat(5, 1); //add a faith
         else
             toLevel.incrementStat(3, 1); //add a vit
     }

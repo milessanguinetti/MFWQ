@@ -2,7 +2,9 @@ package Structures;
 
 import Characters.Inventory.Consumable;
 import Characters.Inventory.Item;
+import Characters.Skills.Flee;
 import Characters.Skills.Skill;
+import Characters.Skills.Wait;
 import Characters.Skills.fleeObject;
 import Characters.combatEffect;
 import Characters.gameCharacter;
@@ -60,14 +62,12 @@ public class battleData implements Data, Serializable {
     //or an enemy (false).
     public int initializeSkill(combatEffect tocast) {
         attackerSpeed = Attacker.getTempSpd(); //get the attacker's speed.
-
+        primaryTarget = true; //primary target needs to be reset to true.
         toCast = tocast;
         if (toCast.getAoE() == -1) { //if this is a single target user-only skill.
             targetIndex = 0; //set target index to 0.
-            primaryTarget = false;
             return 0;
         }
-        primaryTarget = true; //otherwise, primary target needs to be reset to true.
         if (!playerSide) {
             if(toCast.isOffensive()){
                 if(toCast.notUsableOnDead())
@@ -112,39 +112,47 @@ public class battleData implements Data, Serializable {
     //LLL structure in the battle class. returns true if the attacker was dead.
     public boolean executeCombat(gameCharacter Defender) throws fleeObject{
         if(Attacker.isAlive()){
-            Attacker.attackAnimation(); //run the attacker's attack animation.
             if(targetIndex == 0) { //if the character is targeting themselves
                 //display a simple message
-                Game.battle.getInterface().printLeft(Attacker.getName() +
-                        " used " + ((Data) toCast).returnKey() + "!!");
                 Defender = Attacker; //change defender to attacker.
             }
             if(Defender != null) {
                 if (Defender.isAlive() == toCast.notUsableOnDead()) {
+                    boolean succeeded = true;
+                    if(toCast.isOffensive())
+                        succeeded = !Defender.didCounterEvade(Attacker);
                     if (primaryTarget) { //only display this message once.
-                        if (toCast.isOffensive()) {
+                        toCast.performAnimation(Game.battle.getPane(), Attacker, Defender);
+                        if (succeeded && toCast.isOffensive()) {
                             Game.battle.getInterface().printLeft(Attacker.getName() +
-                                    " attacked " + Defender.getName() + " with " +
-                                    ((Data)toCast).returnKey() + "!!");
-                            if(toCast.getAoE() > 0)
+                                    " attacked " + Defender.getName() + " with " + ((Data) toCast).returnKey() + "!!");
+                            if (toCast.getAoE() > 0)
                                 Game.battle.getInterface().printLeftAtNextAvailable("Their teammates were struck as well!");
                             if(Defender.isAlive() && Attacker.isAlive())
                                 Defender.executeCounter(Attacker);
-                        } else {
-                            Game.battle.getInterface().printLeft(Attacker.getName() +
-                                    " cast " + ((Data) toCast).returnKey() + " on " +
-                                    Defender.getName() + "!!");
+                        } else if(succeeded){
+                            if(Defender != Attacker) {
+                                Game.battle.getInterface().printLeft(Attacker.getName() +
+                                        " cast " + ((Data) toCast).returnKey() + " on " +
+                                        Defender.getName() + "!!");
+                            }
+                            else if(!(toCast instanceof Flee) && !(toCast instanceof Wait)){
+                                Game.battle.getInterface().printLeft(Attacker.getName() +
+                                        " cast " + ((Data) toCast).returnKey() + "!!");
+                            }
                             if(toCast.getAoE() > 0)
                                 Game.battle.getInterface().printLeftAtNextAvailable("Their teammates were affected as well!");
                         }
                         primaryTarget = false; //after the first cast, the defender is no
                     }                          //longer the primary target.
                     try {
-                        toCast.takeAction(Attacker, Defender);
-                        if(toCast instanceof Item)
-                            Game.battle.playMedia("basicattack");
-                        else
-                            Game.battle.playMedia("skill");
+                        if(succeeded) {
+                            toCast.takeAction(Attacker, Defender);
+                            if (toCast instanceof Item)
+                                Game.battle.playMedia("basicattack");
+                            else
+                                Game.battle.playMedia("skill");
+                        }
                     }
                     catch(fleeObject Caught){
                         throw Caught; //if the "attacker" fled, throw the caught flee object

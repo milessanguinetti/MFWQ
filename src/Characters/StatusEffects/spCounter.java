@@ -16,4 +16,9 @@ public class spCounter extends Counter{
         Game.battle.getInterface().printLeftAtNextAvailable(Defender.getName() + " transformed the attack's energy into SP!");
         Defender.subtractSP(Defender.getSPCap()/-10);
     }
+
+    @Override
+    public boolean canEvadeAttack(gameCharacter Attacker, gameCharacter Defender) {
+        return false;
+    }
 }
