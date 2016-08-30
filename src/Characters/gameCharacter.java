@@ -127,7 +127,6 @@ public abstract class gameCharacter extends Stats {
         toTake -= tempArmor; //subtract armor from damage value
         if(toTake <= 0)
             toTake = 1; //damage is 1 minimum
-        setGettingHit(); //set the char's sprite to getting hit.
         subtractHP(toTake); //take the damage
         animateDamage(toTake);
         return HP; //some skills' effects hinge on whether or not the target died.

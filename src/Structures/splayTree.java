@@ -6,7 +6,7 @@ import java.io.PrintWriter;
  * Created by Miles Sanguinetti on 3/13/15.
  */
 public class splayTree extends Structure{
-    splayNode root;
+    private splayNode root;
 
     //rotational function. if dir is true, we rotate right. otherwise, we rotate left.
     private splayNode rotate(boolean dir, splayNode toRotate) {

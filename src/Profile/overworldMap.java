@@ -29,6 +29,8 @@ import java.nio.file.Paths;
  * Created by Miles on 8/4/2015.
  */
 public class overworldMap extends StackPane implements Serializable{
+    private City [] CityList; //an array containing all cities; held for easy access for methods that need to iterate
+                              //over all of them.
     private mapIcon currentZone; //the current zone (map or city) that the player is in.
     private mapIcon [] travelPath = new mapIcon[10];
     private int travelLength = 0;
@@ -139,7 +141,7 @@ public class overworldMap extends StackPane implements Serializable{
 
             setOnMouseReleased(event -> {
                 if(isAnimating)
-                    return; //waste of effort.
+                    return; //ignore input if a character's path is already animating.
                 if(currentZone == this) {
                     Enter();
                     return;

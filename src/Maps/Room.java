@@ -463,7 +463,7 @@ public class Room extends StackPane {
             case 2: //right only
                 if(roll == 0){
                     Tiles = new short[]
-                                    {18, 0, 0, 0, 0, 0, 0, 0, 0,
+                            {18, 0, 0, 0, 0, 0, 0, 0, 0,
                                     0, 9, 1, 1, 1, 1, 1, 1, 10,
                                     0, 4, 0, 0, 0, 0, 0, 0, 2,
                                     0, 4, 0, 0, 0, 0, 0, 0, 2,

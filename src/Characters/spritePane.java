@@ -163,7 +163,7 @@ public class spritePane extends StackPane implements Serializable{
             }
         }
 
-        public void setGraphicMode(int toSet){
+        private void setGraphicMode(int toSet){
             lastIndex = -1; //ensure that we aren't going to skip a frame after switching.
             if(toSet != 3){
                 count = 6; //standard number of frames for a given animation.
@@ -185,7 +185,7 @@ public class spritePane extends StackPane implements Serializable{
             Mode = toSet; //and set mode to whatever was passed in.
         }
 
-        public void setGraphicMode(int toSet, int duration){
+        private void setGraphicMode(int toSet, int duration){
             lastIndex = -1; //ensure that we aren't going to skip a frame after switching.
             if(toSet != 3){
                 count = 6; //standard number of frames for a given animation.

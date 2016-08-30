@@ -90,10 +90,11 @@ public class Game {
         bob.setPrimaryClass(new Primalist());
         bob.setSecondaryClass(new geneSplicer());
         //TEST CHARACTER 2
-        playerCharacter oxy = new playerCharacter("Oxy", "Heretic", 350, 100, 10, 10, 10, 10, 10, 10, 0);
+        playerCharacter oxy = new playerCharacter("Oxy", "Heretic", 350, 100, 10, 10, 100, 10, 10, 10, 0);
         Player.addCharacter(oxy);
         new generic2hBlunt(20).Use(oxy);
         characterClass oxyPrimary = new Rogue();
+        oxyPrimary.gainJexp(200000, oxy);
         oxy.setPrimaryClass(oxyPrimary);
         oxy.addClass(oxyPrimary);
         oxy.addClass(new Soldier());
